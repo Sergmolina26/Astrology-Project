@@ -285,13 +285,32 @@ async def generate_chart(
         
         # Extract planetary positions
         planets = {}
-        for planet in subject.planets_list_simple:
-            planets[planet['name']] = {
-                "longitude": planet['abs_pos'],
-                "sign": planet['sign'],
-                "house": planet.get('house', None),
-                "retrograde": planet.get('retrograde', False)
-            }
+        # Try different attribute names for planets
+        planets_data = None
+        if hasattr(subject, 'planets_list'):
+            planets_data = subject.planets_list
+        elif hasattr(subject, 'planets'):
+            planets_data = subject.planets
+        elif hasattr(subject, 'planets_list_simple'):
+            planets_data = subject.planets_list_simple
+        
+        if planets_data:
+            for planet in planets_data:
+                if isinstance(planet, dict):
+                    planets[planet.get('name', 'Unknown')] = {
+                        "longitude": planet.get('abs_pos', 0),
+                        "sign": planet.get('sign', 'Unknown'),
+                        "house": planet.get('house', None),
+                        "retrograde": planet.get('retrograde', False)
+                    }
+                else:
+                    # If it's an object
+                    planets[getattr(planet, 'name', 'Unknown')] = {
+                        "longitude": getattr(planet, 'abs_pos', 0),
+                        "sign": getattr(planet, 'sign', 'Unknown'),
+                        "house": getattr(planet, 'house', None),
+                        "retrograde": getattr(planet, 'retrograde', False)
+                    }
         
         # Extract houses
         houses = {}
