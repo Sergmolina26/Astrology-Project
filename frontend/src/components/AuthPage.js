@@ -74,6 +74,11 @@ const AuthPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
+      {/* Language Switcher at top right */}
+      <div className="fixed top-6 right-6 z-50">
+        <LanguageSwitcher variant="prominent" />
+      </div>
+
       {/* Floating decorative elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 animate-float">
