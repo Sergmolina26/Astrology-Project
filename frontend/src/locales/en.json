@@ -43,6 +43,7 @@
     "noActivity": "No recent activity to show",
     "getStarted": "Get started by exploring your birth chart or booking a session"
   },
+  "admin": {
     "dashboard": "Admin Dashboard",
     "manageBusiness": "Manage your Celestia business with complete administrative control",
     "totalClients": "Total Clients",
