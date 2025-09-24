@@ -80,6 +80,11 @@ const AppLayout = () => {
               <SessionsPage />
             </ProtectedRoute>
           } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
           <Route path="/" element={
             user ? <Navigate to="/dashboard" replace /> : <Navigate to="/auth" replace />
           } />
