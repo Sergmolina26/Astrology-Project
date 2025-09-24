@@ -56,8 +56,8 @@ const Navigation = () => {
               className={`nav-link ${isActive('/tarot') ? 'active' : ''}`}
               data-testid="nav-tarot"
             >
-              <Stars className="w-4 h-4 inline mr-2" />
-              Tarot
+              <Calendar className="w-4 h-4 inline mr-2" />
+              Book Reading
             </Link>
             <Link
               to="/sessions"
