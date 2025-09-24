@@ -667,13 +667,132 @@ async def create_session(
     session_data: SessionCreate,
     current_user: User = Depends(get_current_user)
 ):
+    # Get the reader (business owner) - assuming there's one reader
+    reader = await db.users.find_one({"role": "reader"})
+    if not reader:
+        raise HTTPException(status_code=404, detail="No reader available. Please contact support.")
+    
+    # Calculate service price
+    amount = get_service_price(session_data.service_type)
+    
+    # Create session with pending payment status
     session = Session(
-        reader_id=current_user.id,
-        **session_data.dict()
+        reader_id=reader["id"],
+        client_id=current_user.id,
+        service_type=session_data.service_type,
+        start_at=session_data.start_at,
+        end_at=session_data.end_at,
+        status="pending_payment",
+        amount=amount,
+        client_message=session_data.client_message
     )
     
+    # Generate payment link
+    payment_link = generate_payment_link(session.id, amount)
+    session.payment_link = payment_link
+    
+    # Save session to database
     await db.sessions.insert_one(session.dict())
+    
+    # Send confirmation email to client
+    client_email_subject = "Celestia - Booking Request Received"
+    client_email_content = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #b8860b;">✨ Your Celestia Booking Request</h2>
+        <p>Dear {current_user.name},</p>
+        
+        <p>Thank you for your booking request! Here are the details:</p>
+        
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <h3>📋 Session Details</h3>
+            <p><strong>Service:</strong> {session_data.service_type}</p>
+            <p><strong>Requested Date:</strong> {session_data.start_at.strftime('%B %d, %Y at %I:%M %p')}</p>
+            <p><strong>Duration:</strong> {(session_data.end_at - session_data.start_at).seconds // 60} minutes</p>
+            <p><strong>Investment:</strong> ${amount}</p>
+        </div>
+        
+        <h3>💳 Complete Your Booking</h3>
+        <p>To confirm your session, please complete your payment using the link below:</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{payment_link}" style="background: linear-gradient(135deg, #b8860b, #daa520); color: white; padding: 15px 30px; text-decoration: none; border-radius: 10px; font-weight: bold;">
+                💫 Complete Payment (${amount})
+            </a>
+        </div>
+        
+        <p><small>Once payment is confirmed, you'll receive a Google Meet link for your session.</small></p>
+        
+        <p>Looking forward to your cosmic journey!</p>
+        <p><em>~ Celestia Astrology & Tarot</em></p>
+    </div>
+    """
+    
+    # Send email to client
+    send_email(current_user.email, client_email_subject, client_email_content)
+    
+    # Notify reader about new booking
+    await notify_reader(session.id, "New Booking Request")
+    
     return session
+
+@api_router.post("/sessions/{session_id}/payment/complete")
+async def complete_payment(
+    session_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Mock payment completion endpoint"""
+    session_doc = await db.sessions.find_one({"id": session_id})
+    if not session_doc:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    session = Session(**session_doc)
+    
+    # Check if user owns this session
+    if session.client_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Update session status
+    await db.sessions.update_one(
+        {"id": session_id},
+        {"$set": {
+            "payment_status": "paid",
+            "status": "confirmed"
+        }}
+    )
+    
+    # Send confirmation email to client
+    confirmation_subject = "Celestia - Payment Confirmed! 🌟"
+    confirmation_content = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #b8860b;">✨ Payment Confirmed!</h2>
+        <p>Dear {current_user.name},</p>
+        
+        <p>🎉 Your payment has been successfully processed!</p>
+        
+        <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <h3>📅 Confirmed Session</h3>
+            <p><strong>Service:</strong> {session.service_type}</p>
+            <p><strong>Date:</strong> {session.start_at.strftime('%B %d, %Y at %I:%M %p')}</p>
+            <p><strong>Amount Paid:</strong> ${session.amount}</p>
+            <p><strong>Status:</strong> ✅ Confirmed</p>
+        </div>
+        
+        <h3>📞 What's Next?</h3>
+        <p>Your session is now confirmed! You will receive a Google Meet link 24 hours before your session.</p>
+        
+        <p>If you need to reschedule or have any questions, please contact us.</p>
+        
+        <p>Thank you for choosing Celestia!</p>
+        <p><em>~ Your Cosmic Guide</em></p>
+    </div>
+    """
+    
+    send_email(current_user.email, confirmation_subject, confirmation_content)
+    
+    # Notify reader about payment completion
+    await notify_reader(session_id, "Payment Completed")
+    
+    return {"message": "Payment completed successfully", "status": "confirmed"}
 
 @api_router.get("/sessions", response_model=List[Session])
 async def get_sessions(current_user: User = Depends(get_current_user)):
