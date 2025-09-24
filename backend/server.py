@@ -323,9 +323,76 @@ async def login(login_data: UserLogin):
     
     return Token(access_token=access_token, token_type="bearer", user=user)
 
-@api_router.get("/auth/me", response_model=User)
-async def get_me(current_user: User = Depends(get_current_user)):
-    return current_user
+@api_router.post("/auth/register-reader", response_model=Token)
+async def register_as_reader(user_data: UserCreate):
+    # Check if user exists
+    existing_user = await db.users.find_one({"email": user_data.email})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Check if reader already exists
+    existing_reader = await db.users.find_one({"role": "reader"})
+    if existing_reader:
+        raise HTTPException(status_code=400, detail="Reader account already exists. Contact support if you need access.")
+    
+    # Hash password
+    hashed_password = get_password_hash(user_data.password)
+    
+    # Create reader user
+    user_dict = user_data.dict()
+    user_dict.pop("password")
+    user_dict["role"] = "reader"  # Force reader role
+    user = User(**user_dict)
+    
+    # Store in database
+    await db.users.insert_one({**user.dict(), "hashed_password": hashed_password})
+    
+    # Create token
+    access_token = create_access_token(data={"sub": user.id})
+    
+    return Token(access_token=access_token, token_type="bearer", user=user)
+
+@api_router.get("/reader/dashboard")
+async def get_reader_dashboard(current_user: User = Depends(get_current_user)):
+    if current_user.role != "reader":
+        raise HTTPException(status_code=403, detail="Reader access required")
+    
+    # Get all sessions for reader
+    sessions = await db.sessions.find({"reader_id": current_user.id}).to_list(100)
+    
+    # Get recent clients
+    recent_clients = []
+    for session in sessions[-10:]:  # Last 10 sessions
+        client = await db.users.find_one({"id": session["client_id"]})
+        if client:
+            recent_clients.append({
+                "id": client["id"],
+                "name": client["name"],
+                "email": client["email"],
+                "session_date": session["start_at"],
+                "service": session["service_type"],
+                "status": session["status"],
+                "amount": session.get("amount", 0)
+            })
+    
+    # Calculate stats
+    total_sessions = len(sessions)
+    pending_sessions = len([s for s in sessions if s["status"] == "pending_payment"])
+    confirmed_sessions = len([s for s in sessions if s["status"] == "confirmed"])
+    completed_sessions = len([s for s in sessions if s["status"] == "completed"])
+    total_revenue = sum([s.get("amount", 0) for s in sessions if s["payment_status"] == "paid"])
+    
+    return {
+        "stats": {
+            "total_sessions": total_sessions,
+            "pending_sessions": pending_sessions,
+            "confirmed_sessions": confirmed_sessions,
+            "completed_sessions": completed_sessions,
+            "total_revenue": total_revenue
+        },
+        "recent_clients": recent_clients,
+        "sessions": sessions
+    }
 
 # ==================== ASTROLOGY ROUTES ====================
 
