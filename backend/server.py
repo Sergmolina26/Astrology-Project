@@ -1282,6 +1282,251 @@ async def update_notification_settings(
         print(f"❌ Update notification settings failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ==================== ADMIN MANAGEMENT ROUTES ====================
+
+@api_router.post("/admin/create-admin")
+async def create_admin_user():
+    """Create the main admin user (one-time setup)"""
+    try:
+        # Check if admin already exists
+        existing_admin = await db.users.find_one({"role": "admin"})
+        if existing_admin:
+            return {
+                "message": "Admin user already exists", 
+                "admin_email": existing_admin["email"],
+                "created": False
+            }
+        
+        # Create admin user
+        admin_email = "lago.mistico11@gmail.com"
+        admin_password = "CelestiaAdmin2024!"  # Secure default password
+        
+        # Hash password
+        hashed_password = pwd_context.hash(admin_password)
+        
+        admin_user = User(
+            name="Celestia Admin",
+            email=admin_email,
+            password=hashed_password,
+            role="admin"
+        )
+        
+        await db.users.insert_one(admin_user.dict())
+        
+        # Also create reader profile for the admin
+        admin_profile = {
+            "id": str(uuid.uuid4()),
+            "user_id": admin_user.id,
+            "business_name": "Celestia Astrology & Tarot",
+            "bio": "Master astrologer and tarot reader with years of experience in cosmic guidance.",
+            "specialties": ["Astrology", "Tarot", "Spiritual Guidance", "Life Coaching"],
+            "experience_years": 10,
+            "hourly_rate": 120.0,
+            "calendar_sync_enabled": False,
+            "google_calendar_id": None,
+            "notification_email": admin_email,
+            "availability_schedule": {
+                "monday": {"enabled": True, "start": "09:00", "end": "20:00"},
+                "tuesday": {"enabled": True, "start": "09:00", "end": "20:00"},
+                "wednesday": {"enabled": True, "start": "09:00", "end": "20:00"},
+                "thursday": {"enabled": True, "start": "09:00", "end": "20:00"},
+                "friday": {"enabled": True, "start": "09:00", "end": "20:00"},
+                "saturday": {"enabled": True, "start": "10:00", "end": "18:00"},
+                "sunday": {"enabled": False, "start": "12:00", "end": "17:00"}
+            },
+            "services": {
+                "tarot-reading": {"name": "Tarot Reading", "price": 85.0, "duration": 60},
+                "birth-chart-reading": {"name": "Birth Chart Reading", "price": 120.0, "duration": 90},
+                "chart-tarot-combo": {"name": "Chart + Tarot Combo", "price": 165.0, "duration": 120},
+                "follow-up": {"name": "Follow-up Session", "price": 45.0, "duration": 30}
+            },
+            "admin_permissions": {
+                "manage_users": True,
+                "manage_payments": True,
+                "manage_sessions": True,
+                "manage_system": True,
+                "view_analytics": True
+            },
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        await db.reader_profiles.insert_one(admin_profile)
+        
+        return {
+            "message": "Admin user created successfully",
+            "admin_email": admin_email,
+            "default_password": admin_password,
+            "created": True,
+            "note": "Please change the default password after first login"
+        }
+        
+    except Exception as e:
+        print(f"❌ Admin creation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create admin: {str(e)}")
+
+@api_router.get("/admin/dashboard-stats")
+async def get_admin_dashboard_stats(current_user: User = Depends(get_current_user)):
+    """Get admin dashboard statistics"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Get stats
+        total_users = await db.users.count_documents({})
+        total_clients = await db.users.count_documents({"role": "client"})
+        total_sessions = await db.sessions.count_documents({})
+        confirmed_sessions = await db.sessions.count_documents({"status": "confirmed"})
+        pending_sessions = await db.sessions.count_documents({"status": "pending_payment"})
+        total_revenue = await db.payment_transactions.aggregate([
+            {"$match": {"payment_status": "paid"}},
+            {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+        ]).to_list(1)
+        
+        revenue = total_revenue[0]["total"] if total_revenue else 0
+        
+        return {
+            "total_users": total_users,
+            "total_clients": total_clients,
+            "total_sessions": total_sessions,
+            "confirmed_sessions": confirmed_sessions,
+            "pending_sessions": pending_sessions,
+            "total_revenue": revenue,
+            "conversion_rate": (confirmed_sessions / total_sessions * 100) if total_sessions > 0 else 0
+        }
+        
+    except Exception as e:
+        print(f"❌ Admin stats failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/admin/users")
+async def get_all_users(current_user: User = Depends(get_current_user)):
+    """Get all users for admin management"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        users = await db.users.find({}, {"password": 0}).to_list(None)  # Exclude passwords
+        return users
+        
+    except Exception as e:
+        print(f"❌ Get users failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/admin/sessions")
+async def get_all_sessions(current_user: User = Depends(get_current_user)):
+    """Get all sessions for admin management"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        sessions = await db.sessions.find({}).to_list(None)
+        # Enrich with user data
+        for session in sessions:
+            client = await db.users.find_one({"id": session["client_id"]}, {"name": 1, "email": 1})
+            if client:
+                session["client_name"] = client["name"]
+                session["client_email"] = client["email"]
+        
+        return sessions
+        
+    except Exception as e:
+        print(f"❌ Get sessions failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.put("/admin/sessions/{session_id}/status")
+async def update_session_status(
+    session_id: str,
+    status: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Update session status (confirm, decline, etc.)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    valid_statuses = ["pending_payment", "confirmed", "completed", "cancelled", "declined"]
+    if status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+    
+    try:
+        result = await db.sessions.update_one(
+            {"id": session_id},
+            {"$set": {"status": status, "updated_at": datetime.now(timezone.utc)}}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        # Send notification email to client about status change
+        session = await db.sessions.find_one({"id": session_id})
+        if session:
+            client = await db.users.find_one({"id": session["client_id"]})
+            if client:
+                if status == "confirmed":
+                    subject = "Session Confirmed - Celestia"
+                    content = f"""
+                    <h2>✅ Your session has been confirmed!</h2>
+                    <p>Dear {client['name']},</p>
+                    <p>Great news! Your {session['service_type']} session has been confirmed for {session['start_at']}.</p>
+                    <p>You will receive a Google Meet link 24 hours before your session.</p>
+                    """
+                elif status == "declined":
+                    subject = "Session Update - Celestia"
+                    content = f"""
+                    <h2>Session Status Update</h2>
+                    <p>Dear {client['name']},</p>
+                    <p>We need to reschedule your {session['service_type']} session. Please contact us to arrange a new time.</p>
+                    """
+                else:
+                    subject = f"Session {status.title()} - Celestia"
+                    content = f"""
+                    <h2>Session Status Update</h2>
+                    <p>Dear {client['name']},</p>
+                    <p>Your {session['service_type']} session status has been updated to: {status}</p>
+                    """
+                
+                send_email(client["email"], subject, content)
+        
+        return {"message": f"Session status updated to {status}"}
+        
+    except Exception as e:
+        print(f"❌ Update session status failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.delete("/admin/sessions/{session_id}")
+async def delete_session(
+    session_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Delete a session"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        result = await db.sessions.delete_one({"id": session_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        return {"message": "Session deleted successfully"}
+        
+    except Exception as e:
+        print(f"❌ Delete session failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/admin/payments")
+async def get_all_payments(current_user: User = Depends(get_current_user)):
+    """Get all payment transactions"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        payments = await db.payment_transactions.find({}).to_list(None)
+        return payments
+        
+    except Exception as e:
+        print(f"❌ Get payments failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ==================== INCLUDE ROUTER ====================
 
 app.include_router(api_router)
