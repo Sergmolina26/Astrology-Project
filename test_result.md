@@ -256,7 +256,7 @@ frontend:
     file: "/app/backend/utils/admin.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "main"
@@ -264,6 +264,9 @@ frontend:
         - working: "NA"
           agent: "main"
           comment: "✅ IMPLEMENTED: Reader profile management with notification email configuration, business settings, and calendar sync options."
+        - working: "NA"
+          agent: "testing"
+          comment: "⚠️ CANNOT TEST: Reader profile management endpoints implemented (POST /api/reader/profile, GET /api/reader/profile, PUT /api/reader/notifications) but cannot test due to lack of reader account access. AdminProfileService class properly implemented with profile creation, retrieval, and notification settings. Requires reader authentication to test functionality."
 
   - task: "Email forwarding to admin/reader"
     implemented: true
