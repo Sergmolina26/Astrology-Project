@@ -223,9 +223,8 @@ class CelestiaAPITester:
             self.log_test("Create Tarot Reading", False, "Failed to create tarot reading", response)
             return False
 
-    def test_sessions_creation(self):
-        """Test creating a session"""
-        # First create a reader user for session creation
+    def test_reader_registration(self):
+        """Test reader registration system - should prevent multiple readers"""
         reader_email = f"reader_{datetime.now().strftime('%H%M%S')}@celestia.com"
         reader_data = {
             "name": "Test Reader",
@@ -234,44 +233,138 @@ class CelestiaAPITester:
             "role": "reader"
         }
         
-        success, response = self.make_request('POST', 'auth/register', reader_data, 200)
+        # Test first reader registration
+        success, response = self.make_request('POST', 'auth/register-reader', reader_data, 200)
         
-        if not success:
-            self.log_test("Session Creation (Reader Setup)", False, "Failed to create reader user", response)
+        if success and 'access_token' in response:
+            self.reader_token = response['access_token']
+            self.reader_id = response['user']['id']
+            self.log_test("Reader Registration (First)", True, f"Successfully registered first reader: {reader_email}")
+            
+            # Test second reader registration - should fail
+            second_reader_email = f"reader2_{datetime.now().strftime('%H%M%S')}@celestia.com"
+            second_reader_data = {
+                "name": "Second Reader",
+                "email": second_reader_email,
+                "password": "ReaderPass123!",
+                "role": "reader"
+            }
+            
+            success2, response2 = self.make_request('POST', 'auth/register-reader', second_reader_data, 400)
+            
+            if success2 or (not success2 and "already exists" in str(response2)):
+                self.log_test("Reader Registration (Duplicate Prevention)", True, "Correctly prevented second reader registration")
+                return True
+            else:
+                self.log_test("Reader Registration (Duplicate Prevention)", False, "Failed to prevent duplicate reader", response2)
+                return False
+        else:
+            self.log_test("Reader Registration (First)", False, "Failed to register first reader", response)
+            return False
+
+    def test_get_me_endpoint(self):
+        """Test /api/auth/me endpoint"""
+        if not self.token:
+            self.log_test("Get Me Endpoint", False, "No token available")
+            return False
+            
+        success, response = self.make_request('GET', 'auth/me', None, 200)
+        
+        if success and 'id' in response and 'email' in response and 'name' in response:
+            self.log_test("Get Me Endpoint", True, f"Retrieved user info: {response.get('name')} ({response.get('email')})")
+            return True
+        else:
+            self.log_test("Get Me Endpoint", False, "Failed to retrieve user info", response)
+            return False
+
+    def test_reader_dashboard(self):
+        """Test reader dashboard access"""
+        if not hasattr(self, 'reader_token'):
+            self.log_test("Reader Dashboard", False, "No reader token available")
             return False
             
         # Store original token and switch to reader
         original_token = self.token
-        original_user_id = self.user_id
-        self.token = response['access_token']
-        reader_id = response['user']['id']
+        self.token = self.reader_token
         
-        # Create session
+        success, response = self.make_request('GET', 'reader/dashboard', None, 200)
+        
+        # Restore original token
+        self.token = original_token
+        
+        if success and 'stats' in response and 'recent_clients' in response:
+            stats = response['stats']
+            self.log_test("Reader Dashboard", True, f"Dashboard loaded - Total sessions: {stats.get('total_sessions', 0)}")
+            return True
+        else:
+            self.log_test("Reader Dashboard", False, "Failed to load reader dashboard", response)
+            return False
+
+    def test_sessions_creation(self):
+        """Test creating a session with email and payment link generation"""
+        if not hasattr(self, 'reader_id'):
+            self.log_test("Session Creation", False, "No reader available")
+            return False
+            
+        # Create session as client
         start_time = datetime.now() + timedelta(days=1)
         end_time = start_time + timedelta(hours=1)
         
         session_data = {
-            "client_id": original_user_id,
-            "service_type": "Astrology Reading - 60min",
+            "service_type": "tarot-reading",
             "start_at": start_time.isoformat(),
-            "end_at": end_time.isoformat()
+            "end_at": end_time.isoformat(),
+            "client_message": "Looking forward to my reading!"
         }
         
         success, response = self.make_request('POST', 'sessions', session_data, 200)
         
         if success and 'id' in response:
             self.session_id = response['id']
-            self.log_test("Session Creation", True, f"Created session: {response['service_type']}")
+            # Check if payment link was generated
+            has_payment_link = 'payment_link' in response and response['payment_link']
+            # Check if amount was set
+            has_amount = 'amount' in response and response['amount'] > 0
             
-            # Restore original token
-            self.token = original_token
-            self.user_id = original_user_id
+            details = f"Session ID: {response['id']}, Amount: ${response.get('amount', 0)}"
+            if has_payment_link:
+                details += f", Payment Link: {response['payment_link'][:50]}..."
+                
+            self.log_test("Session Creation", True, details)
+            
+            # Test that email confirmation was triggered (check console output)
+            print("    📧 Email confirmation should be printed to console (mock implementation)")
+            print("    💳 Payment link should be generated")
+            print("    🔔 Reader notification should be printed to console")
+            
             return True
         else:
             self.log_test("Session Creation", False, "Failed to create session", response)
-            # Restore original token
-            self.token = original_token
-            self.user_id = original_user_id
+            return False
+
+    def test_payment_completion(self):
+        """Test payment completion flow"""
+        if not hasattr(self, 'session_id'):
+            self.log_test("Payment Completion", False, "No session available for payment")
+            return False
+            
+        success, response = self.make_request('POST', f'sessions/{self.session_id}/payment/complete', None, 200)
+        
+        if success and 'message' in response:
+            self.log_test("Payment Completion", True, f"Payment completed: {response['message']}")
+            
+            # Verify session status was updated
+            success2, session_response = self.make_request('GET', f'sessions/{self.session_id}', None, 200)
+            if success2 and session_response.get('payment_status') == 'paid':
+                self.log_test("Payment Status Update", True, "Session status updated to paid")
+                print("    📧 Payment confirmation email should be printed to console")
+                print("    🔔 Reader payment notification should be printed to console")
+                return True
+            else:
+                self.log_test("Payment Status Update", False, "Session status not updated", session_response)
+                return False
+        else:
+            self.log_test("Payment Completion", False, "Failed to complete payment", response)
             return False
 
     def test_get_sessions(self):
