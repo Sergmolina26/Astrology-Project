@@ -316,16 +316,16 @@ body::before {
 }
 
 .nav-link:hover {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.15);
+  color: #daa520;
+  background: rgba(184, 134, 11, 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.2);
 }
 
 .nav-link.active {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.25);
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+  color: #daa520;
+  background: rgba(184, 134, 11, 0.25);
+  box-shadow: 0 0 15px rgba(184, 134, 11, 0.3);
 }
 
 /* Mystical Decorative Elements */
