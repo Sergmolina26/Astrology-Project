@@ -397,8 +397,116 @@ body::before {
 
 /* Celestial Background Class */
 .celestial-bg {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a0d2e 25%, #2d1b4e 50%, #1a0d2e 75%, #0f0f23 100%);
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
   position: relative;
+}
+
+/* Mystical Decorative Elements */
+.mystical-hands {
+  position: relative;
+}
+
+.mystical-hands::before {
+  content: '🙏';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  opacity: 0.3;
+  animation: celestial-pulse 3s ease-in-out infinite;
+}
+
+.mystical-columns::before,
+.mystical-columns::after {
+  content: '⚡';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #fbbf24;
+  opacity: 0.4;
+  animation: float 4s ease-in-out infinite;
+}
+
+.mystical-columns::before {
+  left: -20px;
+}
+
+.mystical-columns::after {
+  right: -20px;
+  animation-delay: 2s;
+}
+
+.celestial-symbols {
+  position: relative;
+}
+
+.celestial-symbols::before {
+  content: '☽ ☉ ☾';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #fbbf24;
+  opacity: 0.5;
+  letter-spacing: 8px;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.mystical-eye {
+  position: relative;
+}
+
+.mystical-eye::after {
+  content: '👁️';
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 12px;
+  opacity: 0.4;
+  animation: celestial-pulse 2s ease-in-out infinite;
+}
+
+.palmistry-hands {
+  position: relative;
+  overflow: hidden;
+}
+
+.palmistry-hands::before,
+.palmistry-hands::after {
+  content: '✋';
+  position: absolute;
+  font-size: 40px;
+  opacity: 0.1;
+  color: #fbbf24;
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+
+.palmistry-hands::before {
+  top: 20%;
+  left: -20px;
+  transform: rotate(-15deg);
+}
+
+.palmistry-hands::after {
+  bottom: 20%;
+  right: -20px;
+  transform: rotate(15deg);
+  animation-delay: 4s;
+}
+
+.tarot-symbols::before {
+  content: '🃏 ⚛️ 🔮';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  opacity: 0.3;
+  letter-spacing: 12px;
+  animation: mystical-glow 4s ease-in-out infinite;
 }
 
 /* Enhanced Typography */
