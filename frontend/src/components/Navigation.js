@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
+import LanguageSwitcher from './LanguageSwitcher';
 import { 
   User, 
   LogOut, 
