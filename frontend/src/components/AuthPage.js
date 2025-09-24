@@ -151,12 +151,12 @@ const AuthPage = () => {
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="login-email" className="text-slate-200">
-                      Email
+                      {t('auth.email')}
                     </Label>
                     <Input
                       id="login-email"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder={t('auth.enterEmail')}
                       value={loginForm.email}
                       onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                       className="form-input"
@@ -166,12 +166,12 @@ const AuthPage = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="login-password" className="text-slate-200">
-                      Password
+                      {t('auth.password')}
                     </Label>
                     <Input
                       id="login-password"
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder={t('auth.enterPassword')}
                       value={loginForm.password}
                       onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                       className="form-input"
