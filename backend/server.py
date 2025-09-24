@@ -338,7 +338,7 @@ async def get_tarot_spreads():
             TarotSpread(
                 name="Single Card",
                 description="One card for daily guidance",
-                positions=[{"index": 1, "name": "Guidance", "meaning": "What do I need to know today?"}]
+                positions=[{"index": "1", "name": "Guidance", "meaning": "What do I need to know today?"}]
             ),
             TarotSpread(
                 name="Three Card Spread",
