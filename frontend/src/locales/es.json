@@ -3,7 +3,10 @@
     "dashboard": "Panel",
     "astrology": "Astrología",
     "bookReading": "Reservar Lectura",
-    "sessions": "Sesiones"
+    "sessions": "Sesiones",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "home": "Inicio"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
