@@ -228,12 +228,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Email confirmation system"
-    - "Payment link generation"
-    - "Reader registration system"
-    - "Reader notification system"
-    - "Session creation and management"
-    - "get_me API route"
+    - "SendGrid email integration"
+    - "Calendar blocking system"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
