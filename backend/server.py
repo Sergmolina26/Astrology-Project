@@ -787,6 +787,19 @@ async def create_session(
     if not reader:
         raise HTTPException(status_code=404, detail="No reader available. Please contact support.")
     
+    # Check if time slot is available (prevent double booking)
+    is_available = await calendar_service.is_time_slot_available(
+        session_data.start_at, 
+        session_data.end_at, 
+        reader["id"]
+    )
+    
+    if not is_available:
+        raise HTTPException(
+            status_code=409, 
+            detail="This time slot is not available. Please choose a different time."
+        )
+    
     # Calculate service price
     amount = get_service_price(session_data.service_type)
     
@@ -802,7 +815,7 @@ async def create_session(
         client_message=session_data.client_message
     )
     
-    # Generate payment link
+    # Generate payment link (will be replaced with real Stripe checkout)
     payment_link = generate_payment_link(session.id, amount)
     session.payment_link = payment_link
     
@@ -827,15 +840,15 @@ async def create_session(
         </div>
         
         <h3>💳 Complete Your Booking</h3>
-        <p>To confirm your session, please complete your payment using the link below:</p>
+        <p>To confirm your session, please complete your payment. You can pay securely through our payment portal.</p>
         
         <div style="text-align: center; margin: 30px 0;">
-            <a href="{payment_link}" style="background: linear-gradient(135deg, #b8860b, #daa520); color: white; padding: 15px 30px; text-decoration: none; border-radius: 10px; font-weight: bold;">
-                💫 Complete Payment (${amount})
-            </a>
+            <p style="background: linear-gradient(135deg, #b8860b, #daa520); color: white; padding: 15px 30px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block;">
+                💫 Payment Required: ${amount}
+            </p>
         </div>
         
-        <p><small>Once payment is confirmed, you'll receive a Google Meet link for your session.</small></p>
+        <p><small>Once payment is confirmed, you'll receive a Google Meet link for your session and this time slot will be reserved exclusively for you.</small></p>
         
         <p>Looking forward to your cosmic journey!</p>
         <p><em>~ Celestia Astrology & Tarot</em></p>
