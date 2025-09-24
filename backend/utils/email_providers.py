@@ -4,8 +4,8 @@ Switch between different email providers easily
 """
 import smtplib
 import os
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MimeText as EmailMimeText
+from email.mime.multipart import MimeMultipart as EmailMimeMultipart
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
@@ -108,13 +108,13 @@ class GmailSMTPProvider(EmailProvider):
                 return False
             
             # Create message
-            msg = MimeMultipart('alternative')
+            msg = EmailMimeMultipart('alternative')
             msg['Subject'] = subject
             msg['From'] = f"Celestia Astrology <{self.sender_email}>"
             msg['To'] = to_email
             
             # Add HTML content
-            html_part = MimeText(html_content, 'html')
+            html_part = EmailMimeText(html_content, 'html')
             msg.attach(html_part)
             
             # Send email
