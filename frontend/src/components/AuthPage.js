@@ -132,7 +132,7 @@ const AuthPage = () => {
               {error && (
                 <Alert className="mt-4 border-red-500/50 bg-red-500/10">
                   <AlertDescription className="text-red-400">
-                    {error}
+                    {typeof error === 'string' ? error : 'An error occurred. Please try again.'}
                   </AlertDescription>
                 </Alert>
               )}
