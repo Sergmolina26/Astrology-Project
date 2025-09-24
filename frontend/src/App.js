@@ -9,6 +9,7 @@ import "./i18n"; // Initialize i18n
 import AuthPage from "./components/AuthPage";
 import Dashboard from "./components/Dashboard";
 import AdminDashboard from "./components/AdminDashboard";
+import AdminSetup from "./components/AdminSetup";
 import Navigation from "./components/Navigation";
 import AstrologyPage from "./components/AstrologyPage";
 import TarotPage from "./components/TarotPage";
