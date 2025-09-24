@@ -43,8 +43,9 @@ const AuthPage = () => {
     if (result.success) {
       toast.success('Welcome back to Celestia!');
     } else {
-      setError(result.error);
-      toast.error(result.error);
+      const errorMessage = typeof result.error === 'string' ? result.error : 'Login failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
     
     setLoading(false);
@@ -60,8 +61,9 @@ const AuthPage = () => {
     if (result.success) {
       toast.success('Welcome to Celestia! Your mystical journey begins now.');
     } else {
-      setError(result.error);
-      toast.error(result.error);
+      const errorMessage = typeof result.error === 'string' ? result.error : 'Registration failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
     
     setLoading(false);
