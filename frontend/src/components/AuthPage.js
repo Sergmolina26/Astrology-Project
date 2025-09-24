@@ -103,10 +103,10 @@ const AuthPage = () => {
           </p>
         </div>
 
-        <Card className="glass-card mystical-border">
+        <Card className="glass-card mystical-border ornate-corner">
           <CardHeader>
-            <CardTitle className="text-center text-white font-serif">
-              Enter Your Celestial Realm
+            <CardTitle className="text-center text-white font-mystical text-2xl">
+              ✦ Enter Your Celestial Realm ✦
             </CardTitle>
             <CardDescription className="text-center text-slate-300">
               Access your astrology and tarot portal
