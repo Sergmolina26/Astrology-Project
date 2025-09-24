@@ -51,8 +51,8 @@ const Dashboard = () => {
             <Sun className="w-5 h-5 text-orange-400/30" />
           </div>
 
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
-            Welcome back, {user?.name}
+          <h1 className="font-mystical text-3xl md:text-4xl font-bold mystical-title mb-4">
+            ✦ Welcome back, {user?.name} ✦
           </h1>
           <p className="text-slate-300 text-lg mb-6">
             {user?.role === 'reader' 
