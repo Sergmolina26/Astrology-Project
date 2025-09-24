@@ -105,13 +105,13 @@ const AuthPage = () => {
           </p>
         </div>
 
-        <Card className="glass-card mystical-border ornate-corner">
+        <Card className="glass-card mystical-border ornate-corner palmistry-hands">
           <CardHeader>
             <CardTitle className="text-center text-white font-mystical text-2xl">
-              ✦ Enter Your Celestial Realm ✦
+              ✦ {t('auth.enterRealm')} ✦
             </CardTitle>
             <CardDescription className="text-center text-slate-300">
-              Access your astrology and tarot portal
+              {t('auth.accessPortal')}
             </CardDescription>
           </CardHeader>
           <CardContent>
