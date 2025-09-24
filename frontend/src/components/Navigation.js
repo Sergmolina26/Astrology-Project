@@ -23,7 +23,7 @@ const Navigation = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="glass border-b border-slate-700/50">
+    <nav className="glass border-b border-slate-700/50 mystical-columns">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo - now clickable to go home */}
@@ -37,14 +37,14 @@ const Navigation = () => {
           </Link>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-1 celestial-symbols">
             <Link
               to="/dashboard"
               className={`nav-link ${isActive('/dashboard') ? 'active' : ''}`}
               data-testid="nav-dashboard"
             >
               <Home className="w-4 h-4 inline mr-2" />
-              Dashboard
+              {t('nav.dashboard')}
             </Link>
             <Link
               to="/astrology"
@@ -52,7 +52,7 @@ const Navigation = () => {
               data-testid="nav-astrology"
             >
               <Sparkles className="w-4 h-4 inline mr-2" />
-              Astrology
+              {t('nav.astrology')}
             </Link>
             <Link
               to="/tarot"
@@ -60,7 +60,7 @@ const Navigation = () => {
               data-testid="nav-tarot"
             >
               <Calendar className="w-4 h-4 inline mr-2" />
-              Book Reading
+              {t('nav.bookReading')}
             </Link>
             <Link
               to="/sessions"
@@ -68,13 +68,14 @@ const Navigation = () => {
               data-testid="nav-sessions"
             >
               <Calendar className="w-4 h-4 inline mr-2" />
-              Sessions
+              {t('nav.sessions')}
             </Link>
           </div>
 
-          {/* User Menu */}
+          {/* User Menu with Language Switcher */}
           <div className="flex items-center space-x-4">
-            <Link to="/profile" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <LanguageSwitcher />
+            <Link to="/profile" className="flex items-center space-x-2 hover:opacity-80 transition-opacity mystical-eye">
               <User className="w-5 h-5 text-slate-400" />
               <span className="text-sm font-medium text-slate-200 hover:text-amber-400">
                 {user.name}
