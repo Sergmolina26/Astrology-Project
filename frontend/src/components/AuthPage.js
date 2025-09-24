@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 
 const AuthPage = () => {
   const { user, login, register } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('login');
