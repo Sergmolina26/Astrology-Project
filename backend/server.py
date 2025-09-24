@@ -190,7 +190,7 @@ class SessionNote(BaseModel):
 
 def send_email_deprecated(to_email: str, subject: str, html_content: str):
     """Deprecated SendGrid function - use utils.email_providers.send_email instead"""
-    from utils.email_providers import send_email
+    # Temporarily using placeholder function due to import issues
     return send_email(to_email, subject, html_content)
 
 def generate_payment_link(session_id: str, amount: float) -> str:
