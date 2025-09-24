@@ -69,23 +69,23 @@ body::before {
 
 /* Enhanced Glass Morphism Effects */
 .glass {
-  background: rgba(30, 27, 75, 0.7);
+  background: rgba(10, 10, 31, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(184, 134, 11, 0.3);
   position: relative;
 }
 
 .glass-card {
-  background: rgba(49, 46, 129, 0.4);
+  background: rgba(26, 13, 46, 0.6);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 2px solid rgba(251, 191, 36, 0.3);
+  border: 2px solid rgba(184, 134, 11, 0.4);
   border-radius: 20px;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(251, 191, 36, 0.1) inset,
-    0 0 20px rgba(251, 191, 36, 0.1);
+    0 0 0 1px rgba(184, 134, 11, 0.15) inset,
+    0 0 20px rgba(184, 134, 11, 0.1);
   position: relative;
 }
 
