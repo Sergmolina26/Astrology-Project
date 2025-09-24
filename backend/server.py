@@ -295,10 +295,10 @@ async def generate_chart(
         
         # Extract houses
         houses = {}
-        for i, house in enumerate(subject.houses_list, 1):
+        for i, house in enumerate(subject.houses_list_simple, 1):
             houses[f"house_{i}"] = {
-                "cusp": house.abs_pos,
-                "sign": house.sign
+                "cusp": house['abs_pos'],
+                "sign": house['sign']
             }
         
         # Create chart record
