@@ -128,14 +128,14 @@ const AuthPage = () => {
                   className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
                   data-testid="login-tab"
                 >
-                  Sign In
+                  {t('auth.signIn')}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="register" 
                   className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
                   data-testid="register-tab"
                 >
-                  Join Us
+                  {t('auth.joinUs')}
                 </TabsTrigger>
               </TabsList>
 
