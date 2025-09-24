@@ -11,6 +11,7 @@ import Navigation from "./components/Navigation";
 import AstrologyPage from "./components/AstrologyPage";
 import TarotPage from "./components/TarotPage";
 import SessionsPage from "./components/SessionsPage";
+import ProfilePage from "./components/ProfilePage";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { Toaster } from "./components/ui/sonner";
 
