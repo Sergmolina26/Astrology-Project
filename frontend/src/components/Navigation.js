@@ -74,7 +74,7 @@ const Navigation = () => {
 
           {/* User Menu with Language Switcher */}
           <div className="flex items-center space-x-4">
-            <LanguageSwitcher />
+            <LanguageSwitcher showLabel={true} />
             <Link to="/profile" className="flex items-center space-x-2 hover:opacity-80 transition-opacity mystical-eye">
               <User className="w-5 h-5 text-slate-400" />
               <span className="text-sm font-medium text-slate-200 hover:text-amber-400">
