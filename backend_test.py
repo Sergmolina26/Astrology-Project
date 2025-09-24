@@ -390,6 +390,18 @@ class CelestiaAPITester:
             return False
             
         self.test_auth_login()
+        self.test_get_me_endpoint()
+        
+        # Reader registration tests
+        print("\n👑 Reader Registration Tests:")
+        self.test_reader_registration()
+        self.test_reader_dashboard()
+        
+        # Session tests (priority tests)
+        print("\n📅 Session Management Tests:")
+        self.test_sessions_creation()
+        self.test_payment_completion()
+        self.test_get_sessions()
         
         # Astrology tests
         print("\n⭐ Astrology Tests:")
@@ -404,16 +416,17 @@ class CelestiaAPITester:
         self.test_tarot_cards()
         self.test_tarot_reading()
         
-        # Session tests
-        print("\n📅 Session Tests:")
-        self.test_sessions_creation()
-        self.test_get_sessions()
-        
         # Summary
         print("\n" + "=" * 50)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} passed")
         success_rate = (self.tests_passed / self.tests_run * 100) if self.tests_run > 0 else 0
         print(f"📈 Success Rate: {success_rate:.1f}%")
+        
+        # Print mock implementation notes
+        print("\n📝 Mock Implementation Notes:")
+        print("   📧 Email functionality uses print statements (not actual emails)")
+        print("   💳 Payment links are mock URLs")
+        print("   🔔 Reader notifications use print statements")
         
         if self.tests_passed == self.tests_run:
             print("🎉 All tests passed!")
