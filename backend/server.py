@@ -394,6 +394,10 @@ async def get_reader_dashboard(current_user: User = Depends(get_current_user)):
         "sessions": sessions
     }
 
+@api_router.get("/auth/me", response_model=User)
+async def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
+
 # ==================== ASTROLOGY ROUTES ====================
 
 @api_router.post("/birth-data", response_model=BirthData)
