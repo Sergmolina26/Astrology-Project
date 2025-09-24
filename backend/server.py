@@ -9,12 +9,16 @@ from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 import bcrypt
 from kerykeion import AstrologicalSubject
 import json
+import smtplib
+from email.mime.text import MimeText
+from email.mime.multipart import MimeMultipart
+import hashlib
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
