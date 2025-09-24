@@ -91,7 +91,8 @@ const TarotPage = () => {
       });
     },
     onError: (error) => {
-      toast.error(error.response?.data?.detail || 'Failed to submit booking request');
+      const errorMessage = extractErrorMessage(error, 'Failed to submit booking request');
+      toast.error(errorMessage);
     }
   });
 
