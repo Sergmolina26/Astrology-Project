@@ -936,6 +936,365 @@ async def get_session(
     
     return session
 
+# ==================== PAYMENT ROUTES ====================
+
+@api_router.post("/payments/v1/checkout/session", response_model=CheckoutSessionResponse)
+async def create_payment_checkout(
+    payment_request: PaymentCreateRequest,
+    current_user: User = Depends(get_current_user)
+):
+    """Create Stripe checkout session for service payment"""
+    try:
+        # Get the session
+        session_doc = await db.sessions.find_one({"id": payment_request.session_id})
+        if not session_doc:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        session = Session(**session_doc)
+        
+        # Verify user owns this session
+        if session.client_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Get service price from backend (security - don't trust frontend)
+        amount = get_service_price(session.service_type)
+        
+        # Create success and cancel URLs
+        origin_url = payment_request.origin_url.rstrip('/')
+        success_url = f"{origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
+        cancel_url = f"{origin_url}/payment-cancelled"
+        
+        # Initialize Stripe
+        host_url = payment_request.origin_url
+        webhook_url = f"{host_url}/api/webhook/stripe"
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url=webhook_url)
+        
+        # Create checkout session request
+        checkout_request = CheckoutSessionRequest(
+            amount=amount,
+            currency="USD",
+            success_url=success_url,
+            cancel_url=cancel_url,
+            metadata={
+                "celestia_session_id": payment_request.session_id,
+                "user_id": current_user.id,
+                "service_type": session.service_type,
+                "source": "celestia_booking"
+            }
+        )
+        
+        # Create checkout session
+        stripe_response = await stripe_checkout.create_checkout_session(checkout_request)
+        
+        # Create payment transaction record
+        payment_transaction = PaymentTransaction(
+            session_id=stripe_response.session_id,
+            payment_id=str(uuid.uuid4()),
+            user_id=current_user.id,
+            user_email=current_user.email,
+            amount=amount,
+            currency="USD",
+            payment_status="pending",
+            service_type=session.service_type,
+            celestia_session_id=payment_request.session_id,
+            metadata=checkout_request.metadata or {}
+        )
+        
+        await db.payment_transactions.insert_one(payment_transaction.dict())
+        
+        # Update session with payment link
+        await db.sessions.update_one(
+            {"id": payment_request.session_id},
+            {"$set": {"payment_link": stripe_response.url}}
+        )
+        
+        return stripe_response
+        
+    except Exception as e:
+        print(f"❌ Payment checkout creation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create payment session: {str(e)}")
+
+@api_router.get("/payments/v1/checkout/status/{checkout_session_id}", response_model=PaymentStatusResponse)
+async def get_payment_status(
+    checkout_session_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get payment status from Stripe"""
+    try:
+        # Get payment transaction
+        payment_transaction = await db.payment_transactions.find_one({"session_id": checkout_session_id})
+        if not payment_transaction:
+            raise HTTPException(status_code=404, detail="Payment transaction not found")
+        
+        # Verify user owns this payment
+        if payment_transaction["user_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Initialize Stripe
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url="")
+        
+        # Get status from Stripe
+        checkout_status = await stripe_checkout.get_checkout_status(checkout_session_id)
+        
+        # Update our payment transaction if status changed
+        new_status = "paid" if checkout_status.payment_status == "paid" else checkout_status.status
+        
+        if payment_transaction["payment_status"] != new_status:
+            await db.payment_transactions.update_one(
+                {"session_id": checkout_session_id},
+                {"$set": {
+                    "payment_status": new_status,
+                    "updated_at": datetime.now(timezone.utc)
+                }}
+            )
+            
+            # If payment completed, update the Celestia session
+            if new_status == "paid" and payment_transaction["payment_status"] != "paid":
+                celestia_session_id = payment_transaction["celestia_session_id"]
+                if celestia_session_id:
+                    # Update session status to confirmed
+                    await db.sessions.update_one(
+                        {"id": celestia_session_id},
+                        {"$set": {
+                            "payment_status": "paid",
+                            "status": "confirmed"
+                        }}
+                    )
+                    
+                    # Send confirmation email to client
+                    session_doc = await db.sessions.find_one({"id": celestia_session_id})
+                    if session_doc:
+                        session = Session(**session_doc)
+                        
+                        confirmation_subject = "Celestia - Payment Confirmed! 🌟"
+                        confirmation_content = f"""
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                            <h2 style="color: #b8860b;">✨ Payment Confirmed!</h2>
+                            <p>Dear {current_user.name},</p>
+                            
+                            <p>🎉 Your payment has been successfully processed!</p>
+                            
+                            <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                                <h3>📅 Confirmed Session</h3>
+                                <p><strong>Service:</strong> {session.service_type}</p>
+                                <p><strong>Date:</strong> {session.start_at.strftime('%B %d, %Y at %I:%M %p')}</p>
+                                <p><strong>Amount Paid:</strong> ${session.amount}</p>
+                                <p><strong>Status:</strong> ✅ Confirmed</p>
+                            </div>
+                            
+                            <h3>📞 What's Next?</h3>
+                            <p>Your session is now confirmed! You will receive a Google Meet link 24 hours before your session.</p>
+                            
+                            <p>If you need to reschedule or have any questions, please contact us.</p>
+                            
+                            <p>Thank you for choosing Celestia!</p>
+                            <p><em>~ Your Cosmic Guide</em></p>
+                        </div>
+                        """
+                        
+                        send_email(current_user.email, confirmation_subject, confirmation_content)
+                    
+                    # Notify reader
+                    await notify_reader(celestia_session_id, "Payment Completed")
+        
+        return PaymentStatusResponse(
+            payment_status=new_status,
+            session_id=checkout_session_id,
+            amount=checkout_status.amount_total / 100.0,  # Convert from cents
+            currency=checkout_status.currency.upper(),
+            service_type=payment_transaction.get("service_type")
+        )
+        
+    except Exception as e:
+        print(f"❌ Payment status check failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get payment status: {str(e)}")
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    """Handle Stripe webhooks"""
+    try:
+        body = await request.body()
+        stripe_signature = request.headers.get("Stripe-Signature")
+        
+        if not stripe_signature:
+            raise HTTPException(status_code=400, detail="Missing Stripe signature")
+        
+        # Initialize Stripe
+        stripe_checkout = StripeCheckout(api_key=stripe_api_key, webhook_url="")
+        
+        # Handle webhook
+        webhook_response = await stripe_checkout.handle_webhook(body, stripe_signature)
+        
+        # Process webhook event
+        if webhook_response.event_type == "checkout.session.completed":
+            session_id = webhook_response.session_id
+            payment_status = webhook_response.payment_status
+            
+            # Update payment transaction
+            await db.payment_transactions.update_one(
+                {"session_id": session_id},
+                {"$set": {
+                    "payment_status": payment_status,
+                    "updated_at": datetime.now(timezone.utc)
+                }}
+            )
+            
+            # If payment completed, update Celestia session
+            if payment_status == "paid":
+                payment_transaction = await db.payment_transactions.find_one({"session_id": session_id})
+                if payment_transaction and payment_transaction.get("celestia_session_id"):
+                    celestia_session_id = payment_transaction["celestia_session_id"]
+                    
+                    await db.sessions.update_one(
+                        {"id": celestia_session_id},
+                        {"$set": {
+                            "payment_status": "paid",
+                            "status": "confirmed"
+                        }}
+                    )
+                    
+                    # Notify reader
+                    await notify_reader(celestia_session_id, "Payment Completed")
+        
+        return {"status": "success"}
+        
+    except Exception as e:
+        print(f"❌ Stripe webhook failed: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ==================== CALENDAR ROUTES ====================
+
+@api_router.get("/calendar/availability/{reader_id}")
+async def get_reader_availability(
+    reader_id: str,
+    date: str,  # YYYY-MM-DD format
+    current_user: User = Depends(get_current_user)
+):
+    """Get available time slots for a reader on a specific date"""
+    try:
+        # Parse date
+        target_date = datetime.strptime(date, "%Y-%m-%d")
+        
+        # Get availability
+        available_slots = await calendar_service.get_reader_availability(reader_id, target_date)
+        
+        return {
+            "date": date,
+            "reader_id": reader_id,
+            "available_slots": available_slots
+        }
+        
+    except Exception as e:
+        print(f"❌ Get availability failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/calendar/check-availability")
+async def check_time_slot_availability(
+    reader_id: str,
+    start_time: datetime,
+    end_time: datetime,
+    current_user: User = Depends(get_current_user)
+):
+    """Check if a specific time slot is available"""
+    try:
+        is_available = await calendar_service.is_time_slot_available(start_time, end_time, reader_id)
+        
+        return {
+            "available": is_available,
+            "start_time": start_time.isoformat(),
+            "end_time": end_time.isoformat(),
+            "reader_id": reader_id
+        }
+        
+    except Exception as e:
+        print(f"❌ Check availability failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ==================== ADMIN/READER PROFILE ROUTES ====================
+
+class ReaderProfileCreate(BaseModel):
+    business_name: Optional[str] = "Celestia Astrology & Tarot"
+    bio: Optional[str] = "Professional astrology and tarot reader"
+    specialties: Optional[List[str]] = ["Astrology", "Tarot", "Spiritual Guidance"]
+    experience_years: Optional[int] = 5
+    hourly_rate: Optional[float] = 120.0
+    notification_email: Optional[str] = None
+    calendar_sync_enabled: Optional[bool] = False
+    google_calendar_id: Optional[str] = None
+
+@api_router.post("/reader/profile")
+async def create_reader_profile(
+    profile_data: ReaderProfileCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """Create or update reader profile"""
+    if current_user.role != "reader":
+        raise HTTPException(status_code=403, detail="Reader access required")
+    
+    try:
+        # Use user's email as default notification email if not provided
+        profile_dict = profile_data.dict()
+        if not profile_dict.get("notification_email"):
+            profile_dict["notification_email"] = current_user.email
+        
+        profile = await admin_service.create_reader_profile(current_user.id, profile_dict)
+        return profile
+        
+    except Exception as e:
+        print(f"❌ Create reader profile failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/reader/profile")
+async def get_reader_profile(current_user: User = Depends(get_current_user)):
+    """Get reader profile"""
+    if current_user.role != "reader":
+        raise HTTPException(status_code=403, detail="Reader access required")
+    
+    try:
+        profile = await admin_service.get_reader_profile(current_user.id)
+        if not profile:
+            # Create default profile if none exists
+            profile = await admin_service.create_reader_profile(current_user.id, {
+                "notification_email": current_user.email
+            })
+        
+        return profile
+        
+    except Exception as e:
+        print(f"❌ Get reader profile failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+class NotificationSettings(BaseModel):
+    notification_email: EmailStr
+    calendar_sync_enabled: Optional[bool] = False
+    google_calendar_id: Optional[str] = None
+
+@api_router.put("/reader/notifications")
+async def update_notification_settings(
+    settings: NotificationSettings,
+    current_user: User = Depends(get_current_user)
+):
+    """Update reader notification settings"""
+    if current_user.role != "reader":
+        raise HTTPException(status_code=403, detail="Reader access required")
+    
+    try:
+        success = await admin_service.update_notification_settings(
+            current_user.id,
+            settings.notification_email,
+            settings.calendar_sync_enabled,
+            settings.google_calendar_id
+        )
+        
+        if not success:
+            raise HTTPException(status_code=404, detail="Reader profile not found")
+        
+        return {"message": "Notification settings updated successfully"}
+        
+    except Exception as e:
+        print(f"❌ Update notification settings failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ==================== INCLUDE ROUTER ====================
 
 app.include_router(api_router)
