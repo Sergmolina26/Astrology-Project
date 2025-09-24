@@ -314,11 +314,28 @@ async def generate_chart(
         
         # Extract houses
         houses = {}
-        for i, house in enumerate(subject.houses_list_simple, 1):
-            houses[f"house_{i}"] = {
-                "cusp": house['abs_pos'],
-                "sign": house['sign']
-            }
+        # Try different attribute names for houses
+        houses_data = None
+        if hasattr(subject, 'houses_list'):
+            houses_data = subject.houses_list
+        elif hasattr(subject, 'houses'):
+            houses_data = subject.houses
+        elif hasattr(subject, 'houses_list_simple'):
+            houses_data = subject.houses_list_simple
+            
+        if houses_data:
+            for i, house in enumerate(houses_data, 1):
+                if isinstance(house, dict):
+                    houses[f"house_{i}"] = {
+                        "cusp": house.get('abs_pos', 0),
+                        "sign": house.get('sign', 'Unknown')
+                    }
+                else:
+                    # If it's an object
+                    houses[f"house_{i}"] = {
+                        "cusp": getattr(house, 'abs_pos', 0),
+                        "sign": getattr(house, 'sign', 'Unknown')
+                    }
         
         # Create chart record
         chart = AstroChart(
