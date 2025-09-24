@@ -1,90 +1,87 @@
 {
-  "timestamp": "2025-09-24T15:37:02.201393",
+  "timestamp": "2025-09-24T15:38:19.410754",
   "total_tests": 11,
-  "passed_tests": 8,
-  "success_rate": 72.72727272727273,
+  "passed_tests": 10,
+  "success_rate": 90.9090909090909,
   "test_details": [
     {
       "test_name": "User Registration",
       "success": true,
-      "details": "Registered user: test_user_153701@celestia.com",
+      "details": "Registered user: test_user_153818@celestia.com",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.481348"
+      "timestamp": "2025-09-24T15:38:18.729569"
     },
     {
       "test_name": "User Login/Token Verification",
       "success": true,
       "details": "User authenticated: Test User",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.564655"
+      "timestamp": "2025-09-24T15:38:18.773822"
     },
     {
       "test_name": "Birth Data Creation",
       "success": true,
-      "details": "Created birth data: 90439257-db38-4ccb-94ac-516a557992b1",
+      "details": "Created birth data: eb624d6b-3a2b-4b50-9b81-59f00b1129ef",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.618293"
+      "timestamp": "2025-09-24T15:38:18.813228"
     },
     {
       "test_name": "Get Birth Data",
       "success": true,
       "details": "Retrieved 1 birth data records",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.658383"
+      "timestamp": "2025-09-24T15:38:18.854356"
     },
     {
       "test_name": "Astrology Chart Generation",
       "success": false,
       "details": "Failed to generate astrology chart",
       "response_data": {
-        "detail": "Error generating chart: 'AstrologicalSubject' object has no attribute 'planets_list'"
+        "detail": "Error generating chart: 'AstrologicalSubject' object has no attribute 'planets_list_simple'"
       },
-      "timestamp": "2025-09-24T15:37:01.702124"
+      "timestamp": "2025-09-24T15:38:18.896328"
     },
     {
       "test_name": "Get Astrology Charts",
       "success": true,
       "details": "Retrieved 0 astrology charts",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.740810"
+      "timestamp": "2025-09-24T15:38:18.934567"
     },
     {
       "test_name": "Get Tarot Spreads",
-      "success": false,
-      "details": "Failed to retrieve tarot spreads",
-      "response_data": {
-        "status_code": 500,
-        "text": "Internal Server Error"
-      },
-      "timestamp": "2025-09-24T15:37:01.780028"
+      "success": true,
+      "details": "Retrieved 3 spreads: Single Card, Three Card Spread, Celtic Cross",
+      "response_data": null,
+      "timestamp": "2025-09-24T15:38:18.983809"
     },
     {
       "test_name": "Get Tarot Cards",
       "success": true,
       "details": "Retrieved 5 cards including: The Fool, The Magician, The High Priestess",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.834254"
+      "timestamp": "2025-09-24T15:38:19.022511"
     },
     {
       "test_name": "Create Tarot Reading",
-      "success": false,
-      "details": "No spreads available",
+      "success": true,
+      "details": "Created Single Card reading with 1 cards",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:01.834284"
+      "timestamp": "2025-09-24T15:38:19.073516"
     },
     {
       "test_name": "Session Creation",
       "success": true,
       "details": "Created session: Astrology Reading - 60min",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:02.167123"
+      "timestamp": "2025-09-24T15:38:19.374824"
     },
     {
       "test_name": "Get Sessions",
       "success": true,
       "details": "Retrieved 1 sessions",
       "response_data": null,
-      "timestamp": "2025-09-24T15:37:02.201350"
+      "timestamp": "2025-09-24T15:38:19.410711"
     }
   ]
 }
