@@ -33,6 +33,13 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Initialize services
+calendar_service = CalendarBlockingService(db)
+admin_service = AdminProfileService(db)
+
+# Stripe setup
+stripe_api_key = os.environ.get('STRIPE_API_KEY')
+
 # Security
 security = HTTPBearer()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
