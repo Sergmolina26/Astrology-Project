@@ -29,7 +29,20 @@
     "errorOccurred": "An error occurred. Please try again.",
     "creatingProfile": "Creating your cosmic profile..."
   },
-  "admin": {
+  "dashboard": {
+    "welcome": "Welcome to Celestia",
+    "subtitle": "Your cosmic journey begins here",
+    "quickActions": "Quick Actions",
+    "exploreChart": "Explore Your Birth Chart",
+    "chartDescription": "Discover the planetary positions at your birth",
+    "bookReading": "Book Services",
+    "readingDescription": "Schedule a personalized session with our expert",
+    "viewSessions": "View Sessions", 
+    "sessionsDescription": "Manage your upcoming and past sessions",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No recent activity to show",
+    "getStarted": "Get started by exploring your birth chart or booking a session"
+  },
     "dashboard": "Admin Dashboard",
     "manageBusiness": "Manage your Celestia business with complete administrative control",
     "totalClients": "Total Clients",
