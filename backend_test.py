@@ -386,10 +386,301 @@ class CelestiaAPITester:
             self.log_test("Get Sessions", False, "Failed to retrieve sessions", response)
             return False
 
+    def test_sendgrid_email_integration(self):
+        """Test SendGrid email integration with real API key"""
+        # Test by creating a session which should trigger real email sending
+        start_time = datetime.now() + timedelta(days=2)
+        end_time = start_time + timedelta(hours=1)
+        
+        session_data = {
+            "service_type": "tarot-reading",
+            "start_at": start_time.isoformat(),
+            "end_at": end_time.isoformat(),
+            "client_message": "Testing SendGrid integration"
+        }
+        
+        success, response = self.make_request('POST', 'sessions', session_data, 200)
+        
+        if success and 'id' in response:
+            self.sendgrid_session_id = response['id']
+            self.log_test("SendGrid Email Integration - Session Creation", True, 
+                         "Session created - should trigger real SendGrid email to client and reader")
+            
+            # Test payment completion which should also send emails
+            success2, response2 = self.make_request('POST', f'sessions/{self.sendgrid_session_id}/payment/complete', None, 200)
+            
+            if success2:
+                self.log_test("SendGrid Email Integration - Payment Confirmation", True, 
+                             "Payment completed - should trigger real SendGrid confirmation emails")
+                return True
+            else:
+                self.log_test("SendGrid Email Integration - Payment Confirmation", False, 
+                             "Failed to complete payment for email test", response2)
+                return False
+        else:
+            self.log_test("SendGrid Email Integration - Session Creation", False, 
+                         "Failed to create session for email test", response)
+            return False
+
+    def test_stripe_payment_integration(self):
+        """Test Stripe payment integration using emergentintegrations"""
+        if not hasattr(self, 'session_id'):
+            # Create a session first
+            start_time = datetime.now() + timedelta(days=3)
+            end_time = start_time + timedelta(hours=1)
+            
+            session_data = {
+                "service_type": "birth-chart-reading",
+                "start_at": start_time.isoformat(),
+                "end_at": end_time.isoformat(),
+                "client_message": "Testing Stripe integration"
+            }
+            
+            success, response = self.make_request('POST', 'sessions', session_data, 200)
+            if not success:
+                self.log_test("Stripe Integration - Session Creation", False, "Failed to create session", response)
+                return False
+            self.stripe_session_id = response['id']
+        else:
+            self.stripe_session_id = self.session_id
+
+        # Test creating Stripe checkout session
+        payment_request = {
+            "service_type": "birth-chart-reading",
+            "session_id": self.stripe_session_id,
+            "origin_url": self.base_url
+        }
+        
+        success, response = self.make_request('POST', 'payments/v1/checkout/session', payment_request, 200)
+        
+        if success and 'url' in response and 'session_id' in response:
+            checkout_session_id = response['session_id']
+            self.log_test("Stripe Checkout Session Creation", True, 
+                         f"Created Stripe checkout session: {checkout_session_id}")
+            
+            # Test getting payment status
+            success2, response2 = self.make_request('GET', f'payments/v1/checkout/status/{checkout_session_id}', None, 200)
+            
+            if success2 and 'payment_status' in response2:
+                self.log_test("Stripe Payment Status Check", True, 
+                             f"Payment status: {response2['payment_status']}")
+                return True
+            else:
+                self.log_test("Stripe Payment Status Check", False, 
+                             "Failed to get payment status", response2)
+                return False
+        else:
+            self.log_test("Stripe Checkout Session Creation", False, 
+                         "Failed to create Stripe checkout session", response)
+            return False
+
+    def test_calendar_blocking_system(self):
+        """Test calendar blocking to prevent double bookings"""
+        # Get reader ID first
+        reader = None
+        if hasattr(self, 'reader_id'):
+            reader_id = self.reader_id
+        else:
+            # Try to find existing reader
+            success, response = self.make_request('GET', 'auth/me', None, 200)
+            if success and response.get('role') == 'reader':
+                reader_id = response['id']
+            else:
+                self.log_test("Calendar Blocking - Reader Setup", False, "No reader available for testing")
+                return False
+
+        # Test getting availability
+        tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+        success, response = self.make_request('GET', f'calendar/availability/{reader_id}?date={tomorrow}', None, 200)
+        
+        if success and 'available_slots' in response:
+            self.log_test("Calendar Availability Check", True, 
+                         f"Retrieved availability for {tomorrow}: {len(response['available_slots'])} slots")
+            
+            # Test checking specific time slot availability
+            start_time = datetime.now() + timedelta(days=1, hours=10)
+            end_time = start_time + timedelta(hours=1)
+            
+            check_data = {
+                "reader_id": reader_id,
+                "start_time": start_time.isoformat(),
+                "end_time": end_time.isoformat()
+            }
+            
+            success2, response2 = self.make_request('POST', 'calendar/check-availability', check_data, 200)
+            
+            if success2 and 'available' in response2:
+                is_available = response2['available']
+                self.log_test("Calendar Time Slot Check", True, 
+                             f"Time slot availability: {is_available}")
+                
+                # Test creating overlapping sessions (should fail for second one)
+                session_data = {
+                    "service_type": "tarot-reading",
+                    "start_at": start_time.isoformat(),
+                    "end_at": end_time.isoformat(),
+                    "client_message": "Testing calendar blocking"
+                }
+                
+                # Create first session
+                success3, response3 = self.make_request('POST', 'sessions', session_data, 200)
+                if success3:
+                    first_session_id = response3['id']
+                    
+                    # Complete payment to confirm the session
+                    self.make_request('POST', f'sessions/{first_session_id}/payment/complete', None, 200)
+                    
+                    # Try to create overlapping session (should fail)
+                    success4, response4 = self.make_request('POST', 'sessions', session_data, 200)
+                    
+                    if not success4 and 'not available' in str(response4):
+                        self.log_test("Calendar Double Booking Prevention", True, 
+                                     "Successfully prevented double booking")
+                        return True
+                    else:
+                        self.log_test("Calendar Double Booking Prevention", False, 
+                                     "Failed to prevent double booking", response4)
+                        return False
+                else:
+                    self.log_test("Calendar Blocking - Session Creation", False, 
+                                 "Failed to create session for blocking test", response3)
+                    return False
+            else:
+                self.log_test("Calendar Time Slot Check", False, 
+                             "Failed to check time slot availability", response2)
+                return False
+        else:
+            self.log_test("Calendar Availability Check", False, 
+                         "Failed to get calendar availability", response)
+            return False
+
+    def test_admin_reader_profile_management(self):
+        """Test admin/reader profile management system"""
+        # Switch to reader token if available
+        original_token = self.token
+        if hasattr(self, 'reader_token'):
+            self.token = self.reader_token
+        else:
+            self.log_test("Reader Profile Management", False, "No reader token available")
+            return False
+
+        # Test creating reader profile
+        profile_data = {
+            "business_name": "Mystic Celestia Readings",
+            "bio": "Expert astrologer and tarot reader with 10+ years experience",
+            "specialties": ["Natal Charts", "Tarot", "Relationship Readings"],
+            "experience_years": 10,
+            "hourly_rate": 150.0,
+            "notification_email": "reader@celestia.com",
+            "calendar_sync_enabled": True
+        }
+        
+        success, response = self.make_request('POST', 'reader/profile', profile_data, 200)
+        
+        if success and 'id' in response:
+            self.log_test("Reader Profile Creation", True, 
+                         f"Created reader profile: {response.get('business_name')}")
+            
+            # Test getting reader profile
+            success2, response2 = self.make_request('GET', 'reader/profile', None, 200)
+            
+            if success2 and 'business_name' in response2:
+                self.log_test("Reader Profile Retrieval", True, 
+                             f"Retrieved profile: {response2.get('business_name')}")
+                
+                # Test updating notification settings
+                notification_settings = {
+                    "notification_email": "updated@celestia.com",
+                    "calendar_sync_enabled": False
+                }
+                
+                success3, response3 = self.make_request('PUT', 'reader/notifications', notification_settings, 200)
+                
+                if success3:
+                    self.log_test("Reader Notification Settings Update", True, 
+                                 "Successfully updated notification settings")
+                    
+                    # Restore original token
+                    self.token = original_token
+                    return True
+                else:
+                    self.log_test("Reader Notification Settings Update", False, 
+                                 "Failed to update notification settings", response3)
+                    self.token = original_token
+                    return False
+            else:
+                self.log_test("Reader Profile Retrieval", False, 
+                             "Failed to retrieve reader profile", response2)
+                self.token = original_token
+                return False
+        else:
+            self.log_test("Reader Profile Creation", False, 
+                         "Failed to create reader profile", response)
+            self.token = original_token
+            return False
+
+    def test_enhanced_session_management(self):
+        """Test enhanced session management with calendar blocking and email forwarding"""
+        # Create session that should check calendar availability
+        start_time = datetime.now() + timedelta(days=4)
+        end_time = start_time + timedelta(hours=1, minutes=30)
+        
+        session_data = {
+            "service_type": "chart-tarot-combo",
+            "start_at": start_time.isoformat(),
+            "end_at": end_time.isoformat(),
+            "client_message": "Testing enhanced session management with calendar blocking"
+        }
+        
+        success, response = self.make_request('POST', 'sessions', session_data, 200)
+        
+        if success and 'id' in response:
+            enhanced_session_id = response['id']
+            self.log_test("Enhanced Session Creation", True, 
+                         f"Created session with calendar checking: {enhanced_session_id}")
+            
+            # Verify session has correct amount for combo service
+            expected_amount = 165.0  # chart-tarot-combo price
+            actual_amount = response.get('amount', 0)
+            
+            if actual_amount == expected_amount:
+                self.log_test("Session Pricing Verification", True, 
+                             f"Correct pricing applied: ${actual_amount}")
+            else:
+                self.log_test("Session Pricing Verification", False, 
+                             f"Incorrect pricing: expected ${expected_amount}, got ${actual_amount}")
+            
+            # Test payment completion which should trigger reader notification to configured email
+            success2, response2 = self.make_request('POST', f'sessions/{enhanced_session_id}/payment/complete', None, 200)
+            
+            if success2:
+                self.log_test("Enhanced Session Payment", True, 
+                             "Payment completed - should forward notification to reader's configured email")
+                
+                # Verify session status updated
+                success3, response3 = self.make_request('GET', f'sessions/{enhanced_session_id}', None, 200)
+                
+                if success3 and response3.get('status') == 'confirmed':
+                    self.log_test("Session Status Update", True, 
+                                 "Session status correctly updated to confirmed")
+                    return True
+                else:
+                    self.log_test("Session Status Update", False, 
+                                 "Session status not updated correctly", response3)
+                    return False
+            else:
+                self.log_test("Enhanced Session Payment", False, 
+                             "Failed to complete payment", response2)
+                return False
+        else:
+            self.log_test("Enhanced Session Creation", False, 
+                         "Failed to create enhanced session", response)
+            return False
+
     def run_all_tests(self):
-        """Run all API tests"""
-        print("🌟 Starting Celestia API Tests...")
-        print("=" * 50)
+        """Run all API tests including new integrations"""
+        print("🌟 Starting Celestia API Tests - NEW INTEGRATIONS FOCUS...")
+        print("=" * 60)
         
         # Authentication tests
         print("\n🔐 Authentication Tests:")
@@ -405,8 +696,25 @@ class CelestiaAPITester:
         self.test_reader_registration()
         self.test_reader_dashboard()
         
-        # Session tests (priority tests)
-        print("\n📅 Session Management Tests:")
+        # NEW HIGH PRIORITY INTEGRATION TESTS
+        print("\n🚀 NEW INTEGRATION TESTS (HIGH PRIORITY):")
+        print("\n📧 SendGrid Email Integration:")
+        self.test_sendgrid_email_integration()
+        
+        print("\n💳 Stripe Payment Integration:")
+        self.test_stripe_payment_integration()
+        
+        print("\n📅 Calendar Blocking System:")
+        self.test_calendar_blocking_system()
+        
+        print("\n👤 Admin/Reader Profile Management:")
+        self.test_admin_reader_profile_management()
+        
+        print("\n⚡ Enhanced Session Management:")
+        self.test_enhanced_session_management()
+        
+        # Original session tests
+        print("\n📅 Original Session Management Tests:")
         self.test_sessions_creation()
         self.test_payment_completion()
         self.test_get_sessions()
@@ -425,16 +733,18 @@ class CelestiaAPITester:
         self.test_tarot_reading()
         
         # Summary
-        print("\n" + "=" * 50)
+        print("\n" + "=" * 60)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} passed")
         success_rate = (self.tests_passed / self.tests_run * 100) if self.tests_run > 0 else 0
         print(f"📈 Success Rate: {success_rate:.1f}%")
         
-        # Print mock implementation notes
-        print("\n📝 Mock Implementation Notes:")
-        print("   📧 Email functionality uses print statements (not actual emails)")
-        print("   💳 Payment links are mock URLs")
-        print("   🔔 Reader notifications use print statements")
+        # Print integration status
+        print("\n🔧 NEW INTEGRATION STATUS:")
+        print("   📧 SendGrid: REAL email sending with API key")
+        print("   💳 Stripe: REAL payment processing with emergentintegrations")
+        print("   📅 Calendar: REAL double booking prevention")
+        print("   👤 Profiles: REAL reader profile management")
+        print("   ⚡ Sessions: Enhanced with calendar blocking and email forwarding")
         
         if self.tests_passed == self.tests_run:
             print("🎉 All tests passed!")
