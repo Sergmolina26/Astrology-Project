@@ -15,10 +15,8 @@ from jose import JWTError, jwt
 import bcrypt
 from kerykeion import AstrologicalSubject
 import json
-# Email imports removed - using print statements for now
-# import smtplib
-# from email.mime.text import MimeText
-# from email.mime.multipart import MimeMultipart
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import hashlib
 
 ROOT_DIR = Path(__file__).parent
