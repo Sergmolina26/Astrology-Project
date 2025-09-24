@@ -217,7 +217,7 @@ body::before {
 
 /* Enhanced Button Variants */
 .btn-primary {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  background: linear-gradient(135deg, #b8860b 0%, #daa520 50%, #b8860b 100%);
   color: #1a0d2e;
   border: none;
   padding: 14px 28px;
@@ -230,13 +230,13 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   font-size: 14px;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+  box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(251, 191, 36, 0.5);
-  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+  box-shadow: 0 12px 25px rgba(184, 134, 11, 0.5);
+  background: linear-gradient(135deg, #daa520 0%, #b8860b 50%, #daa520 100%);
 }
 
 .btn-primary:before {
