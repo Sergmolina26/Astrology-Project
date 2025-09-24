@@ -111,17 +111,17 @@ const AuthPage = () => {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
+              <TabsList className="grid w-full grid-cols-2 bg-slate-800/50 border border-slate-600/30 rounded-lg p-1">
                 <TabsTrigger 
                   value="login" 
-                  className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
+                  className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
                   data-testid="login-tab"
                 >
                   Sign In
                 </TabsTrigger>
                 <TabsTrigger 
                   value="register" 
-                  className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
+                  className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
                   data-testid="register-tab"
                 >
                   Join Us
