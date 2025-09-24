@@ -353,16 +353,16 @@ async def get_tarot_spreads():
                 name="Celtic Cross",
                 description="Comprehensive 10-card spread",
                 positions=[
-                    {"index": 1, "name": "Present", "meaning": "Your current situation"},
-                    {"index": 2, "name": "Challenge", "meaning": "What challenges you"},
-                    {"index": 3, "name": "Past", "meaning": "Distant past/foundation"},
-                    {"index": 4, "name": "Future", "meaning": "Possible future"},
-                    {"index": 5, "name": "Above", "meaning": "Your goal or aspiration"},
-                    {"index": 6, "name": "Below", "meaning": "Subconscious influences"},
-                    {"index": 7, "name": "Advice", "meaning": "Your approach"},
-                    {"index": 8, "name": "Environment", "meaning": "External influences"},
-                    {"index": 9, "name": "Hopes", "meaning": "Your hopes and fears"},
-                    {"index": 10, "name": "Outcome", "meaning": "Final outcome"}
+                    {"index": "1", "name": "Present", "meaning": "Your current situation"},
+                    {"index": "2", "name": "Challenge", "meaning": "What challenges you"},
+                    {"index": "3", "name": "Past", "meaning": "Distant past/foundation"},
+                    {"index": "4", "name": "Future", "meaning": "Possible future"},
+                    {"index": "5", "name": "Above", "meaning": "Your goal or aspiration"},
+                    {"index": "6", "name": "Below", "meaning": "Subconscious influences"},
+                    {"index": "7", "name": "Advice", "meaning": "Your approach"},
+                    {"index": "8", "name": "Environment", "meaning": "External influences"},
+                    {"index": "9", "name": "Hopes", "meaning": "Your hopes and fears"},
+                    {"index": "10", "name": "Outcome", "meaning": "Final outcome"}
                 ]
             )
         ]
