@@ -100,7 +100,8 @@ const AstrologyPage = () => {
       setActiveTab('charts');
     },
     onError: (error) => {
-      toast.error(error.response?.data?.detail || 'Failed to generate chart');
+      const errorMessage = extractErrorMessage(error, 'Failed to generate chart');
+      toast.error(errorMessage);
     }
   });
 
