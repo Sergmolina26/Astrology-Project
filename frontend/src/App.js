@@ -65,6 +65,7 @@ const AppLayout = () => {
       <main className="container mx-auto px-4 py-8">
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/setup-admin" element={<AdminSetup />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
               {user?.role === 'admin' ? <AdminDashboard /> : <Dashboard />}
