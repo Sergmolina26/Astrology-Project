@@ -22,7 +22,11 @@
     "enterEmail": "Enter your email",
     "enterPassword": "Enter your password",
     "enterFullName": "Enter your full name",
-    "createPassword": "Create a password"
+    "createPassword": "Create a password",
+    "accessingStars": "Accessing your stars...",
+    "unlockMysteries": "Unlock the mysteries of the stars",
+    "stepIntoWorld": "Step into a world where the cosmos guides your path",
+    "errorOccurred": "An error occurred. Please try again."
   },
   "dashboard": {
     "welcomeBack": "Welcome back, {{name}}",
