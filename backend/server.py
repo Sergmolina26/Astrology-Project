@@ -167,7 +167,91 @@ class SessionNote(BaseModel):
     visibility: str = "client_visible"  # reader_private, client_visible
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# ==================== AUTH UTILITIES ====================
+# ==================== EMAIL AND PAYMENT UTILITIES ====================
+
+def send_email(to_email: str, subject: str, html_content: str):
+    """Send email using SMTP (mock for now, can be replaced with SendGrid)"""
+    try:
+        # For now, we'll log the email instead of actually sending it
+        # In production, replace this with actual email service
+        print(f"📧 EMAIL SENT TO: {to_email}")
+        print(f"📧 SUBJECT: {subject}")
+        print(f"📧 CONTENT: {html_content}")
+        return True
+    except Exception as e:
+        print(f"❌ Email sending failed: {str(e)}")
+        return False
+
+def generate_payment_link(session_id: str, amount: float) -> str:
+    """Generate a mock payment link (replace with Stripe later)"""
+    payment_id = hashlib.md5(f"{session_id}{amount}".encode()).hexdigest()
+    return f"https://mystic-insight-1.preview.emergentagent.com/pay/{payment_id}"
+
+def get_service_price(service_type: str) -> float:
+    """Get pricing for different services"""
+    prices = {
+        "tarot-reading": 85.0,
+        "birth-chart-reading": 120.0,
+        "chart-tarot-combo": 165.0,
+        "follow-up": 45.0
+    }
+    return prices.get(service_type, 85.0)
+
+async def notify_reader(session_id: str, event_type: str):
+    """Send notification to reader about client activities"""
+    try:
+        # Get reader email (assuming there's one reader - you)
+        reader = await db.users.find_one({"role": "reader"})
+        if not reader:
+            print("❌ No reader found in database")
+            return False
+            
+        session = await db.sessions.find_one({"id": session_id})
+        if not session:
+            print("❌ Session not found")
+            return False
+            
+        client = await db.users.find_one({"id": session["client_id"]})
+        client_name = client["name"] if client else "Unknown Client"
+        
+        subject = f"Celestia - {event_type}: {client_name}"
+        
+        if event_type == "New Booking Request":
+            html_content = f"""
+            <h2>🌟 New Booking Request</h2>
+            <p><strong>Client:</strong> {client_name}</p>
+            <p><strong>Service:</strong> {session['service_type']}</p>
+            <p><strong>Requested Date:</strong> {session['start_at']}</p>
+            <p><strong>Amount:</strong> ${session.get('amount', 0)}</p>
+            <p><strong>Status:</strong> Pending Payment</p>
+            
+            {f"<p><strong>Client Message:</strong> {session.get('client_message', 'No message')}</p>" if session.get('client_message') else ""}
+            
+            <p>Payment link has been sent to the client. You will receive another notification once payment is completed.</p>
+            """
+        elif event_type == "Payment Completed":
+            html_content = f"""
+            <h2>💰 Payment Completed</h2>
+            <p><strong>Client:</strong> {client_name}</p>
+            <p><strong>Service:</strong> {session['service_type']}</p>
+            <p><strong>Date:</strong> {session['start_at']}</p>
+            <p><strong>Amount Paid:</strong> ${session.get('amount', 0)}</p>
+            
+            <p>✅ Session is now confirmed and ready to be scheduled!</p>
+            """
+        else:
+            html_content = f"""
+            <h2>📋 Session Update</h2>
+            <p><strong>Event:</strong> {event_type}</p>
+            <p><strong>Client:</strong> {client_name}</p>
+            <p><strong>Service:</strong> {session['service_type']}</p>
+            """
+        
+        return send_email(reader["email"], subject, html_content)
+        
+    except Exception as e:
+        print(f"❌ Reader notification failed: {str(e)}")
+        return False
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
