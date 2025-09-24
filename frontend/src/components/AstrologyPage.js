@@ -17,6 +17,7 @@ import {
   MapPin, 
   Clock,
   Star,
+  Stars,
   Moon,
   Sun,
   Plus
