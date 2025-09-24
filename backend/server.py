@@ -231,15 +231,15 @@ def get_service_price(service_type: str) -> float:
 async def notify_reader(session_id: str, event_type: str):
     """Send notification to reader about client activities"""
     try:
-        # Get reader email (assuming there's one reader - you)
-        reader = await db.users.find_one({"role": "reader"})
-        if not reader:
-            print("❌ No reader found in database")
-            return False
-            
+        # Get reader and their notification email from profile
         session = await db.sessions.find_one({"id": session_id})
         if not session:
             print("❌ Session not found")
+            return False
+            
+        reader_email = await admin_service.get_reader_notification_email(session["reader_id"])
+        if not reader_email:
+            print("❌ No reader notification email configured")
             return False
             
         client = await db.users.find_one({"id": session["client_id"]})
@@ -249,36 +249,49 @@ async def notify_reader(session_id: str, event_type: str):
         
         if event_type == "New Booking Request":
             html_content = f"""
-            <h2>🌟 New Booking Request</h2>
-            <p><strong>Client:</strong> {client_name}</p>
-            <p><strong>Service:</strong> {session['service_type']}</p>
-            <p><strong>Requested Date:</strong> {session['start_at']}</p>
-            <p><strong>Amount:</strong> ${session.get('amount', 0)}</p>
-            <p><strong>Status:</strong> Pending Payment</p>
-            
-            {f"<p><strong>Client Message:</strong> {session.get('client_message', 'No message')}</p>" if session.get('client_message') else ""}
-            
-            <p>Payment link has been sent to the client. You will receive another notification once payment is completed.</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #b8860b;">🌟 New Booking Request</h2>
+                <p><strong>Client:</strong> {client_name}</p>
+                <p><strong>Email:</strong> {client.get('email', 'N/A') if client else 'N/A'}</p>
+                <p><strong>Service:</strong> {session['service_type']}</p>
+                <p><strong>Requested Date:</strong> {session['start_at']}</p>
+                <p><strong>Amount:</strong> ${session.get('amount', 0)}</p>
+                <p><strong>Status:</strong> Pending Payment</p>
+                
+                {f"<p><strong>Client Message:</strong> {session.get('client_message', 'No message')}</p>" if session.get('client_message') else ""}
+                
+                <p>Payment link has been sent to the client. You will receive another notification once payment is completed.</p>
+                
+                <p><small>This notification was sent to your configured reader email. You can update your notification preferences in your reader profile.</small></p>
+            </div>
             """
         elif event_type == "Payment Completed":
             html_content = f"""
-            <h2>💰 Payment Completed</h2>
-            <p><strong>Client:</strong> {client_name}</p>
-            <p><strong>Service:</strong> {session['service_type']}</p>
-            <p><strong>Date:</strong> {session['start_at']}</p>
-            <p><strong>Amount Paid:</strong> ${session.get('amount', 0)}</p>
-            
-            <p>✅ Session is now confirmed and ready to be scheduled!</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #b8860b;">💰 Payment Completed</h2>
+                <p><strong>Client:</strong> {client_name}</p>
+                <p><strong>Email:</strong> {client.get('email', 'N/A') if client else 'N/A'}</p>
+                <p><strong>Service:</strong> {session['service_type']}</p>
+                <p><strong>Date:</strong> {session['start_at']}</p>
+                <p><strong>Amount Paid:</strong> ${session.get('amount', 0)}</p>
+                
+                <p>✅ Session is now confirmed and ready to be scheduled!</p>
+                <p>📅 This time slot has been blocked in your calendar to prevent double bookings.</p>
+                
+                <p><small>This notification was sent to your configured reader email.</small></p>
+            </div>
             """
         else:
             html_content = f"""
-            <h2>📋 Session Update</h2>
-            <p><strong>Event:</strong> {event_type}</p>
-            <p><strong>Client:</strong> {client_name}</p>
-            <p><strong>Service:</strong> {session['service_type']}</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #b8860b;">📋 Session Update</h2>
+                <p><strong>Event:</strong> {event_type}</p>
+                <p><strong>Client:</strong> {client_name}</p>
+                <p><strong>Service:</strong> {session['service_type']}</p>
+            </div>
             """
         
-        return send_email(reader["email"], subject, html_content)
+        return send_email(reader_email, subject, html_content)
         
     except Exception as e:
         print(f"❌ Reader notification failed: {str(e)}")
