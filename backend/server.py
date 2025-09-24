@@ -77,8 +77,8 @@ class BirthData(BaseModel):
     birth_time: Optional[str] = None  # HH:MM format
     time_accuracy: str = "exact"  # exact, approx, unknown
     birth_place: str
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    latitude: Optional[str] = None  # Changed to str to handle conversion
+    longitude: Optional[str] = None  # Changed to str to handle conversion
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class BirthDataCreate(BaseModel):
