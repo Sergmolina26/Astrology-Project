@@ -111,7 +111,7 @@ const AuthPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="login" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 bg-slate-800/50 border border-slate-600/30 rounded-lg p-1">
                 <TabsTrigger 
                   value="login" 
