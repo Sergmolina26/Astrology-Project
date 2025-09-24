@@ -479,7 +479,7 @@ body::before {
   position: absolute;
   font-size: 40px;
   opacity: 0.1;
-  color: #fbbf24;
+  color: #b8860b;
   pointer-events: none;
   animation: float 8s ease-in-out infinite;
 }
