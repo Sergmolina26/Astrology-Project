@@ -115,6 +115,9 @@
     "next": "Next",
     "previous": "Previous",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "spanish": "Español"
   }
 }
