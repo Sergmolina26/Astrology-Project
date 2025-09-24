@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -17,7 +17,13 @@ from kerykeion import AstrologicalSubject
 import json
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 import hashlib
+
+# Import our custom utilities
+from models.payment import PaymentTransaction, PaymentCreateRequest, PaymentStatusResponse
+from utils.calendar import CalendarBlockingService
+from utils.admin import AdminProfileService
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
