@@ -86,8 +86,8 @@ class BirthDataCreate(BaseModel):
     birth_time: Optional[str] = None
     time_accuracy: str = "exact"
     birth_place: str
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    latitude: Optional[str] = None  # Changed to str to accept empty strings
+    longitude: Optional[str] = None  # Changed to str to accept empty strings
 
 class AstroChart(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
