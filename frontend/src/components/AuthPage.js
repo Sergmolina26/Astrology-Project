@@ -250,7 +250,7 @@ const AuthPage = () => {
                     </Label>
                     <div className="p-3 rounded-lg bg-slate-800/30 border border-slate-600/30">
                       <div className="text-sm text-slate-300">
-                        Client Account - Book personalized astrology and tarot sessions
+                        {t('auth.clientAccount')}
                       </div>
                     </div>
                     <input type="hidden" value="client" />
@@ -264,10 +264,10 @@ const AuthPage = () => {
                     {loading ? (
                       <div className="flex items-center space-x-2">
                         <div className="loading-spinner"></div>
-                        <span>Creating your cosmic profile...</span>
+                        <span>{t('auth.creatingProfile')}</span>
                       </div>
                     ) : (
-                      'Begin Your Journey'
+                      t('auth.beginJourney')
                     )}
                   </Button>
                 </form>
@@ -277,7 +277,7 @@ const AuthPage = () => {
         </Card>
 
         <div className="text-center mt-6 text-sm text-slate-400">
-          <p>Step into a world where the cosmos guides your path</p>
+          <p>{t('auth.stepIntoWorld')}</p>
         </div>
       </div>
     </div>
