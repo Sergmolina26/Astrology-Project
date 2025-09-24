@@ -15,6 +15,7 @@ import {
 
 const Navigation = () => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const location = useLocation();
 
   if (!user) return null;
