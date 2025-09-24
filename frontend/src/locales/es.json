@@ -26,7 +26,8 @@
     "accessingStars": "Accediendo a tus estrellas...",
     "unlockMysteries": "Descubre los misterios de las estrellas",
     "stepIntoWorld": "Entra a un mundo donde el cosmos guía tu camino",
-    "errorOccurred": "Ocurrió un error. Por favor intenta de nuevo."
+    "errorOccurred": "Ocurrió un error. Por favor intenta de nuevo.",
+    "creatingProfile": "Creando tu perfil cósmico..."
   },
   "dashboard": {
     "welcomeBack": "Bienvenido de vuelta, {{name}}",
