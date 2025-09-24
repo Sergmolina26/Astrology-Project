@@ -71,7 +71,7 @@ const Dashboard = () => {
             <Link to="/tarot">
               <Button className="btn-secondary" data-testid="quick-tarot-btn">
                 <Stars className="w-4 h-4 mr-2" />
-                Draw Tarot Cards
+                Book Services
               </Button>
             </Link>
           </div>
