@@ -270,11 +270,11 @@ frontend:
 
   - task: "Email forwarding to admin/reader"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "main"
@@ -282,6 +282,9 @@ frontend:
         - working: "NA"
           agent: "main"
           comment: "✅ IMPLEMENTED: All booking and payment notifications now forward to reader's configured notification email address."
+        - working: false
+          agent: "testing"
+          comment: "❌ BLOCKED BY SENDGRID: Email forwarding system implemented correctly - notify_reader() function retrieves reader's configured notification email from AdminProfileService and sends notifications for 'New Booking Request' and 'Payment Completed' events. However, all emails fail due to SendGrid sender verification issue (403 Forbidden). Structure and logic working, blocked by email delivery."
 
 metadata:
   created_by: "main_agent"
