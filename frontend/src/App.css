@@ -9,7 +9,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a0d2e 25%, #2d1b4e 50%, #1a0d2e 75%, #0f0f23 100%);
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
   color: #f4f1ff;
   line-height: 1.6;
   min-height: 100vh;
@@ -25,14 +25,14 @@ body::before {
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(1px 1px at 25px 40px, rgba(251, 191, 36, 0.4), transparent),
+    radial-gradient(2px 2px at 25px 40px, rgba(251, 191, 36, 0.4), transparent),
     radial-gradient(1px 1px at 75px 120px, rgba(245, 158, 11, 0.3), transparent),
-    radial-gradient(2px 2px at 150px 80px, rgba(251, 191, 36, 0.5), transparent),
+    radial-gradient(3px 3px at 150px 80px, rgba(251, 191, 36, 0.5), transparent),
     radial-gradient(1px 1px at 200px 160px, rgba(245, 158, 11, 0.2), transparent),
-    radial-gradient(1px 1px at 300px 60px, rgba(251, 191, 36, 0.3), transparent);
+    radial-gradient(2px 2px at 300px 60px, rgba(251, 191, 36, 0.3), transparent);
   background-repeat: repeat;
   background-size: 250px 200px;
-  opacity: 0.7;
+  opacity: 0.6;
   pointer-events: none;
   z-index: -1;
 }
