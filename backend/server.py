@@ -182,37 +182,10 @@ class SessionNote(BaseModel):
 
 # ==================== EMAIL AND PAYMENT UTILITIES ====================
 
-def send_email(to_email: str, subject: str, html_content: str):
-    """Send email using SendGrid"""
-    try:
-        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
-        sender_email = os.environ.get('SENDER_EMAIL')
-        
-        if not sendgrid_api_key or not sender_email:
-            print(f"❌ Missing SendGrid configuration")
-            return False
-            
-        message = Mail(
-            from_email=sender_email,
-            to_emails=to_email,
-            subject=subject,
-            html_content=html_content
-        )
-        
-        sg = SendGridAPIClient(sendgrid_api_key)
-        response = sg.send(message)
-        
-        if response.status_code == 202:
-            print(f"✅ EMAIL SENT TO: {to_email}")
-            print(f"📧 SUBJECT: {subject}")
-            return True
-        else:
-            print(f"❌ Email failed with status: {response.status_code}")
-            return False
-            
-    except Exception as e:
-        print(f"❌ Email sending failed: {str(e)}")
-        return False
+def send_email_deprecated(to_email: str, subject: str, html_content: str):
+    """Deprecated SendGrid function - use utils.email_providers.send_email instead"""
+    from utils.email_providers import send_email
+    return send_email(to_email, subject, html_content)
 
 def generate_payment_link(session_id: str, amount: float) -> str:
     """Generate a real Stripe payment link (will be replaced with actual checkout session)"""
