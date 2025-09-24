@@ -127,6 +127,10 @@
     "optional": "Opcional",
     "selectLanguage": "Seleccionar Idioma",
     "english": "English",
-    "spanish": "Español"
+    "spanish": "Español",
+    "success": "exitoso!",
+    "minutes": "minutos",
+    "endTime": "Hora de Finalización",
+    "submitting": "Enviando..."
   }
 }
