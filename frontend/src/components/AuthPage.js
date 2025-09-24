@@ -236,18 +236,14 @@ const AuthPage = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="register-role" className="text-slate-200">
-                      I am a...
+                      Account Type
                     </Label>
-                    <select
-                      id="register-role"
-                      value={registerForm.role}
-                      onChange={(e) => setRegisterForm({ ...registerForm, role: e.target.value })}
-                      className="form-input"
-                      data-testid="register-role-select"
-                    >
-                      <option value="client">Client (seeking readings)</option>
-                      <option value="reader">Reader (providing services)</option>
-                    </select>
+                    <div className="p-3 rounded-lg bg-slate-800/30 border border-slate-600/30">
+                      <div className="text-sm text-slate-300">
+                        Client Account - Book personalized astrology and tarot sessions
+                      </div>
+                    </div>
+                    <input type="hidden" value="client" />
                   </div>
                   <Button
                     type="submit"
