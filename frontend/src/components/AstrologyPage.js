@@ -234,16 +234,28 @@ const AstrologyPage = () => {
                     <MapPin className="w-4 h-4 mr-1" />
                     Birth Place *
                   </Label>
-                  <Input
-                    id="birth_place"
-                    type="text"
-                    placeholder="City, State, Country"
+                  <PlacesAutocomplete
                     value={birthForm.birth_place}
                     onChange={(e) => setBirthForm({ ...birthForm, birth_place: e.target.value })}
+                    onPlaceSelect={(place) => {
+                      setBirthForm({
+                        ...birthForm,
+                        birth_place: place.address,
+                        latitude: place.latitude.toString(),
+                        longitude: place.longitude.toString()
+                      });
+                    }}
+                    placeholder="Search for city, state, country"
                     className="form-input"
                     data-testid="birth-place-input"
                     required
                   />
+                  {birthForm.latitude && birthForm.longitude && (
+                    <div className="text-xs text-emerald-400 flex items-center">
+                      <MapPin className="w-3 h-3 mr-1" />
+                      Coordinates: {parseFloat(birthForm.latitude).toFixed(4)}, {parseFloat(birthForm.longitude).toFixed(4)}
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
