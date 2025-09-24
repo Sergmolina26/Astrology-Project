@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Alert, AlertDescription } from './ui/alert';
 import { Stars, Sparkles, Moon, Sun } from 'lucide-react';
 import { toast } from 'sonner';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const AuthPage = () => {
   const { user, login, register } = useAuth();
