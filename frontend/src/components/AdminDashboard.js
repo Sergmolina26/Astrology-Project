@@ -127,11 +127,11 @@ const AdminDashboard = () => {
             <Shield className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white font-mystical">
-            Admin Dashboard
+            {t('admin.dashboard')}
           </h1>
         </div>
         <p className="text-slate-300 max-w-2xl mx-auto">
-          Manage your Celestia business with complete administrative control
+          {t('admin.manageBusiness')}
         </p>
       </div>
 
