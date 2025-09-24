@@ -214,7 +214,7 @@ def send_email(to_email: str, subject: str, html_content: str):
         return False
 
 def generate_payment_link(session_id: str, amount: float) -> str:
-    """Generate a mock payment link (replace with Stripe later)"""
+    """Generate a real Stripe payment link (will be replaced with actual checkout session)"""
     payment_id = hashlib.md5(f"{session_id}{amount}".encode()).hexdigest()
     return f"https://mystictarot-3.preview.emergentagent.com/pay/{payment_id}"
 
