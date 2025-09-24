@@ -104,7 +104,7 @@
     "requestSession": "Solicitar Sesión",
     "availableServices": "Servicios Disponibles",
     "professionalReadings": "Lecturas profesionales adaptadas a tus necesidades",
-    "whatToExpected": "Qué Esperar",
+    "whatToExpect": "Qué Esperar",
     "personalizedExperience": "Experiencia Personalizada",
     "uniqueEnergy": "Cada sesión está adaptada a tu energía única y preguntas.",
     "liveSession": "Sesión Interactiva en Vivo",
@@ -112,7 +112,8 @@
     "recordingNotes": "Grabación y Notas",
     "sessionNotes": "Recibe notas de la sesión y perspectivas clave para referencia futura.",
     "professionalGuidance": "Guía Profesional",
-    "expertInterpretation": "Interpretación experta con guía compasiva y perspicaz."
+    "expertInterpretation": "Interpretación experta con guía compasiva y perspicaz.",
+    "sessionRequested": "¡Sesión solicitada exitosamente!"
   },
   "common": {
     "loading": "Cargando...",
