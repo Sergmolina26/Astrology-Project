@@ -75,7 +75,11 @@
     "planetaryPositions": "Planetary Positions",
     "houseCusps": "House Cusps",
     "noCharts": "No Charts Generated",
-    "generateFirst": "Generate your first birth chart to see planetary positions and aspects."
+    "generateFirst": "Generate your first birth chart to see planetary positions and aspects.",
+    "saving": "Saving...",
+    "generating": "Generating...",
+    "selectTimeAccuracy": "Select time accuracy",
+    "enterBirthPlace": "Enter birth place"
   },
   "services": {
     "bookReading": "Book Your Reading",
