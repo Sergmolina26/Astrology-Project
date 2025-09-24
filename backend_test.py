@@ -316,11 +316,7 @@ class CelestiaAPITester:
 
     def test_sessions_creation(self):
         """Test creating a session with email and payment link generation"""
-        if not hasattr(self, 'reader_id'):
-            self.log_test("Session Creation", False, "No reader available")
-            return False
-            
-        # Create session as client
+        # Create session as client - the backend should find the existing reader
         start_time = datetime.now() + timedelta(days=1)
         end_time = start_time + timedelta(hours=1)
         
