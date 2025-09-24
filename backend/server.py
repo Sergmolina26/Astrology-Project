@@ -337,10 +337,10 @@ async def login(login_data: UserLogin):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # Verify password
-    if not verify_password(login_data.password, user_doc["password"]):
+    if not verify_password(login_data.password, user_doc["hashed_password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    user = User(**{k: v for k, v in user_doc.items() if k != "password"})
+    user = User(**{k: v for k, v in user_doc.items() if k != "hashed_password"})
     
     # Create token
     access_token = create_access_token(data={"sub": user.id})
