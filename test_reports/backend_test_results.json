@@ -1,120 +1,185 @@
 {
-  "timestamp": "2025-09-24T17:45:37.078627",
-  "total_tests": 16,
-  "passed_tests": 16,
-  "success_rate": 100.0,
+  "timestamp": "2025-09-24T18:19:58.834700",
+  "total_tests": 25,
+  "passed_tests": 21,
+  "success_rate": 84.0,
   "test_details": [
     {
       "test_name": "User Registration",
       "success": true,
-      "details": "Registered user: test_user_174536@celestia.com",
+      "details": "Registered user: test_user_181953@celestia.com",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.410819"
+      "timestamp": "2025-09-24T18:19:53.842398"
     },
     {
       "test_name": "User Login/Token Verification",
       "success": true,
       "details": "User authenticated: Test User",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.451652"
+      "timestamp": "2025-09-24T18:19:53.885464"
     },
     {
       "test_name": "Get Me Endpoint",
       "success": true,
-      "details": "Retrieved user info: Test User (test_user_174536@celestia.com)",
+      "details": "Retrieved user info: Test User (test_user_181953@celestia.com)",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.530038"
+      "timestamp": "2025-09-24T18:19:53.924816"
     },
     {
       "test_name": "Reader Registration (Duplicate Prevention)",
       "success": true,
       "details": "Correctly prevented duplicate reader registration - reader already exists",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.570587"
+      "timestamp": "2025-09-24T18:19:53.988233"
     },
     {
       "test_name": "Reader Dashboard (Access Control)",
       "success": true,
       "details": "Correctly denied non-reader access to dashboard",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.611166"
+      "timestamp": "2025-09-24T18:19:54.029102"
+    },
+    {
+      "test_name": "SendGrid Email Integration - Session Creation",
+      "success": true,
+      "details": "Session created - should trigger real SendGrid email to client and reader",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:54.830898"
+    },
+    {
+      "test_name": "SendGrid Email Integration - Payment Confirmation",
+      "success": true,
+      "details": "Payment completed - should trigger real SendGrid confirmation emails",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:55.541561"
+    },
+    {
+      "test_name": "Stripe Checkout Session Creation",
+      "success": true,
+      "details": "Created Stripe checkout session: cs_test_a1L4ae2iLGxefo8bYiA4LNMnfCWyOCAphsTS5qt0jfvhIvl369RRKUa8Bo",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:56.874495"
+    },
+    {
+      "test_name": "Stripe Payment Status Check",
+      "success": true,
+      "details": "Payment status: open",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:57.155034"
+    },
+    {
+      "test_name": "Calendar Blocking - Reader Setup",
+      "success": false,
+      "details": "No reader available for testing",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:57.191471"
+    },
+    {
+      "test_name": "Reader Profile Management",
+      "success": false,
+      "details": "No reader token available",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:57.191505"
+    },
+    {
+      "test_name": "Enhanced Session Creation",
+      "success": true,
+      "details": "Created session with calendar checking: 0ebdc1ff-675b-4e46-8618-285ed30ed069",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:57.734453"
+    },
+    {
+      "test_name": "Session Pricing Verification",
+      "success": true,
+      "details": "Correct pricing applied: $165.0",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:57.734486"
+    },
+    {
+      "test_name": "Enhanced Session Payment",
+      "success": true,
+      "details": "Payment completed - should forward notification to reader's configured email",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:58.387315"
+    },
+    {
+      "test_name": "Session Status Update",
+      "success": true,
+      "details": "Session status correctly updated to confirmed",
+      "response_data": null,
+      "timestamp": "2025-09-24T18:19:58.425992"
     },
     {
       "test_name": "Session Creation",
-      "success": true,
-      "details": "Session ID: 6b62392a-cc76-4535-8f11-d5ca9fc36aba, Amount: $85.0, Payment Link: https://mystictarot-3.preview.emergentagent.com/pa...",
-      "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.653204"
+      "success": false,
+      "details": "Failed to create session",
+      "response_data": {
+        "detail": "This time slot is not available. Please choose a different time."
+      },
+      "timestamp": "2025-09-24T18:19:58.504867"
     },
     {
       "test_name": "Payment Completion",
-      "success": true,
-      "details": "Payment completed: Payment completed successfully",
+      "success": false,
+      "details": "No session available for payment",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.695263"
-    },
-    {
-      "test_name": "Payment Status Update",
-      "success": true,
-      "details": "Session status updated to paid",
-      "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.732925"
+      "timestamp": "2025-09-24T18:19:58.504906"
     },
     {
       "test_name": "Get Sessions",
       "success": true,
-      "details": "Retrieved 1 sessions",
+      "details": "Retrieved 3 sessions",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.804401"
+      "timestamp": "2025-09-24T18:19:58.541691"
     },
     {
       "test_name": "Birth Data Creation",
       "success": true,
-      "details": "Created birth data: a0760159-b244-44d8-8e36-f8c3f5ec9975",
+      "details": "Created birth data: 1c5216da-7d11-4ead-8af4-8a303d2a8ac1",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.845856"
+      "timestamp": "2025-09-24T18:19:58.603130"
     },
     {
       "test_name": "Get Birth Data",
       "success": true,
       "details": "Retrieved 1 birth data records",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.886380"
+      "timestamp": "2025-09-24T18:19:58.644169"
     },
     {
       "test_name": "Astrology Chart Generation",
       "success": true,
       "details": "Generated chart with 5 planets and 12 houses",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.925836"
+      "timestamp": "2025-09-24T18:19:58.689289"
     },
     {
       "test_name": "Get Astrology Charts",
       "success": true,
       "details": "Retrieved 1 astrology charts",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.962811"
+      "timestamp": "2025-09-24T18:19:58.724016"
     },
     {
       "test_name": "Get Tarot Spreads",
       "success": true,
       "details": "Retrieved 3 spreads: Single Card, Three Card Spread, Celtic Cross",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:36.999346"
+      "timestamp": "2025-09-24T18:19:58.761342"
     },
     {
       "test_name": "Get Tarot Cards",
       "success": true,
       "details": "Retrieved 5 cards including: The Fool, The Magician, The High Priestess",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:37.039446"
+      "timestamp": "2025-09-24T18:19:58.797313"
     },
     {
       "test_name": "Create Tarot Reading",
       "success": true,
       "details": "Created Single Card reading with 1 cards",
       "response_data": null,
-      "timestamp": "2025-09-24T17:45:37.078573"
+      "timestamp": "2025-09-24T18:19:58.834646"
     }
   ]
 }
