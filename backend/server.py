@@ -253,6 +253,8 @@ async def notify_reader(session_id: str, event_type: str):
         print(f"❌ Reader notification failed: {str(e)}")
         return False
 
+# ==================== AUTH UTILITIES ====================
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
