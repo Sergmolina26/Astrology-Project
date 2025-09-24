@@ -66,7 +66,12 @@ const AppLayout = () => {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
-              <Dashboard />
+              {user?.role === 'admin' ? <AdminDashboard /> : <Dashboard />}
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              {user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/dashboard" replace />}
             </ProtectedRoute>
           } />
           <Route path="/astrology" element={
