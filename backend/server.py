@@ -136,16 +136,29 @@ class Session(BaseModel):
     service_type: str
     start_at: datetime
     end_at: datetime
-    status: str = "scheduled"  # scheduled, completed, canceled
+    status: str = "pending_payment"  # pending_payment, confirmed, completed, canceled
     notes: Optional[str] = None
     payment_status: str = "pending"  # pending, paid, refunded
+    payment_link: Optional[str] = None
+    amount: Optional[float] = None
+    client_message: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class SessionCreate(BaseModel):
-    client_id: str
     service_type: str
     start_at: datetime
     end_at: datetime
+    client_message: Optional[str] = None
+
+class PaymentLink(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: str
+    amount: float
+    currency: str = "USD"
+    payment_url: str
+    expires_at: datetime
+    status: str = "pending"  # pending, paid, expired
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class SessionNote(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
