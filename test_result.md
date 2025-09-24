@@ -279,8 +279,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "SendGrid email integration"
+    - "Stripe payment integration"
     - "Calendar blocking system"
+    - "Admin/Reader profile management"
+    - "Email forwarding to admin/reader"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
