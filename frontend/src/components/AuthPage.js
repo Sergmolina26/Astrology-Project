@@ -188,10 +188,10 @@ const AuthPage = () => {
                     {loading ? (
                       <div className="flex items-center space-x-2">
                         <div className="loading-spinner"></div>
-                        <span>Accessing your stars...</span>
+                        <span>{t('auth.accessingStars')}</span>
                       </div>
                     ) : (
-                      'Enter Celestia'
+                      t('auth.enterCelestia')
                     )}
                   </Button>
                 </form>
