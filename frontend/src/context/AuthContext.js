@@ -50,22 +50,7 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
-      let errorMessage = 'Login failed';
-      
-      if (error.response?.data) {
-        if (typeof error.response.data === 'string') {
-          errorMessage = error.response.data;
-        } else if (error.response.data.detail) {
-          if (typeof error.response.data.detail === 'string') {
-            errorMessage = error.response.data.detail;
-          } else if (Array.isArray(error.response.data.detail)) {
-            errorMessage = error.response.data.detail[0]?.msg || 'Login failed';
-          }
-        } else if (error.response.data.message) {
-          errorMessage = error.response.data.message;
-        }
-      }
-      
+      const errorMessage = extractErrorMessage(error, 'Login failed');
       return { 
         success: false, 
         error: errorMessage
@@ -85,22 +70,7 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
-      let errorMessage = 'Registration failed';
-      
-      if (error.response?.data) {
-        if (typeof error.response.data === 'string') {
-          errorMessage = error.response.data;
-        } else if (error.response.data.detail) {
-          if (typeof error.response.data.detail === 'string') {
-            errorMessage = error.response.data.detail;
-          } else if (Array.isArray(error.response.data.detail)) {
-            errorMessage = error.response.data.detail[0]?.msg || 'Registration failed';
-          }
-        } else if (error.response.data.message) {
-          errorMessage = error.response.data.message;
-        }
-      }
-      
+      const errorMessage = extractErrorMessage(error, 'Registration failed');
       return { 
         success: false, 
         error: errorMessage
