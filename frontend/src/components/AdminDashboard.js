@@ -204,28 +204,28 @@ const AdminDashboard = () => {
             className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
           >
             <TrendingUp className="w-4 h-4 mr-2" />
-            Overview
+            {t('admin.overview')}
           </TabsTrigger>
           <TabsTrigger 
             value="sessions" 
             className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
           >
             <Calendar className="w-4 h-4 mr-2" />
-            Sessions
+            {t('admin.sessions')}
           </TabsTrigger>
           <TabsTrigger 
             value="users" 
             className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
           >
             <Users className="w-4 h-4 mr-2" />
-            Users
+            {t('admin.users')}
           </TabsTrigger>
           <TabsTrigger 
             value="payments" 
             className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
           >
             <DollarSign className="w-4 h-4 mr-2" />
-            Payments
+            {t('admin.payments')}
           </TabsTrigger>
         </TabsList>
 
