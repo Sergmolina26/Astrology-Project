@@ -1313,11 +1313,13 @@ async def create_admin_user():
         admin_user = User(
             name="Celestia Admin",
             email=admin_email,
-            password=hashed_password,
             role="admin"
         )
         
-        await db.users.insert_one(admin_user.dict())
+        # Store in database with hashed password
+        admin_dict = admin_user.dict()
+        admin_dict["hashed_password"] = hashed_password
+        await db.users.insert_one(admin_dict)
         
         # Also create reader profile for the admin
         admin_profile = {
