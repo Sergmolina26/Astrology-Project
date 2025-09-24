@@ -15,7 +15,6 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('login');
-  const [activeTab, setActiveTab] = useState('login');
 
   // Form states
   const [loginForm, setLoginForm] = useState({
