@@ -75,7 +75,11 @@
     "planetaryPositions": "Posiciones Planetarias",
     "houseCusps": "Cúspides de Casas",
     "noCharts": "No hay Cartas Generadas",
-    "generateFirst": "Genera tu primera carta natal para ver posiciones planetarias y aspectos."
+    "generateFirst": "Genera tu primera carta natal para ver posiciones planetarias y aspectos.",
+    "saving": "Guardando...",
+    "generating": "Generando...",
+    "selectTimeAccuracy": "Seleccionar precisión de hora",
+    "enterBirthPlace": "Ingresa lugar de nacimiento"
   },
   "services": {
     "bookReading": "Reserva Tu Lectura",
