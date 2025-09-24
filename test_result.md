@@ -234,11 +234,11 @@ frontend:
 
   - task: "Calendar blocking system"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/utils/calendar.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "main"
@@ -246,6 +246,9 @@ frontend:
         - working: "NA"
           agent: "main"
           comment: "✅ IMPLEMENTED: Calendar blocking service to prevent double bookings. Checks time slot availability before allowing session creation."
+        - working: true
+          agent: "testing"
+          comment: "✅ FULLY WORKING: Calendar blocking system tested successfully. Created session, confirmed payment to block time slot, then attempted overlapping booking which was correctly rejected with 'This time slot is not available' error. Double booking prevention confirmed working. CalendarBlockingService properly integrated with session creation flow."
 
   - task: "Admin/Reader profile management"
     implemented: true
