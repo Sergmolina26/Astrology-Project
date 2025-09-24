@@ -107,7 +107,7 @@ const AuthPage = () => {
             Celestia
           </h1>
           <p className="text-slate-400 text-lg">
-            Unlock the mysteries of the stars
+            {t('auth.unlockMysteries')}
           </p>
         </div>
 
