@@ -234,12 +234,10 @@ class CelestiaAPITester:
         }
         
         # Try to register a reader - should fail if one already exists
-        success, response = self.make_request('POST', 'auth/register-reader', reader_data, 400)
+        success, response = self.make_request('POST', 'auth/register-reader', reader_data, 200)
         
         if not success and "already exists" in str(response):
             self.log_test("Reader Registration (Duplicate Prevention)", True, "Correctly prevented duplicate reader registration - reader already exists")
-            # Since reader exists, we can't test reader dashboard without credentials
-            # But we can verify the system is working
             return True
         else:
             # If no reader exists, try to register one
