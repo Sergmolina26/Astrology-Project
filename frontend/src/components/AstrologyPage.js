@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Alert, AlertDescription } from './ui/alert';
 import { Badge } from './ui/badge';
+import PlacesAutocomplete from './PlacesAutocomplete';
 import { 
   Sparkles, 
   Calendar,
