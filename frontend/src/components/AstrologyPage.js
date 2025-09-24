@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -9,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Alert, AlertDescription } from './ui/alert';
 import { Badge } from './ui/badge';
-import PlacesAutocomplete from './PlacesAutocomplete';
 import { extractErrorMessage } from '../utils/errorHandler';
 import { 
   Sparkles, 
@@ -25,6 +25,7 @@ import { toast } from 'sonner';
 
 const AstrologyPage = () => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('create');
 
   // Form state for birth data
@@ -50,12 +51,13 @@ const AstrologyPage = () => {
         const birthDataResponse = await axios.get(`/birth-data/${userId}`);
         return birthDataResponse.data;
       } catch (error) {
+        console.error('Error fetching birth data:', error);
         return [];
       }
     }
   });
 
-  // Fetch user's charts
+  // Fetch charts
   const { data: charts = [], isLoading: chartsLoading } = useQuery({
     queryKey: ['charts'],
     queryFn: async () => {
@@ -65,16 +67,19 @@ const AstrologyPage = () => {
         const chartsResponse = await axios.get(`/astrology/charts/${userId}`);
         return chartsResponse.data;
       } catch (error) {
+        console.error('Error fetching charts:', error);
         return [];
       }
     }
   });
 
-  // Create birth data mutation
-  const createBirthDataMutation = useMutation({
-    mutationFn: (data) => axios.post('/birth-data', data),
-    onSuccess: (response) => {
-      toast.success('Birth data saved successfully!');
+  // Save birth data mutation
+  const saveBirthDataMutation = useMutation({
+    mutationFn: async (birthData) => {
+      const response = await axios.post('/birth-data', birthData);
+      return response.data;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries(['birth-data']);
       setBirthForm({
         birth_date: '',
@@ -84,236 +89,214 @@ const AstrologyPage = () => {
         latitude: '',
         longitude: ''
       });
+      toast.success(t('common.save') + ' ' + t('common.success'));
     },
     onError: (error) => {
-      const errorMessage = extractErrorMessage(error, 'Failed to save birth data');
+      const errorMessage = extractErrorMessage(error);
       toast.error(errorMessage);
     }
   });
 
   // Generate chart mutation
   const generateChartMutation = useMutation({
-    mutationFn: (birthDataId) => axios.post(`/astrology/chart?birth_data_id=${birthDataId}`),
-    onSuccess: (response) => {
-      toast.success('Birth chart generated successfully!');
+    mutationFn: async (birthDataId) => {
+      const response = await axios.post(`/astrology/chart?birth_data_id=${birthDataId}`);
+      return response.data;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries(['charts']);
-      setActiveTab('charts');
+      toast.success(t('astrology.generateChart') + ' ' + t('common.success'));
     },
     onError: (error) => {
-      const errorMessage = extractErrorMessage(error, 'Failed to generate chart');
+      const errorMessage = extractErrorMessage(error);
       toast.error(errorMessage);
     }
   });
 
-  const handleBirthFormSubmit = (e) => {
+  const handleSaveBirthData = (e) => {
     e.preventDefault();
-    createBirthDataMutation.mutate(birthForm);
+    saveBirthDataMutation.mutate(birthForm);
   };
 
   const handleGenerateChart = (birthDataId) => {
     generateChartMutation.mutate(birthDataId);
   };
 
-  const formatPlanetPosition = (planet) => {
-    const signs = [
-      'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
-      'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
-    ];
-    
-    const degree = Math.floor(planet.longitude);
-    const signIndex = Math.floor(planet.longitude / 30);
-    const signDegree = Math.floor(planet.longitude % 30);
-    
-    return `${degree}° ${signs[signIndex]} ${signDegree}°`;
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="text-center">
-        <h1 className="font-serif text-3xl font-bold text-white mb-4 flex items-center justify-center">
-          <Sparkles className="w-8 h-8 mr-3 text-amber-400" />
-          Astrology Portal
-        </h1>
-        <p className="text-slate-400 max-w-2xl mx-auto">
-          Generate precise natal charts and explore the celestial influences that shaped your birth moment.
+      <div className="text-center space-y-4">
+        <div className="flex justify-center items-center space-x-3">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center animate-mystical-glow">
+            <Sparkles className="w-6 h-6 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-white font-mystical">
+            {t('astrology.portal')}
+          </h1>
+        </div>
+        <p className="text-slate-300 max-w-2xl mx-auto">
+          {t('astrology.generateCharts')}
         </p>
       </div>
 
+      {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+        <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 border border-slate-600/30 rounded-lg p-1">
           <TabsTrigger 
             value="create" 
-            className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
-            data-testid="create-birth-data-tab"
+            className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add Birth Data
+            {t('astrology.addBirthData')}
           </TabsTrigger>
           <TabsTrigger 
             value="generate" 
-            className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
-            data-testid="generate-chart-tab"
+            className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
           >
             <Star className="w-4 h-4 mr-2" />
-            Generate Chart
+            {t('astrology.generateChart')}
           </TabsTrigger>
           <TabsTrigger 
             value="charts" 
-            className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
-            data-testid="view-charts-tab"
+            className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 transition-all duration-200 rounded-md"
           >
-            <Sun className="w-4 h-4 mr-2" />
-            My Charts
+            <Calendar className="w-4 h-4 mr-2" />
+            {t('astrology.myCharts')}
           </TabsTrigger>
         </TabsList>
 
         {/* Create Birth Data Tab */}
-        <TabsContent value="create">
-          <Card className="glass-card">
+        <TabsContent value="create" className="mt-6">
+          <Card className="glass-card mystical-border">
             <CardHeader>
-              <CardTitle className="text-white font-serif flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-amber-400" />
-                Birth Information
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+                <span>{t('astrology.birthInformation')}</span>
               </CardTitle>
-              <CardDescription className="text-slate-400">
-                Enter precise birth details for accurate astrological calculations
+              <CardDescription className="text-slate-300">
+                {t('astrology.preciseBirthDetails')}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleBirthFormSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={handleSaveBirthData} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Birth Date */}
                   <div className="space-y-2">
-                    <Label htmlFor="birth_date" className="text-slate-200">
-                      Birth Date *
+                    <Label htmlFor="birth-date" className="text-slate-200 flex items-center">
+                      <Calendar className="w-4 h-4 mr-2 text-amber-400" />
+                      {t('astrology.birthDate')}
                     </Label>
                     <Input
-                      id="birth_date"
+                      id="birth-date"
                       type="date"
                       value={birthForm.birth_date}
                       onChange={(e) => setBirthForm({ ...birthForm, birth_date: e.target.value })}
                       className="form-input"
-                      data-testid="birth-date-input"
                       required
                     />
                   </div>
-                  
+
+                  {/* Birth Time */}
                   <div className="space-y-2">
-                    <Label htmlFor="birth_time" className="text-slate-200">
-                      Birth Time
+                    <Label htmlFor="birth-time" className="text-slate-200 flex items-center">
+                      <Clock className="w-4 h-4 mr-2 text-amber-400" />
+                      {t('astrology.birthTime')}
                     </Label>
                     <Input
-                      id="birth_time"
+                      id="birth-time"
                       type="time"
                       value={birthForm.birth_time}
                       onChange={(e) => setBirthForm({ ...birthForm, birth_time: e.target.value })}
                       className="form-input"
-                      data-testid="birth-time-input"
+                    />
+                  </div>
+
+                  {/* Time Accuracy */}
+                  <div className="space-y-2">
+                    <Label className="text-slate-200">{t('astrology.timeAccuracy')}</Label>
+                    <Select value={birthForm.time_accuracy} onValueChange={(value) => setBirthForm({ ...birthForm, time_accuracy: value })}>
+                      <SelectTrigger className="form-input">
+                        <SelectValue placeholder={t('astrology.selectTimeAccuracy')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="exact">{t('astrology.exactTime')}</SelectItem>
+                        <SelectItem value="approx">{t('astrology.approxTime')}</SelectItem>
+                        <SelectItem value="unknown">{t('astrology.timeUnknown')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Birth Place */}
+                  <div className="space-y-2">
+                    <Label htmlFor="birth-place" className="text-slate-200 flex items-center">
+                      <MapPin className="w-4 h-4 mr-2 text-amber-400" />
+                      {t('astrology.birthPlace')}
+                    </Label>
+                    <Input
+                      id="birth-place"
+                      type="text"
+                      placeholder={t('astrology.enterBirthPlace')}
+                      value={birthForm.birth_place}
+                      onChange={(e) => setBirthForm({ ...birthForm, birth_place: e.target.value })}
+                      className="form-input"
+                      required
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="time_accuracy" className="text-slate-200">
-                    Time Accuracy
-                  </Label>
-                  <Select
-                    value={birthForm.time_accuracy}
-                    onValueChange={(value) => setBirthForm({ ...birthForm, time_accuracy: value })}
-                  >
-                    <SelectTrigger className="form-input" data-testid="time-accuracy-select">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-slate-800 border-slate-600">
-                      <SelectItem value="exact">Exact time known</SelectItem>
-                      <SelectItem value="approx">Approximate time</SelectItem>
-                      <SelectItem value="unknown">Time unknown</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="birth_place" className="text-slate-200 flex items-center">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    Birth Place *
-                  </Label>
-                  <PlacesAutocomplete
-                    value={birthForm.birth_place}
-                    onChange={(e) => setBirthForm({ ...birthForm, birth_place: e.target.value })}
-                    onPlaceSelect={(place) => {
-                      setBirthForm({
-                        ...birthForm,
-                        birth_place: place.address,
-                        latitude: place.latitude.toString(),
-                        longitude: place.longitude.toString()
-                      });
-                    }}
-                    placeholder="Enter city, state, country"
-                    className="form-input"
-                    data-testid="birth-place-input"
-                    required
-                  />
-                  <p className="text-xs text-slate-400">
-                    Enter your birth location and manually add coordinates below for accurate calculations.
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-400">
+                    {t('astrology.enterLocation')}
                   </p>
-                  {birthForm.latitude && birthForm.longitude && (
-                    <div className="text-xs text-emerald-400 flex items-center">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      Coordinates: {parseFloat(birthForm.latitude).toFixed(4)}, {parseFloat(birthForm.longitude).toFixed(4)}
-                    </div>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="latitude" className="text-slate-200">
-                      Latitude (Optional)
-                    </Label>
-                    <Input
-                      id="latitude"
-                      type="number"
-                      step="any"
-                      placeholder="e.g., 40.7128"
-                      value={birthForm.latitude}
-                      onChange={(e) => setBirthForm({ ...birthForm, latitude: e.target.value })}
-                      className="form-input"
-                      data-testid="latitude-input"
-                    />
-                  </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="longitude" className="text-slate-200">
-                      Longitude (Optional)
-                    </Label>
-                    <Input
-                      id="longitude"
-                      type="number"
-                      step="any"
-                      placeholder="e.g., -74.0060"
-                      value={birthForm.longitude}
-                      onChange={(e) => setBirthForm({ ...birthForm, longitude: e.target.value })}
-                      className="form-input"
-                      data-testid="longitude-input"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Latitude */}
+                    <div className="space-y-2">
+                      <Label htmlFor="latitude" className="text-slate-200">
+                        {t('astrology.latitude')}
+                      </Label>
+                      <Input
+                        id="latitude"
+                        type="text"
+                        placeholder="e.g., 40.7128"
+                        value={birthForm.latitude}
+                        onChange={(e) => setBirthForm({ ...birthForm, latitude: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
+
+                    {/* Longitude */}
+                    <div className="space-y-2">
+                      <Label htmlFor="longitude" className="text-slate-200">
+                        {t('astrology.longitude')}
+                      </Label>
+                      <Input
+                        id="longitude"
+                        type="text"
+                        placeholder="e.g., -74.0060"
+                        value={birthForm.longitude}
+                        onChange={(e) => setBirthForm({ ...birthForm, longitude: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <Button
-                  type="submit"
-                  className="btn-primary w-full"
-                  disabled={createBirthDataMutation.isPending}
-                  data-testid="save-birth-data-button"
+                <Button 
+                  type="submit" 
+                  className="w-full btn-primary"
+                  disabled={saveBirthDataMutation.isPending}
                 >
-                  {createBirthDataMutation.isPending ? (
+                  {saveBirthDataMutation.isPending ? (
                     <div className="flex items-center space-x-2">
                       <div className="loading-spinner"></div>
-                      <span>Saving birth data...</span>
+                      <span>{t('astrology.saving')}</span>
                     </div>
                   ) : (
-                    <>
-                      <Star className="w-4 h-4 mr-2" />
-                      Save Birth Data
-                    </>
+                    <div className="flex items-center space-x-2">
+                      <Sparkles className="w-4 h-4" />
+                      <span>{t('astrology.saveBirthData')}</span>
+                    </div>
                   )}
                 </Button>
               </form>
@@ -322,195 +305,184 @@ const AstrologyPage = () => {
         </TabsContent>
 
         {/* Generate Chart Tab */}
-        <TabsContent value="generate">
-          <Card className="glass-card">
+        <TabsContent value="generate" className="mt-6">
+          <Card className="glass-card mystical-border">
             <CardHeader>
-              <CardTitle className="text-white font-serif flex items-center">
-                <Star className="w-5 h-5 mr-2 text-amber-400" />
-                Generate Birth Chart
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <Star className="w-5 h-5 text-amber-400" />
+                <span>{t('astrology.generateChart')}</span>
               </CardTitle>
-              <CardDescription className="text-slate-400">
-                Select birth data to generate a detailed astrological chart
+              <CardDescription className="text-slate-300">
+                {t('astrology.selectBirthData')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {birthDataLoading ? (
-                <div className="space-y-4">
-                  {[1, 2].map(i => (
-                    <div key={i} className="animate-pulse p-4 rounded-lg bg-slate-700/30">
-                      <div className="h-4 bg-slate-600/50 rounded mb-2"></div>
-                      <div className="h-3 bg-slate-600/30 rounded w-3/4"></div>
-                    </div>
-                  ))}
+                <div className="text-center py-8">
+                  <div className="loading-spinner mx-auto mb-4"></div>
+                  <p className="text-slate-400">{t('common.loading')}</p>
                 </div>
-              ) : birthDataList.length > 0 ? (
-                <div className="space-y-4">
-                  {birthDataList.map((birthData) => (
-                    <div 
-                      key={birthData.id} 
-                      className="p-4 rounded-lg bg-slate-800/30 border border-slate-600/30 hover:border-amber-500/50 transition-all"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-2">
-                          <h3 className="font-medium text-white flex items-center">
-                            <Calendar className="w-4 h-4 mr-2 text-amber-400" />
-                            {birthData.birth_date}
-                            {birthData.birth_time && (
-                              <>
-                                <Clock className="w-4 h-4 ml-4 mr-1 text-blue-400" />
-                                {birthData.birth_time}
-                              </>
-                            )}
-                          </h3>
-                          <p className="text-sm text-slate-400 flex items-center">
-                            <MapPin className="w-3 h-3 mr-1" />
-                            {birthData.birth_place}
-                          </p>
-                          <div className="flex items-center space-x-2">
-                            <Badge variant="outline" className="text-xs">
+              ) : birthDataList.length === 0 ? (
+                <Alert className="border-amber-500/50 bg-amber-500/10">
+                  <AlertDescription className="text-amber-400">
+                    {t('astrology.noBirthData')}
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <div className="grid gap-4">
+                  {birthDataList.map((birthData, index) => (
+                    <Card key={birthData.id} className="glass-card border-slate-600/30 hover:border-amber-400/50 transition-colors">
+                      <CardContent className="pt-6">
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Calendar className="w-4 h-4 text-amber-400" />
+                              <span className="text-white font-medium">
+                                {new Date(birthData.birth_date).toLocaleDateString()}
+                              </span>
+                              {birthData.birth_time && (
+                                <>
+                                  <Clock className="w-4 h-4 text-amber-400 ml-4" />
+                                  <span className="text-slate-300">{birthData.birth_time}</span>
+                                </>
+                              )}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <MapPin className="w-4 h-4 text-amber-400" />
+                              <span className="text-slate-300">{birthData.birth_place}</span>
+                            </div>
+                            <Badge variant="secondary" className="bg-slate-700/50 text-slate-300">
                               {birthData.time_accuracy}
                             </Badge>
                           </div>
+                          <Button
+                            onClick={() => handleGenerateChart(birthData.id)}
+                            className="btn-primary"
+                            disabled={generateChartMutation.isPending}
+                          >
+                            {generateChartMutation.isPending ? (
+                              <div className="flex items-center space-x-2">
+                                <div className="loading-spinner"></div>
+                                <span>{t('astrology.generating')}</span>
+                              </div>
+                            ) : (
+                              <div className="flex items-center space-x-2">
+                                <Star className="w-4 h-4" />
+                                <span>{t('astrology.generateChart')}</span>
+                              </div>
+                            )}
+                          </Button>
                         </div>
-                        <Button
-                          onClick={() => handleGenerateChart(birthData.id)}
-                          disabled={generateChartMutation.isPending}
-                          className="btn-primary"
-                          data-testid={`generate-chart-button-${birthData.id}`}
-                        >
-                          {generateChartMutation.isPending ? (
-                            <div className="loading-spinner w-4 h-4"></div>
-                          ) : (
-                            <>
-                              <Sparkles className="w-4 h-4 mr-2" />
-                              Generate Chart
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
-              ) : (
-                <Alert className="border-amber-500/50 bg-amber-500/10">
-                  <Star className="w-4 h-4 text-amber-400" />
-                  <AlertDescription className="text-amber-200">
-                    No birth data found. Please add your birth information first.
-                  </AlertDescription>
-                </Alert>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Charts Tab */}
-        <TabsContent value="charts">
-          <div className="space-y-4">
-            {chartsLoading ? (
-              <Card className="glass-card">
-                <CardContent className="p-6">
-                  <div className="animate-pulse space-y-4">
-                    <div className="h-6 bg-slate-600/50 rounded w-1/4"></div>
-                    <div className="grid grid-cols-3 gap-4">
-                      {[1, 2, 3].map(i => (
-                        <div key={i} className="h-20 bg-slate-600/30 rounded"></div>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : charts.length > 0 ? (
-              charts.map((chart) => (
-                <Card key={chart.id} className="glass-card">
-                  <CardHeader>
-                    <CardTitle className="text-white font-serif flex items-center">
-                      <Sun className="w-5 h-5 mr-2 text-amber-400" />
-                      Natal Chart - {chart.birth_data.birth_date}
-                    </CardTitle>
-                    <CardDescription className="text-slate-400">
-                      Generated on {new Date(chart.created_at).toLocaleDateString()}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {/* Planets */}
-                      <div>
-                        <h4 className="font-semibold text-white mb-4 flex items-center">
-                          <Star className="w-4 h-4 mr-2 text-purple-400" />
-                          Planetary Positions
-                        </h4>
-                        <div className="space-y-2">
-                          {Object.entries(chart.planets).map(([name, planet]) => (
-                            <div 
-                              key={name} 
-                              className="flex justify-between items-center p-2 rounded bg-slate-800/30"
-                            >
-                              <span className="text-slate-200 capitalize">{name}</span>
-                              <div className="text-right">
-                                <span className="text-amber-400 font-mono text-sm">
-                                  {formatPlanetPosition(planet)}
-                                </span>
-                                <div className="text-xs text-slate-400">
-                                  {planet.sign}
-                                  {planet.house && ` • House ${planet.house}`}
-                                  {planet.retrograde && ' • R'}
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Houses */}
-                      <div>
-                        <h4 className="font-semibold text-white mb-4 flex items-center">
-                          <Moon className="w-4 h-4 mr-2 text-blue-400" />
-                          House Cusps
-                        </h4>
-                        <div className="space-y-2">
-                          {Object.entries(chart.houses).map(([houseName, house]) => {
-                            const houseNumber = houseName.replace('house_', '');
-                            return (
-                              <div 
-                                key={houseName} 
-                                className="flex justify-between items-center p-2 rounded bg-slate-800/30"
-                              >
-                                <span className="text-slate-200">House {houseNumber}</span>
-                                <div className="text-right">
-                                  <span className="text-blue-400 font-mono text-sm">
-                                    {Math.floor(house.cusp)}°
-                                  </span>
-                                  <div className="text-xs text-slate-400">
-                                    {house.sign}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <Card className="glass-card">
-                <CardContent className="p-6 text-center">
-                  <Sun className="w-12 h-12 mx-auto mb-4 text-slate-400 opacity-50" />
-                  <h3 className="text-white font-medium mb-2">No Charts Generated</h3>
-                  <p className="text-slate-400 mb-4">
-                    Generate your first birth chart to see planetary positions and aspects.
+        <TabsContent value="charts" className="mt-6">
+          <Card className="glass-card mystical-border">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2 text-white">
+                <Calendar className="w-5 h-5 text-amber-400" />
+                <span>{t('astrology.myCharts')}</span>
+              </CardTitle>
+              <CardDescription className="text-slate-300">
+                {t('astrology.generatedOn')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {chartsLoading ? (
+                <div className="text-center py-8">
+                  <div className="loading-spinner mx-auto mb-4"></div>
+                  <p className="text-slate-400">{t('common.loading')}</p>
+                </div>
+              ) : charts.length === 0 ? (
+                <div className="text-center py-12">
+                  <Stars className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-slate-300 mb-2">
+                    {t('astrology.noCharts')}
+                  </h3>
+                  <p className="text-slate-400 mb-6">
+                    {t('astrology.generateFirst')}
                   </p>
                   <Button 
-                    onClick={() => setActiveTab('generate')}
+                    onClick={() => setActiveTab('create')}
                     className="btn-primary"
                   >
-                    Generate Chart
+                    <Plus className="w-4 h-4 mr-2" />
+                    {t('astrology.addBirthData')}
                   </Button>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+                </div>
+              ) : (
+                <div className="grid gap-6">
+                  {charts.map((chart) => (
+                    <Card key={chart.id} className="glass-card border-slate-600/30">
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold text-white">
+                              {t('astrology.natalChart')}
+                            </h3>
+                            <Badge variant="secondary" className="bg-amber-500/20 text-amber-400">
+                              {new Date(chart.created_at).toLocaleDateString()}
+                            </Badge>
+                          </div>
+
+                          {/* Planetary Positions */}
+                          <div className="space-y-3">
+                            <h4 className="font-medium text-amber-400 flex items-center">
+                              <Sun className="w-4 h-4 mr-2" />
+                              {t('astrology.planetaryPositions')}
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {Object.entries(chart.planets || {}).map(([planet, data]) => (
+                                <div key={planet} className="bg-slate-800/30 rounded-lg p-3 border border-slate-600/30">
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-medium text-white">{planet}</span>
+                                    <Badge variant="outline" className="text-xs">
+                                      {data.sign}
+                                    </Badge>
+                                  </div>
+                                  <div className="text-xs text-slate-400 mt-1">
+                                    {data.longitude?.toFixed(2)}° {data.house && `• House ${data.house}`}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* House Cusps */}
+                          <div className="space-y-3">
+                            <h4 className="font-medium text-amber-400 flex items-center">
+                              <Moon className="w-4 h-4 mr-2" />
+                              {t('astrology.houseCusps')}
+                            </h4>
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                              {Object.entries(chart.houses || {}).map(([house, data]) => (
+                                <div key={house} className="bg-slate-800/30 rounded-lg p-3 border border-slate-600/30 text-center">
+                                  <div className="font-medium text-white text-sm">
+                                    {house.replace('house_', 'H')}
+                                  </div>
+                                  <div className="text-xs text-amber-400">{data.sign}</div>
+                                  <div className="text-xs text-slate-400">
+                                    {data.cusp?.toFixed(1)}°
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
