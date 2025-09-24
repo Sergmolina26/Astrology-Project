@@ -511,11 +511,11 @@ body::before {
 
 /* Enhanced Typography */
 .mystical-title {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fbbf24 100%);
+  background: linear-gradient(135deg, #b8860b 0%, #daa520 50%, #b8860b 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+  text-shadow: 0 0 30px rgba(184, 134, 11, 0.5);
 }
 
 /* Responsive Design */
