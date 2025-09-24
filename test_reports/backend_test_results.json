@@ -1,124 +1,120 @@
 {
-  "timestamp": "2025-09-24T17:44:20.247458",
+  "timestamp": "2025-09-24T17:45:37.078627",
   "total_tests": 16,
-  "passed_tests": 14,
-  "success_rate": 87.5,
+  "passed_tests": 16,
+  "success_rate": 100.0,
   "test_details": [
     {
       "test_name": "User Registration",
       "success": true,
-      "details": "Registered user: test_user_174418@celestia.com",
+      "details": "Registered user: test_user_174536@celestia.com",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:18.817659"
+      "timestamp": "2025-09-24T17:45:36.410819"
     },
     {
       "test_name": "User Login/Token Verification",
       "success": true,
       "details": "User authenticated: Test User",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:18.989022"
+      "timestamp": "2025-09-24T17:45:36.451652"
     },
     {
       "test_name": "Get Me Endpoint",
       "success": true,
-      "details": "Retrieved user info: Test User (test_user_174418@celestia.com)",
+      "details": "Retrieved user info: Test User (test_user_174536@celestia.com)",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.030541"
+      "timestamp": "2025-09-24T17:45:36.530038"
     },
     {
-      "test_name": "Reader Registration (First)",
-      "success": false,
-      "details": "Failed to register first reader",
-      "response_data": {
-        "detail": "Reader account already exists. Contact support if you need access."
-      },
-      "timestamp": "2025-09-24T17:44:19.187017"
+      "test_name": "Reader Registration (Duplicate Prevention)",
+      "success": true,
+      "details": "Correctly prevented duplicate reader registration - reader already exists",
+      "response_data": null,
+      "timestamp": "2025-09-24T17:45:36.570587"
     },
     {
       "test_name": "Reader Dashboard (Access Control)",
-      "success": false,
-      "details": "Failed to deny non-reader access",
-      "response_data": {
-        "detail": "Reader access required"
-      },
-      "timestamp": "2025-09-24T17:44:19.227122"
+      "success": true,
+      "details": "Correctly denied non-reader access to dashboard",
+      "response_data": null,
+      "timestamp": "2025-09-24T17:45:36.611166"
     },
     {
       "test_name": "Session Creation",
       "success": true,
-      "details": "Session ID: 738a8a74-1a88-43ec-888a-cba931833a16, Amount: $85.0, Payment Link: https://mystictarot-3.preview.emergentagent.com/pa...",
+      "details": "Session ID: 6b62392a-cc76-4535-8f11-d5ca9fc36aba, Amount: $85.0, Payment Link: https://mystictarot-3.preview.emergentagent.com/pa...",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.271243"
+      "timestamp": "2025-09-24T17:45:36.653204"
     },
     {
       "test_name": "Payment Completion",
       "success": true,
       "details": "Payment completed: Payment completed successfully",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.311741"
+      "timestamp": "2025-09-24T17:45:36.695263"
     },
     {
       "test_name": "Payment Status Update",
       "success": true,
       "details": "Session status updated to paid",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.353003"
+      "timestamp": "2025-09-24T17:45:36.732925"
     },
     {
       "test_name": "Get Sessions",
       "success": true,
       "details": "Retrieved 1 sessions",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.386879"
+      "timestamp": "2025-09-24T17:45:36.804401"
     },
     {
       "test_name": "Birth Data Creation",
       "success": true,
-      "details": "Created birth data: 2d3607f2-6c18-4d8a-ad89-9d91d097dc32",
+      "details": "Created birth data: a0760159-b244-44d8-8e36-f8c3f5ec9975",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.434228"
+      "timestamp": "2025-09-24T17:45:36.845856"
     },
     {
       "test_name": "Get Birth Data",
       "success": true,
       "details": "Retrieved 1 birth data records",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.469958"
+      "timestamp": "2025-09-24T17:45:36.886380"
     },
     {
       "test_name": "Astrology Chart Generation",
       "success": true,
       "details": "Generated chart with 5 planets and 12 houses",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:19.521901"
+      "timestamp": "2025-09-24T17:45:36.925836"
     },
     {
       "test_name": "Get Astrology Charts",
       "success": true,
       "details": "Retrieved 1 astrology charts",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:20.136530"
+      "timestamp": "2025-09-24T17:45:36.962811"
     },
     {
       "test_name": "Get Tarot Spreads",
       "success": true,
       "details": "Retrieved 3 spreads: Single Card, Three Card Spread, Celtic Cross",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:20.172332"
+      "timestamp": "2025-09-24T17:45:36.999346"
     },
     {
       "test_name": "Get Tarot Cards",
       "success": true,
       "details": "Retrieved 5 cards including: The Fool, The Magician, The High Priestess",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:20.208151"
+      "timestamp": "2025-09-24T17:45:37.039446"
     },
     {
       "test_name": "Create Tarot Reading",
       "success": true,
       "details": "Created Single Card reading with 1 cards",
       "response_data": null,
-      "timestamp": "2025-09-24T17:44:20.247399"
+      "timestamp": "2025-09-24T17:45:37.078573"
     }
   ]
 }
