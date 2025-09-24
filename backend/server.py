@@ -344,9 +344,9 @@ async def get_tarot_spreads():
                 name="Three Card Spread",
                 description="Past, Present, Future reading",
                 positions=[
-                    {"index": 1, "name": "Past", "meaning": "What influences from the past affect this situation?"},
-                    {"index": 2, "name": "Present", "meaning": "What is the current situation?"},
-                    {"index": 3, "name": "Future", "meaning": "What is the likely outcome?"}
+                    {"index": "1", "name": "Past", "meaning": "What influences from the past affect this situation?"},
+                    {"index": "2", "name": "Present", "meaning": "What is the current situation?"},
+                    {"index": "3", "name": "Future", "meaning": "What is the likely outcome?"}
                 ]
             ),
             TarotSpread(
