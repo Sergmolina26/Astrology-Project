@@ -86,7 +86,8 @@ const AstrologyPage = () => {
       });
     },
     onError: (error) => {
-      toast.error(error.response?.data?.detail || 'Failed to save birth data');
+      const errorMessage = extractErrorMessage(error, 'Failed to save birth data');
+      toast.error(errorMessage);
     }
   });
 
