@@ -201,12 +201,12 @@ const AuthPage = () => {
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="register-name" className="text-slate-200">
-                      Full Name
+                      {t('auth.fullName')}
                     </Label>
                     <Input
                       id="register-name"
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder={t('auth.enterFullName')}
                       value={registerForm.name}
                       onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
                       className="form-input"
@@ -216,12 +216,12 @@ const AuthPage = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="register-email" className="text-slate-200">
-                      Email
+                      {t('auth.email')}
                     </Label>
                     <Input
                       id="register-email"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder={t('auth.enterEmail')}
                       value={registerForm.email}
                       onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
                       className="form-input"
@@ -231,12 +231,12 @@ const AuthPage = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="register-password" className="text-slate-200">
-                      Password
+                      {t('auth.password')}
                     </Label>
                     <Input
                       id="register-password"
                       type="password"
-                      placeholder="Create a password"
+                      placeholder={t('auth.createPassword')}
                       value={registerForm.password}
                       onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
                       className="form-input"
@@ -246,7 +246,7 @@ const AuthPage = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="register-role" className="text-slate-200">
-                      Account Type
+                      {t('auth.accountType')}
                     </Label>
                     <div className="p-3 rounded-lg bg-slate-800/30 border border-slate-600/30">
                       <div className="text-sm text-slate-300">
