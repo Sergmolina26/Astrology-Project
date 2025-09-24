@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import "./App.css";
+import "./i18n"; // Initialize i18n
 
 // Import components
 import AuthPage from "./components/AuthPage";
