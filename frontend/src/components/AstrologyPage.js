@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Alert, AlertDescription } from './ui/alert';
 import { Badge } from './ui/badge';
 import PlacesAutocomplete from './PlacesAutocomplete';
+import { extractErrorMessage } from '../utils/errorHandler';
 import { 
   Sparkles, 
   Calendar,
