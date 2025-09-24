@@ -234,16 +234,16 @@ const AdminDashboard = () => {
           <div className="grid gap-6">
             <Card className="glass-card mystical-border">
               <CardHeader>
-                <CardTitle className="text-white">Recent Activity</CardTitle>
+                <CardTitle className="text-white">{t('admin.recentActivity')}</CardTitle>
                 <CardDescription className="text-slate-300">
-                  Latest sessions and bookings
+                  {t('admin.latestSessions')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {sessionsLoading ? (
                   <div className="text-center py-4">
                     <div className="loading-spinner mx-auto mb-2"></div>
-                    <p className="text-slate-400">Loading recent activity...</p>
+                    <p className="text-slate-400">{t('admin.loadingActivity')}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
