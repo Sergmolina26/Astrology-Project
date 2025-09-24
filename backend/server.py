@@ -24,7 +24,7 @@ import hashlib
 from models.payment import PaymentTransaction, PaymentCreateRequest, PaymentStatusResponse
 from utils.calendar import CalendarBlockingService
 from utils.admin import AdminProfileService
-# from utils.email_providers import send_email  # Temporarily disabled due to import issues
+from utils.email_providers import send_email as email_send
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
