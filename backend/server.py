@@ -334,8 +334,10 @@ async def generate_chart(
         # Extract houses using first house as reference
         houses = {}
         if hasattr(subject, 'first_house'):
+            house_names = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
+                          'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth']
             for i in range(1, 13):
-                house_attr = f"{'first' if i == 1 else 'second' if i == 2 else 'third' if i == 3 else 'fourth' if i == 4 else 'fifth' if i == 5 else 'sixth' if i == 6 else 'seventh' if i == 7 else 'eighth' if i == 8 else 'ninth' if i == 9 else 'tenth' if i == 10 else 'eleventh' if i == 11 else 'twelfth'}_house"
+                house_attr = f"{house_names[i-1]}_house"
                 if hasattr(subject, house_attr):
                     house = getattr(subject, house_attr)
                     houses[f"house_{i}"] = {
