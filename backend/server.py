@@ -47,11 +47,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key-change-in-production")
 ALGORITHM = "HS256"
 
-# Temporary email function to replace send_email while import is disabled
+# Real email function using email providers
 def send_email(to_email: str, subject: str, html_content: str) -> bool:
-    """Temporary placeholder for send_email function"""
-    print(f"📧 EMAIL DISABLED - Would send to {to_email}: {subject}")
-    return True
+    """Send email using configured provider"""
+    try:
+        return email_send(to_email, subject, html_content)
+    except Exception as e:
+        print(f"📧 EMAIL ERROR: {str(e)}")
+        return False
 
 # Create the main app
 app = FastAPI(title="Celestia API")
