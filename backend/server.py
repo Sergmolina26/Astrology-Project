@@ -270,9 +270,17 @@ async def generate_chart(
             time_parts = birth_data.birth_time.split(":")
             hour, minute = int(time_parts[0]), int(time_parts[1])
         
-        # Use default coordinates if not provided
-        lat = birth_data.latitude if birth_data.latitude else 40.7128  # NYC default
-        lng = birth_data.longitude if birth_data.longitude else -74.0060
+        # Use default coordinates if not provided or convert from string
+        lat = 40.7128  # NYC default
+        lng = -74.0060
+        
+        if birth_data.latitude and birth_data.longitude:
+            try:
+                lat = float(birth_data.latitude)
+                lng = float(birth_data.longitude)
+            except (ValueError, TypeError):
+                # Use defaults if conversion fails
+                pass
         
         # Create astrological subject
         subject = AstrologicalSubject(
