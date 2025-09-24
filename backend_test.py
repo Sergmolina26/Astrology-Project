@@ -256,7 +256,7 @@ class CelestiaAPITester:
                     "role": "reader"
                 }
                 
-                success2, response2 = self.make_request('POST', 'auth/register-reader', second_reader_data, 400)
+                success2, response2 = self.make_request('POST', 'auth/register-reader', second_reader_data, 200)
                 
                 if not success2 and "already exists" in str(response2):
                     self.log_test("Reader Registration (Duplicate Prevention)", True, "Correctly prevented second reader registration")
