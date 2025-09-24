@@ -112,7 +112,8 @@
     "recordingNotes": "Recording & Notes",
     "sessionNotes": "Receive session notes and key insights for future reference.",
     "professionalGuidance": "Professional Guidance",
-    "expertInterpretation": "Expert interpretation with compassionate, insightful guidance."
+    "expertInterpretation": "Expert interpretation with compassionate, insightful guidance.",
+    "sessionRequested": "Session requested successfully!"
   },
   "common": {
     "loading": "Loading...",
