@@ -245,11 +245,14 @@ const AstrologyPage = () => {
                         longitude: place.longitude.toString()
                       });
                     }}
-                    placeholder="Search for city, state, country"
+                    placeholder="Enter city, state, country"
                     className="form-input"
                     data-testid="birth-place-input"
                     required
                   />
+                  <p className="text-xs text-slate-400">
+                    Enter your birth location and manually add coordinates below for accurate calculations.
+                  </p>
                   {birthForm.latitude && birthForm.longitude && (
                     <div className="text-xs text-emerald-400 flex items-center">
                       <MapPin className="w-3 h-3 mr-1" />
