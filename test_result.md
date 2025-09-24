@@ -198,9 +198,9 @@ backend:
 frontend:
   - task: "SendGrid email integration"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -210,6 +210,9 @@ frontend:
         - working: true
           agent: "main"
           comment: "✅ IMPLEMENTED: SendGrid integration complete with real API key. Updated send_email function to use SendGrid API instead of print statements."
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL ISSUE: SendGrid integration implemented but failing with '403 Forbidden' errors. API key is valid but sender email 'Lago.mistico11@gmail.com' is not verified in SendGrid. All email sending attempts fail. Email structure and triggers work correctly, but actual delivery blocked by SendGrid sender verification requirement."
 
   - task: "Stripe payment integration"
     implemented: true
