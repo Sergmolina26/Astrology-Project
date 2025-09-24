@@ -114,8 +114,8 @@ class CelestiaAPITester:
             "birth_time": "14:30",
             "time_accuracy": "exact",
             "birth_place": "New York, NY",
-            "latitude": 40.7128,
-            "longitude": -74.0060
+            "latitude": "40.7128",  # Changed to string
+            "longitude": "-74.0060"  # Changed to string
         }
         
         success, response = self.make_request('POST', 'birth-data', birth_data, 200)
