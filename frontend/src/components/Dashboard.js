@@ -54,12 +54,12 @@ const Dashboard = () => {
           </div>
 
           <h1 className="font-mystical text-3xl md:text-4xl font-bold mystical-title mb-4">
-            ✦ Welcome back, {user?.name} ✦
+            ✦ {t('dashboard.welcomeBack', { name: user?.name })} ✦
           </h1>
           <p className="text-slate-300 text-lg mb-6">
             {user?.role === 'reader' 
-              ? 'Your cosmic guidance awaits those who seek wisdom'
-              : 'Your celestial journey continues with new insights'
+              ? t('dashboard.guidanceAwaits')
+              : t('dashboard.journeyContinues')
             }
           </p>
           
