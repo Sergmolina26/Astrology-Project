@@ -67,13 +67,13 @@ const Dashboard = () => {
             <Link to="/astrology">
               <Button className="btn-primary" data-testid="quick-astrology-btn">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Generate Birth Chart
+                {t('dashboard.generateChart')}
               </Button>
             </Link>
             <Link to="/tarot">
               <Button className="btn-secondary" data-testid="quick-tarot-btn">
                 <Stars className="w-4 h-4 mr-2" />
-                Book Services
+                {t('dashboard.bookServices')}
               </Button>
             </Link>
           </div>
