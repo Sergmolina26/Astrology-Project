@@ -145,7 +145,7 @@ const AdminDashboard = () => {
                   <Users className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Total Clients</p>
+                  <p className="text-sm text-slate-400">{t('admin.totalClients')}</p>
                   <p className="text-2xl font-bold text-white">{stats.total_clients}</p>
                 </div>
               </div>
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
                   <Calendar className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Total Sessions</p>
+                  <p className="text-sm text-slate-400">{t('admin.totalSessions')}</p>
                   <p className="text-2xl font-bold text-white">{stats.total_sessions}</p>
                 </div>
               </div>
@@ -173,7 +173,7 @@ const AdminDashboard = () => {
                   <DollarSign className="w-6 h-6 text-amber-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Revenue</p>
+                  <p className="text-sm text-slate-400">{t('admin.revenue')}</p>
                   <p className="text-2xl font-bold text-white">${stats.total_revenue.toFixed(2)}</p>
                 </div>
               </div>
@@ -187,7 +187,7 @@ const AdminDashboard = () => {
                   <TrendingUp className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Conversion Rate</p>
+                  <p className="text-sm text-slate-400">{t('admin.conversionRate')}</p>
                   <p className="text-2xl font-bold text-white">{stats.conversion_rate.toFixed(1)}%</p>
                 </div>
               </div>
