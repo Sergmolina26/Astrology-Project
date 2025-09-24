@@ -19,6 +19,7 @@ import {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const { data: sessions = [], isLoading: sessionsLoading } = useQuery({
     queryKey: ['sessions'],
