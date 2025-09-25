@@ -133,7 +133,7 @@ backend:
           comment: "Mock payment link generation implemented (lines 185-188). Returns hardcoded URL format. Needs testing and Stripe integration."
         - working: true
           agent: "testing"
-          comment: "✅ TESTED: Payment link generation working correctly. Generates mock payment URLs in format 'https://mystictarot-3.preview.emergentagent.com/pay/{hash}' and includes them in session responses and emails."
+          comment: "✅ TESTED: Payment link generation working correctly. Generates mock payment URLs in format 'https://astro-booking-3.preview.emergentagent.com/pay/{hash}' and includes them in session responses and emails."
 
   - task: "Reader registration system"
     implemented: true

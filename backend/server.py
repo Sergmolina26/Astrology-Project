@@ -202,7 +202,7 @@ def send_email_deprecated(to_email: str, subject: str, html_content: str):
 def generate_payment_link(session_id: str, amount: float) -> str:
     """Generate a real Stripe payment link (will be replaced with actual checkout session)"""
     payment_id = hashlib.md5(f"{session_id}{amount}".encode()).hexdigest()
-    return f"https://mystictarot-3.preview.emergentagent.com/pay/{payment_id}"
+    return f"https://astro-booking-3.preview.emergentagent.com/pay/{payment_id}"
 
 def get_service_price(service_type: str) -> float:
     """Get pricing for different services"""

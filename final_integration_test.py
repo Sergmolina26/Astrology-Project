@@ -5,7 +5,7 @@ import json
 from datetime import datetime, timedelta
 
 def test_integrations():
-    base_url = 'https://mystictarot-3.preview.emergentagent.com'
+    base_url = 'https://astro-booking-3.preview.emergentagent.com'
     api_url = f'{base_url}/api'
 
     # Create user
