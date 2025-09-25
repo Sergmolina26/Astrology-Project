@@ -220,7 +220,6 @@ def get_service_duration(service_type: str) -> int:
         "general-purpose-reading": 45,  # 30-45 min
         "astrological-tarot-session": 60,  # 60 min
         "birth-chart-reading": 90,  # 90 min
-        "chart-tarot-combo": 120,  # 120 min
         "follow-up": 30  # 30 min
     }
     return durations.get(service_type, 45)
