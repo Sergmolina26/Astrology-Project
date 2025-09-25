@@ -245,8 +245,7 @@ const SessionsPage = () => {
                             })} {new Date(session.start_at).toLocaleTimeString('en-US', { 
                               hour: 'numeric', 
                               minute: '2-digit', 
-                              hour12: true,
-                              timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                              hour12: true
                             })}
                           </span>
                         </div>
