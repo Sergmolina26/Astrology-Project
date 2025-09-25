@@ -660,7 +660,7 @@ async def generate_chart(
             planets=planets,
             houses=houses,
             aspects=[],  # We'll add aspect calculations later
-            svg_content=chart_svg_content if chart_svg_content else None,
+            chart_svg=chart_svg_content if chart_svg_content else None,
             image_path=chart_image_path if chart_image_path else None
         )
         
