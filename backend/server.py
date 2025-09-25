@@ -1701,7 +1701,7 @@ async def get_session_notes(
             raise HTTPException(status_code=403, detail="Access denied")
         
         # Get personal notes
-        personal_notes = await db.personal_notes.find({
+        personal_notes_raw = await db.personal_notes.find({
             "session_id": session_id,
             "user_id": current_user.id if current_user.role != "admin" else session["client_id"]
         }).to_list(None)
@@ -1711,7 +1711,20 @@ async def get_session_notes(
         if current_user.role != "admin":
             mistica_notes_query["is_visible_to_client"] = True
         
-        mistica_notes = await db.mistica_notes.find(mistica_notes_query).to_list(None)
+        mistica_notes_raw = await db.mistica_notes.find(mistica_notes_query).to_list(None)
+        
+        # Remove MongoDB _id field to avoid serialization issues
+        personal_notes = []
+        for note in personal_notes_raw:
+            if "_id" in note:
+                del note["_id"]
+            personal_notes.append(note)
+        
+        mistica_notes = []
+        for note in mistica_notes_raw:
+            if "_id" in note:
+                del note["_id"]
+            mistica_notes.append(note)
         
         return {
             "personal_notes": personal_notes,
