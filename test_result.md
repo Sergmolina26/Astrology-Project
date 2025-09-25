@@ -302,6 +302,18 @@ backend:
           comment: "✅ TESTED: /api/auth/me endpoint working correctly. Returns authenticated user information including id, email, name, and role."
 
 frontend:
+  - task: "Astrological map inline display and workflow"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/AstrologyPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "❌ FRONTEND TESTING BLOCKED: Unable to test complete astrological map generation workflow due to authentication issues in testing environment. Login attempts with admin credentials return 'Invalid credentials', preventing access to /astrology page. ✅ FRONTEND CODE REVIEW: AstrologyPage.js implementation looks correct - has generateMapMutation for /api/charts/{id}/generate-map, proper SVG display with dangerouslySetInnerHTML, button state changes (Generate Map → Regenerate Map), loading states, and inline SVG container with maxHeight styling. ✅ BACKEND CONFIRMED WORKING: Server logs show successful SVG generation and API endpoints responding correctly. Frontend implementation appears properly structured for the workflow, but requires authenticated testing to verify complete functionality."
+
   - task: "Time display timezone conversion fix"
     implemented: false
     working: false
