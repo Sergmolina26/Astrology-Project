@@ -419,16 +419,23 @@ const AdminDashboard = () => {
         <TabsContent value="payments" className="mt-6">
           <Card className="glass-card mystical-border">
             <CardHeader>
-              <CardTitle className="text-white">Payment Transactions</CardTitle>
+              <CardTitle className="text-white">{t('admin.paymentTransactions')}</CardTitle>
               <CardDescription className="text-slate-300">
-                View all payment transactions and revenue
+                {t('admin.viewAllRevenue')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {paymentsLoading ? (
                 <div className="text-center py-8">
                   <div className="loading-spinner mx-auto mb-4"></div>
-                  <p className="text-slate-400">Loading payments...</p>
+                  <p className="text-slate-400">{t('admin.loadingPayments')}</p>
+                </div>
+              ) : payments.length === 0 ? (
+                <div className="text-center py-8">
+                  <DollarSign className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-slate-300 mb-2">
+                    {t('admin.noPaymentsFound')}
+                  </h3>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -439,24 +446,24 @@ const AdminDashboard = () => {
                           <div className="flex items-center space-x-4">
                             <h3 className="font-medium text-white">${payment.amount}</h3>
                             <Badge className={payment.payment_status === 'paid' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}>
-                              {payment.payment_status}
+                              {payment.payment_status === 'paid' ? t('admin.completed') : t('admin.pendingPayment')}
                             </Badge>
                           </div>
                           <div className="flex items-center space-x-4 text-sm text-slate-400">
                             <span className="flex items-center">
                               <Mail className="w-3 h-3 mr-1" />
-                              {payment.user_email}
+                              {payment.user_email || 'No email'}
                             </span>
                             <span className="flex items-center">
                               <Calendar className="w-3 h-3 mr-1" />
                               {new Date(payment.created_at).toLocaleDateString()}
                             </span>
-                            <span>{payment.service_type}</span>
+                            <span>{payment.service_type || 'Service'}</span>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-slate-400">Currency: {payment.currency}</p>
-                          <p className="text-xs text-slate-500">ID: {payment.payment_id.substring(0, 8)}...</p>
+                          <p className="text-sm text-slate-400">{t('admin.currency')}: {payment.currency || 'USD'}</p>
+                          <p className="text-xs text-slate-500">ID: {(payment.payment_id || payment.id || '').substring(0, 8)}...</p>
                         </div>
                       </div>
                     </div>
