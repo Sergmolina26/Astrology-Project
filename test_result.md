@@ -407,6 +407,30 @@ frontend:
           agent: "testing"
           comment: "✅ FULLY WORKING: Comprehensive testing confirms all fixes working perfectly. 1) Service Removal: 'chart-tarot-combo' service successfully removed from /api/services, 2) Duration Calculation: 45-minute session starting at 10:00 AM correctly ends at 10:45 AM, 3) All Services: Tested all service durations (general-purpose-reading: 45min, astrological-tarot-session: 60min, birth-chart-reading: 90min, follow-up: 30min) - all calculate correctly, 4) Business Hours: Validation still working, rejecting sessions ending after 6:00 PM. Duration calculation bug completely resolved (9/9 tests passed - 100% success rate)."
 
+  - task: "Admin sessions list endpoint fix"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL BUG FOUND: Admin sessions list endpoint (/api/admin/sessions) failing with 500 Internal Server Error due to MongoDB ObjectId serialization issue. This is the root cause of sessions not appearing in admin portal. Sessions are being created and stored correctly, but admin cannot view them due to this endpoint failure. Fix needed: exclude '_id' field or convert ObjectId to string in line ~1533."
+
+  - task: "Reader dashboard access for admin users"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ ACCESS ISSUE: Admin user (role: 'admin') cannot access reader dashboard endpoint (/api/reader/dashboard) which requires role: 'reader'. This prevents admin from viewing sessions in reader dashboard. Fix needed: allow admin role access OR change admin user role to 'reader' in line ~435."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
