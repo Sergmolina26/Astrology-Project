@@ -126,12 +126,47 @@ const TarotPage = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
+  const validateBusinessHours = (startTime) => {
+    if (!startTime) return { valid: false, message: 'Please select a date and time' };
+    
+    const start = new Date(startTime);
+    const dayOfWeek = start.getDay(); // 0 = Sunday, 6 = Saturday
+    
+    // Check if it's a weekend
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      return { valid: false, message: 'Services are only available Monday through Friday' };
+    }
+    
+    // Check if it's within business hours (10 AM - 6 PM)
+    const hour = start.getHours();
+    if (hour < 10) {
+      return { valid: false, message: 'Services start at 10:00 AM' };
+    }
+    
+    // Check if session will end by 6 PM
+    if (selectedService) {
+      const end = new Date(start.getTime() + (selectedService.duration * 60 * 1000));
+      if (end.getHours() >= 18) {
+        return { valid: false, message: 'All services must conclude by 6:00 PM' };
+      }
+    }
+    
+    return { valid: true, message: '' };
+  };
+
   const handleStartTimeChange = (startTime) => {
+    const validation = validateBusinessHours(startTime);
+    
     setSessionForm(prev => ({
       ...prev,
       start_at: startTime,
       end_at: selectedService ? calculateEndTime(startTime, selectedService.duration) : ''
     }));
+    
+    // Show validation error if needed
+    if (!validation.valid && startTime) {
+      toast.error(validation.message);
+    }
   };
 
   // Generate available time slots for business hours (10 AM - 6 PM, Mon-Fri)
