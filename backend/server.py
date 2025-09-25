@@ -128,6 +128,7 @@ class AstroChart(BaseModel):
     houses: Dict[str, Any] = {}
     aspects: List[Dict[str, Any]] = []
     chart_svg: Optional[str] = None
+    image_path: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class TarotCard(BaseModel):
