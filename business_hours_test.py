@@ -62,6 +62,7 @@ class BusinessHoursValidationTester:
             
             try:
                 response_data = response.json()
+                response_data['status_code'] = response.status_code  # Always include status code
             except:
                 response_data = {"status_code": response.status_code, "text": response.text}
 
