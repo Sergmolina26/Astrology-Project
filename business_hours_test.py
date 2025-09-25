@@ -197,7 +197,7 @@ class BusinessHoursValidationTester:
         success, response = self.make_request('POST', 'sessions', session_data, 400)  # Expect 400 error
         
         # Check if the request was properly rejected (400 status) and contains the right error message
-        if not success and response.get('status_code') == 400 and "10:00 AM" in str(response):
+        if response.get('status_code') == 400 and "10:00 AM" in str(response):
             self.log_test("Session Starting Before 10 AM", True, 
                          f"Correctly rejected session starting at 9:00 AM: {response.get('detail', 'Unknown error')}")
             return True
