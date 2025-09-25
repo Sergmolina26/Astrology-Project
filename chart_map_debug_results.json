@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-09-25T08:17:09.743052",
+  "test_type": "chart_map_debug",
+  "total_tests": 9,
+  "passed_tests": 9,
+  "success_rate": 100.0,
+  "chart_id": "e9874450-e302-4fde-badf-4b8daa48bbe0",
+  "birth_data_id": "379a06cd-4ccd-4a8d-9ded-52582fdd610c",
+  "test_details": [
+    {
+      "test_name": "Authentication Setup",
+      "success": true,
+      "details": "Registered user: chart_test_081708@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.246055"
+    },
+    {
+      "test_name": "Birth Data Creation",
+      "success": true,
+      "details": "Created birth data: 379a06cd-4ccd-4a8d-9ded-52582fdd610c",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.286494"
+    },
+    {
+      "test_name": "Chart Generation with SVG",
+      "success": true,
+      "details": "Chart ID: e9874450-e302-4fde-badf-4b8daa48bbe0, Planets: 5, Houses: 12, Has SVG: True, SVG Length: 155703 chars, SVG Elements: circle=True, path=True, text=True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.336635"
+    },
+    {
+      "test_name": "Chart Map Generation Endpoint",
+      "success": true,
+      "details": "Message: Chart map generated successfully, Has SVG: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.388624"
+    },
+    {
+      "test_name": "SVG Retrieval Endpoint",
+      "success": true,
+      "details": "Content-Type: image/svg+xml, Length: 155703, Is SVG: True, Elements: circle=True, path=True, text=True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.440338"
+    },
+    {
+      "test_name": "KerykeionChartSVG File Generation",
+      "success": true,
+      "details": "Initial SVG: True, Regenerated SVG: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.543608"
+    },
+    {
+      "test_name": "SVG File Path Issues",
+      "success": true,
+      "details": "No file path issues detected: Message: Chart map generated successfully, Has SVG: True, File Error Detected: False",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.591216"
+    },
+    {
+      "test_name": "Chart Data Integrity",
+      "success": true,
+      "details": "Birth Data: True, Complete: True, Planets: 5, Houses: 12",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.633407"
+    },
+    {
+      "test_name": "Error Investigation",
+      "success": true,
+      "details": "Completed error investigation - check console output above",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:17:09.743016"
+    }
+  ]
+}
