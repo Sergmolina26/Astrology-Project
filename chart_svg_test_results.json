@@ -1,0 +1,127 @@
+{
+  "timestamp": "2025-09-25T08:28:02.698874",
+  "total_tests": 17,
+  "passed_tests": 17,
+  "success_rate": 100.0,
+  "test_details": [
+    {
+      "test_name": "Authentication Setup",
+      "success": true,
+      "details": "Registered user: chart_test_082757@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:01.996525"
+    },
+    {
+      "test_name": "Existing Charts Check",
+      "success": true,
+      "details": "No existing charts found - will create new ones",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.039018"
+    },
+    {
+      "test_name": "Birth Data Creation",
+      "success": true,
+      "details": "Created birth data: d715c5a1-94b3-4836-95c1-04dbecd844ef",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.079423"
+    },
+    {
+      "test_name": "Sample Chart Creation",
+      "success": true,
+      "details": "Created chart 0239c7a6-723e-45a2-8553-e131ff3d4774, SVG included: True, SVG size: 157211 chars",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.132631"
+    },
+    {
+      "test_name": "SVG Retrieval",
+      "success": true,
+      "details": "Retrieved SVG: 157211 chars, Content-Type: image/svg+xml",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.175854"
+    },
+    {
+      "test_name": "SVG Content Validation",
+      "success": true,
+      "details": "SVG elements - Circles: True, Paths: True, Text: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.175884"
+    },
+    {
+      "test_name": "Complete Chart SVG Workflow",
+      "success": true,
+      "details": "Full workflow successful for chart 0239c7a6-723e-45a2-8553-e131ff3d4774",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.176563"
+    },
+    {
+      "test_name": "SVG Map Generation",
+      "success": true,
+      "details": "Map generation completed, SVG generated: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.310587"
+    },
+    {
+      "test_name": "SVG Retrieval",
+      "success": true,
+      "details": "Retrieved SVG: 157984 chars, Content-Type: image/svg+xml",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.350451"
+    },
+    {
+      "test_name": "SVG Content Validation",
+      "success": true,
+      "details": "SVG elements - Circles: True, Paths: True, Text: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.350480"
+    },
+    {
+      "test_name": "SVG Map Generation",
+      "success": true,
+      "details": "Map generation completed, SVG generated: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.483309"
+    },
+    {
+      "test_name": "SVG Retrieval",
+      "success": true,
+      "details": "Retrieved SVG: 154360 chars, Content-Type: image/svg+xml",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.527789"
+    },
+    {
+      "test_name": "SVG Content Validation",
+      "success": true,
+      "details": "SVG elements - Circles: True, Paths: True, Text: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.527823"
+    },
+    {
+      "test_name": "SVG Map Generation",
+      "success": true,
+      "details": "Map generation completed, SVG generated: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.656014"
+    },
+    {
+      "test_name": "SVG Retrieval",
+      "success": true,
+      "details": "Retrieved SVG: 152806 chars, Content-Type: image/svg+xml",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.698129"
+    },
+    {
+      "test_name": "SVG Content Validation",
+      "success": true,
+      "details": "SVG elements - Circles: True, Paths: True, Text: True",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.698158"
+    },
+    {
+      "test_name": "Multiple Chart SVG Generation",
+      "success": true,
+      "details": "Successfully generated SVG for 3/3 charts (100.0%)",
+      "response_data": null,
+      "timestamp": "2025-09-25T08:28:02.698715"
+    }
+  ]
+}
