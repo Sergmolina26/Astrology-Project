@@ -137,15 +137,18 @@ backend:
 
   - task: "Implement business hours validation"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "main"
           comment: "Business hours validation already implemented in lines 780-798 for 10 AM-6 PM, Monday-Friday constraints."
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL BUG FOUND: Business hours validation has a bug in line 794. The condition 'end_datetime.hour > 18' allows sessions ending at 6:30 PM (hour=18) to pass validation. Sessions should not be allowed to end after 6:00 PM. Correctly rejects before 10 AM and weekends, but fails for after 6 PM validation."
 
 backend:
   - task: "Email confirmation system"
