@@ -150,6 +150,18 @@ backend:
           agent: "testing"
           comment: "❌ CRITICAL BUG FOUND: Business hours validation has a bug in line 794. The condition 'end_datetime.hour > 18' allows sessions ending at 6:30 PM (hour=18) to pass validation. Sessions should not be allowed to end after 6:00 PM. Correctly rejects before 10 AM and weekends, but fails for after 6 PM validation."
 
+  - task: "Fix business hours 6 PM validation bug"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "BUG IDENTIFIED: Line 794 in server.py has condition 'end_datetime.hour > 18' which allows sessions ending at 6:30 PM (hour=18) to pass. Should be 'end_datetime.hour >= 18' or check if end time is after 6:00 PM exactly. Currently allows bookings from 5:30-6:30 PM when they should be rejected."
+
 backend:
   - task: "Email confirmation system"
     implemented: true
