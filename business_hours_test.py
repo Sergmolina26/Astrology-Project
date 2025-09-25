@@ -227,7 +227,7 @@ class BusinessHoursValidationTester:
         success, response = self.make_request('POST', 'sessions', session_data, 400)  # Expect 400 error
         
         # Check if the request was properly rejected (400 status) and contains the right error message
-        if not success and response.get('status_code') == 400 and ("Monday through Friday" in str(response) or "weekday" in str(response)):
+        if response.get('status_code') == 400 and ("Monday through Friday" in str(response) or "weekday" in str(response)):
             self.log_test("Weekend Session Rejection", True, 
                          f"Correctly rejected Saturday session: {response.get('detail', 'Unknown error')}")
             return True
