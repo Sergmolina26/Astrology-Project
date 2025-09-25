@@ -96,6 +96,8 @@ const TarotPage = () => {
 
   const handleServiceSelect = (serviceId) => {
     const service = services.find(s => s.id === serviceId);
+    if (!service) return;
+    
     setSessionForm(prev => ({
       ...prev,
       service_type: serviceId,
