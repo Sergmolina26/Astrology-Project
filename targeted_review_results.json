@@ -1,0 +1,92 @@
+{
+  "timestamp": "2025-09-25T07:25:16.116821",
+  "total_tests": 12,
+  "passed_tests": 12,
+  "success_rate": 100.0,
+  "test_details": [
+    {
+      "test_name": "Authentication Setup",
+      "success": true,
+      "details": "Registered user: targeted_review_072511@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:11.393170"
+    },
+    {
+      "test_name": "Time Display - 10:00 AM Storage",
+      "success": true,
+      "details": "10:00 AM correctly stored as hour 10",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:11.438652"
+    },
+    {
+      "test_name": "Time Display - 10:00 AM Retrieval",
+      "success": true,
+      "details": "Retrieved session maintains 10:00 AM (hour 10)",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:11.473648"
+    },
+    {
+      "test_name": "Business Hours - Before 10 AM Rejection",
+      "success": true,
+      "details": "Correctly rejected 9:00 AM booking",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:11.547352"
+    },
+    {
+      "test_name": "Business Hours - After 6 PM Rejection",
+      "success": true,
+      "details": "Correctly rejected session ending at 6:15 PM",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:11.587375"
+    },
+    {
+      "test_name": "Business Hours - Weekend Rejection",
+      "success": true,
+      "details": "Correctly rejected Saturday booking",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:13.330720"
+    },
+    {
+      "test_name": "End Time Validation - Exactly 6:00 PM Acceptance",
+      "success": true,
+      "details": "Correctly accepted session ending exactly at 6:00 PM",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:15.953600"
+    },
+    {
+      "test_name": "End Time Validation - 6:00 PM Time Verification",
+      "success": true,
+      "details": "Session correctly ends at 18:00 (6:00 PM)",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:15.953637"
+    },
+    {
+      "test_name": "End Time Validation - After 6:00 PM Rejection",
+      "success": true,
+      "details": "Correctly rejected session ending at 6:30 PM",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:15.996994"
+    },
+    {
+      "test_name": "Double Booking - First Session Creation",
+      "success": true,
+      "details": "Created first session: 5e19b6a3-2bc4-4ee2-aa6f-ac4e4d51dfb3",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:16.041032"
+    },
+    {
+      "test_name": "Double Booking - First Session Payment",
+      "success": true,
+      "details": "Completed payment for first session",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:16.076298"
+    },
+    {
+      "test_name": "Double Booking - Overlap Prevention",
+      "success": true,
+      "details": "Successfully prevented overlapping session",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:25:16.116760"
+    }
+  ]
+}
