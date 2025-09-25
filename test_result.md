@@ -346,7 +346,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Fix business hours 6 PM validation bug"
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
   stuck_tasks:
