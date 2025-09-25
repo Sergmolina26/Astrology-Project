@@ -1541,6 +1541,197 @@ async def get_all_payments(current_user: User = Depends(get_current_user)):
         print(f"❌ Get payments failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ==================== NOTES SYSTEM ROUTES ====================
+
+class PersonalNote(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: str
+    user_id: str
+    note_content: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class MisticaNote(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: str
+    client_id: str
+    admin_id: str  # Admin who created the note
+    note_content: str
+    is_visible_to_client: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+@api_router.get("/sessions/{session_id}/notes")
+async def get_session_notes(
+    session_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get all notes for a session (personal + Mistica's notes)"""
+    try:
+        # Verify user has access to this session
+        session = await db.sessions.find_one({"id": session_id})
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        if current_user.role == "admin":
+            # Admin can see all notes
+            pass
+        elif session["client_id"] != current_user.id:
+            # Client can only see their own session
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Get personal notes
+        personal_notes = await db.personal_notes.find({
+            "session_id": session_id,
+            "user_id": current_user.id if current_user.role != "admin" else session["client_id"]
+        }).to_list(None)
+        
+        # Get Mistica's notes (visible to client)
+        mistica_notes_query = {"session_id": session_id}
+        if current_user.role != "admin":
+            mistica_notes_query["is_visible_to_client"] = True
+        
+        mistica_notes = await db.mistica_notes.find(mistica_notes_query).to_list(None)
+        
+        return {
+            "personal_notes": personal_notes,
+            "mistica_notes": mistica_notes
+        }
+        
+    except Exception as e:
+        print(f"❌ Get session notes failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/sessions/{session_id}/personal-notes")
+async def create_personal_note(
+    session_id: str,
+    note_content: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Create or update personal note for a session"""
+    try:
+        # Verify user has access to this session
+        session = await db.sessions.find_one({"id": session_id})
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        if session["client_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Check if personal note already exists
+        existing_note = await db.personal_notes.find_one({
+            "session_id": session_id,
+            "user_id": current_user.id
+        })
+        
+        if existing_note:
+            # Update existing note
+            await db.personal_notes.update_one(
+                {"id": existing_note["id"]},
+                {"$set": {
+                    "note_content": note_content,
+                    "updated_at": datetime.now(timezone.utc)
+                }}
+            )
+            return {"message": "Personal note updated successfully"}
+        else:
+            # Create new note
+            personal_note = PersonalNote(
+                session_id=session_id,
+                user_id=current_user.id,
+                note_content=note_content
+            )
+            await db.personal_notes.insert_one(personal_note.dict())
+            return {"message": "Personal note created successfully"}
+        
+    except Exception as e:
+        print(f"❌ Create personal note failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/sessions/{session_id}/mistica-notes")
+async def create_mistica_note(
+    session_id: str,
+    note_content: str,
+    is_visible_to_client: bool = True,
+    current_user: User = Depends(get_current_user)
+):
+    """Create Mistica's note for a session (admin only)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Verify session exists
+        session = await db.sessions.find_one({"id": session_id})
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        # Create Mistica's note
+        mistica_note = MisticaNote(
+            session_id=session_id,
+            client_id=session["client_id"],
+            admin_id=current_user.id,
+            note_content=note_content,
+            is_visible_to_client=is_visible_to_client
+        )
+        
+        await db.mistica_notes.insert_one(mistica_note.dict())
+        
+        return {"message": "Mistica's note created successfully"}
+        
+    except Exception as e:
+        print(f"❌ Create Mistica note failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.put("/mistica-notes/{note_id}")
+async def update_mistica_note(
+    note_id: str,
+    note_content: str,
+    is_visible_to_client: bool,
+    current_user: User = Depends(get_current_user)
+):
+    """Update Mistica's note (admin only)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        result = await db.mistica_notes.update_one(
+            {"id": note_id},
+            {"$set": {
+                "note_content": note_content,
+                "is_visible_to_client": is_visible_to_client,
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Note not found")
+        
+        return {"message": "Mistica's note updated successfully"}
+        
+    except Exception as e:
+        print(f"❌ Update Mistica note failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.delete("/mistica-notes/{note_id}")
+async def delete_mistica_note(
+    note_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Delete Mistica's note (admin only)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        result = await db.mistica_notes.delete_one({"id": note_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Note not found")
+        
+        return {"message": "Mistica's note deleted successfully"}
+        
+    except Exception as e:
+        print(f"❌ Delete Mistica note failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ==================== INCLUDE ROUTER ====================
 
 app.include_router(api_router)
