@@ -346,8 +346,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "SendGrid email integration"
-    - "Email forwarding to admin/reader"
+    - "Google Calendar integration"
+    - "Google Meets integration"
   stuck_tasks:
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
