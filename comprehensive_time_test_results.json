@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-09-25T07:14:49.933755",
+  "investigation_focus": "Comprehensive Time Display and Double Booking Issues",
+  "total_tests": 5,
+  "passed_tests": 4,
+  "success_rate": 80.0,
+  "critical_issues_found": 0,
+  "issues": [],
+  "test_details": [
+    {
+      "test_name": "Test User Setup",
+      "success": true,
+      "details": "Created test user: comprehensive_test_071447@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:14:47.616088"
+    },
+    {
+      "test_name": "10 AM \u2192 3 PM Bug Test",
+      "success": true,
+      "details": "Time calculation working correctly: 10:00 AM + 45 min = 10:45 AM",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:14:48.099161"
+    },
+    {
+      "test_name": "First Session Creation",
+      "success": false,
+      "details": "Failed to create first session",
+      "response_data": {
+        "detail": "This time slot is not available. Please choose a different time."
+      },
+      "timestamp": "2025-09-25T07:14:48.135991"
+    },
+    {
+      "test_name": "Session Duration Calculations",
+      "success": true,
+      "details": "All duration calculations working correctly",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:14:49.764402"
+    },
+    {
+      "test_name": "Business Hours Edge Cases",
+      "success": true,
+      "details": "All business hours validations working correctly",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:14:49.933714"
+    }
+  ]
+}
