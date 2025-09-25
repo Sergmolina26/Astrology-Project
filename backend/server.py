@@ -1531,14 +1531,28 @@ async def get_all_sessions(current_user: User = Depends(get_current_user)):
     
     try:
         sessions = await db.sessions.find({}).to_list(None)
-        # Enrich with user data
-        for session in sessions:
-            client = await db.users.find_one({"id": session["client_id"]}, {"name": 1, "email": 1})
+        # Convert to Pydantic models and enrich with user data
+        result_sessions = []
+        for session_doc in sessions:
+            # Remove MongoDB _id field to avoid serialization issues
+            if "_id" in session_doc:
+                del session_doc["_id"]
+            
+            client = await db.users.find_one({"id": session_doc["client_id"]}, {"name": 1, "email": 1})
             if client:
-                session["client_name"] = client["name"]
-                session["client_email"] = client["email"]
+                session_doc["client_name"] = client["name"]
+                session_doc["client_email"] = client["email"]
+            
+            # Convert to Session model for proper serialization
+            try:
+                session = Session(**session_doc)
+                result_sessions.append(session.dict())
+            except Exception as model_error:
+                print(f"⚠️ Session model conversion failed: {model_error}")
+                # Fallback: return the document without _id
+                result_sessions.append(session_doc)
         
-        return sessions
+        return result_sessions
         
     except Exception as e:
         print(f"❌ Get sessions failed: {str(e)}")
