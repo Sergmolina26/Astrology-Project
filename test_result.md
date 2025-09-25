@@ -359,6 +359,21 @@ frontend:
           agent: "testing"
           comment: "❌ BLOCKED BY SENDGRID: Email forwarding system implemented correctly - notify_reader() function retrieves reader's configured notification email from AdminProfileService and sends notifications for 'New Booking Request' and 'Payment Completed' events. However, all emails fail due to SendGrid sender verification issue (403 Forbidden). Structure and logic working, blocked by email delivery."
 
+  - task: "Duration calculation fix and service removal"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "✅ IMPLEMENTED: Fixed duration calculation bug where 45-minute sessions starting at 10:00 AM incorrectly calculated end time as 3:45 PM instead of 10:45 AM. Updated calculateEndTime function to use setMinutes instead of millisecond calculations. Also removed 'Birth Chart + Tarot Combo' service from both frontend and backend."
+        - working: true
+          agent: "testing"
+          comment: "✅ FULLY WORKING: Comprehensive testing confirms all fixes working perfectly. 1) Service Removal: 'chart-tarot-combo' service successfully removed from /api/services, 2) Duration Calculation: 45-minute session starting at 10:00 AM correctly ends at 10:45 AM, 3) All Services: Tested all service durations (general-purpose-reading: 45min, astrological-tarot-session: 60min, birth-chart-reading: 90min, follow-up: 30min) - all calculate correctly, 4) Business Hours: Validation still working, rejecting sessions ending after 6:00 PM. Duration calculation bug completely resolved (9/9 tests passed - 100% success rate)."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
