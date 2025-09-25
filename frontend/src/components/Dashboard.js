@@ -101,24 +101,26 @@ const Dashboard = () => {
           </Card>
         </Link>
 
-        <Card className="glass-card card-hover">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-200">
-              This Month
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-emerald-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white" data-testid="monthly-sessions-count">
-              {sessionsLoading ? '...' : sessions.filter(s => 
-                new Date(s.created_at).getMonth() === new Date().getMonth()
-              ).length}
-            </div>
-            <p className="text-xs text-slate-400">
-              Sessions this month
-            </p>
-          </CardContent>
-        </Card>
+        <Link to="/sessions">
+          <Card className="glass-card card-hover cursor-pointer hover:border-emerald-400/50 transition-colors">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-200">
+                This Month
+              </CardTitle>
+              <TrendingUp className="h-4 w-4 text-emerald-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-white" data-testid="monthly-sessions-count">
+                {sessionsLoading ? '...' : sessions.filter(s => 
+                  new Date(s.created_at).getMonth() === new Date().getMonth()
+                ).length}
+              </div>
+              <p className="text-xs text-slate-400">
+                Sessions this month
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
         <Card className="glass-card card-hover">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
