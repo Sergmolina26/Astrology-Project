@@ -768,10 +768,34 @@ async def create_session(
     session_data: SessionCreate,
     current_user: User = Depends(get_current_user)
 ):
-    # Get the reader (business owner) - assuming there's one reader
-    reader = await db.users.find_one({"role": "reader"})
+    # Get the reader (business owner) - admin can also act as reader
+    reader = await db.users.find_one({"$or": [{"role": "reader"}, {"role": "admin"}]})
     if not reader:
         raise HTTPException(status_code=404, detail="No reader available. Please contact support.")
+    
+    # Validate business hours (10 AM - 6 PM, Monday-Friday)
+    start_datetime = session_data.start_at
+    end_datetime = session_data.end_at
+    
+    # Check if it's a weekday (Monday=0, Friday=4)
+    if start_datetime.weekday() > 4:  # Saturday=5, Sunday=6
+        raise HTTPException(
+            status_code=400, 
+            detail="Services are only available Monday through Friday."
+        )
+    
+    # Check business hours (10 AM - 6 PM)
+    if start_datetime.hour < 10:
+        raise HTTPException(
+            status_code=400, 
+            detail="Services start at 10:00 AM. Please choose a later time."
+        )
+    
+    if end_datetime.hour > 18:  # 6 PM in 24-hour format
+        raise HTTPException(
+            status_code=400, 
+            detail="All services must conclude by 6:00 PM. Please choose an earlier time."
+        )
     
     # Check if time slot is available (prevent double booking)
     is_available = await calendar_service.is_time_slot_available(
