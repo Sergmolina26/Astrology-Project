@@ -1,132 +1,101 @@
 {
-  "timestamp": "2025-09-25T07:36:45.495590",
-  "total_tests": 14,
-  "passed_tests": 8,
-  "success_rate": 57.14285714285714,
+  "timestamp": "2025-09-25T07:37:29.218370",
+  "total_tests": 12,
+  "passed_tests": 9,
+  "success_rate": 75.0,
   "test_details": [
     {
       "test_name": "Client User Setup",
       "success": true,
-      "details": "Client registered: client_notes_073644@celestia.com",
+      "details": "Client registered: client_notes_073728@celestia.com",
       "response_data": null,
-      "timestamp": "2025-09-25T07:36:44.755760"
+      "timestamp": "2025-09-25T07:37:28.514971"
     },
     {
       "test_name": "Admin User Setup",
       "success": true,
       "details": "Admin logged in: lago.mistico11@gmail.com",
       "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.059381"
+      "timestamp": "2025-09-25T07:37:28.777543"
     },
     {
       "test_name": "Session Time Storage (10:00 AM)",
       "success": true,
       "details": "Time correctly stored as 10:00 AM (hour: 10, minute: 0)",
       "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.100505"
+      "timestamp": "2025-09-25T07:37:28.856020"
     },
     {
       "test_name": "Session Required Fields",
       "success": true,
       "details": "All required fields present: id, start_at, end_at, service_type, amount, status, client_id",
       "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.100536"
+      "timestamp": "2025-09-25T07:37:28.856050"
     },
     {
       "test_name": "Session Time Retrieval (10:00 AM)",
       "success": true,
       "details": "Time correctly retrieved as 10:00 AM (not 3:00 PM)",
       "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.179553"
+      "timestamp": "2025-09-25T07:37:28.894666"
     },
     {
       "test_name": "Personal Notes Creation",
-      "success": false,
-      "details": "Failed to create personal note",
-      "response_data": {
-        "detail": [
-          {
-            "type": "missing",
-            "loc": [
-              "query",
-              "note_content"
-            ],
-            "msg": "Field required",
-            "input": null,
-            "url": "https://errors.pydantic.dev/2.11/v/missing"
-          }
-        ]
-      },
-      "timestamp": "2025-09-25T07:36:45.221366"
+      "success": true,
+      "details": "Personal note created successfully: Personal note created successfully",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:37:28.947480"
     },
     {
       "test_name": "Mistica Notes Creation (Admin)",
+      "success": true,
+      "details": "Mistica note created successfully: Mistica's note created successfully",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:37:28.995519"
+    },
+    {
+      "test_name": "Mistica Private Notes Creation",
+      "success": true,
+      "details": "Private Mistica note created",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:37:29.073208"
+    },
+    {
+      "test_name": "Session Notes Retrieval (Client)",
       "success": false,
-      "details": "Failed to create Mistica note",
+      "details": "Failed to retrieve session notes",
       "response_data": {
-        "detail": [
-          {
-            "type": "missing",
-            "loc": [
-              "query",
-              "note_content"
-            ],
-            "msg": "Field required",
-            "input": null,
-            "url": "https://errors.pydantic.dev/2.11/v/missing"
-          }
-        ]
+        "status_code": 500,
+        "text": "Internal Server Error"
       },
-      "timestamp": "2025-09-25T07:36:45.299050"
+      "timestamp": "2025-09-25T07:37:29.112106"
     },
     {
-      "test_name": "Personal Notes Visibility (Client)",
+      "test_name": "Session Notes Retrieval (Admin)",
       "success": false,
-      "details": "Client cannot see personal notes",
-      "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.337919"
+      "details": "Failed to retrieve session notes as admin",
+      "response_data": {
+        "status_code": 500,
+        "text": "Internal Server Error"
+      },
+      "timestamp": "2025-09-25T07:37:29.146864"
     },
     {
-      "test_name": "Mistica Notes Visibility (Client)",
+      "test_name": "Session Notes API Endpoint",
       "success": false,
-      "details": "Client cannot see any Mistica notes",
-      "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.337946"
-    },
-    {
-      "test_name": "Mistica Private Notes Security",
-      "success": true,
-      "details": "Client correctly cannot see private Mistica notes",
-      "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.337952"
-    },
-    {
-      "test_name": "Personal Notes Visibility (Admin)",
-      "success": false,
-      "details": "Admin cannot see personal notes",
-      "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.376031"
-    },
-    {
-      "test_name": "Mistica Notes Visibility (Admin)",
-      "success": false,
-      "details": "Admin cannot see Mistica notes",
-      "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.376055"
-    },
-    {
-      "test_name": "Session Notes API Structure",
-      "success": true,
-      "details": "API returns correct structure with personal_notes and mistica_notes",
-      "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.412567"
+      "details": "Session notes endpoint not working",
+      "response_data": {
+        "status_code": 500,
+        "text": "Internal Server Error"
+      },
+      "timestamp": "2025-09-25T07:37:29.180096"
     },
     {
       "test_name": "Admin Dashboard Stats",
       "success": true,
-      "details": "All dashboard stats available: {'total_users': 30, 'total_clients': 28, 'total_sessions': 61, 'confirmed_sessions': 8, 'pending_sessions': 53, 'total_revenue': 0}",
+      "details": "All dashboard stats available: {'total_users': 31, 'total_clients': 29, 'total_sessions': 62, 'confirmed_sessions': 8, 'pending_sessions': 54, 'total_revenue': 0}",
       "response_data": null,
-      "timestamp": "2025-09-25T07:36:45.495530"
+      "timestamp": "2025-09-25T07:37:29.218319"
     }
   ]
 }
