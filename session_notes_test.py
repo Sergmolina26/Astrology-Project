@@ -242,14 +242,11 @@ class SessionNotesAPITester:
         
         print("\n🔮 Testing Mistica Notes Creation (Admin)...")
         
-        # Create Mistica note as admin
+        # Create Mistica note as admin - parameters are query parameters
         note_content = "Mistica's insights: The client's energy suggests a strong focus on career transformation. Recommend exploring Jupiter transits in their 10th house."
         
-        success, response = self.make_request('POST', f'sessions/{self.session_id}/mistica-notes', 
-                                            {
-                                                "note_content": note_content,
-                                                "is_visible_to_client": True
-                                            }, 200, self.admin_token)
+        success, response = self.make_request('POST', f'sessions/{self.session_id}/mistica-notes?note_content={note_content}&is_visible_to_client=true', 
+                                            None, 200, self.admin_token)
         
         if success and 'message' in response:
             self.log_test("Mistica Notes Creation (Admin)", True, 
@@ -258,11 +255,8 @@ class SessionNotesAPITester:
             # Test creating private Mistica note (not visible to client)
             private_note_content = "Private admin note: Client seems anxious about career change. Approach with gentle guidance."
             
-            success2, response2 = self.make_request('POST', f'sessions/{self.session_id}/mistica-notes', 
-                                                  {
-                                                      "note_content": private_note_content,
-                                                      "is_visible_to_client": False
-                                                  }, 200, self.admin_token)
+            success2, response2 = self.make_request('POST', f'sessions/{self.session_id}/mistica-notes?note_content={private_note_content}&is_visible_to_client=false', 
+                                                  None, 200, self.admin_token)
             
             if success2:
                 self.log_test("Mistica Private Notes Creation", True, "Private Mistica note created")
