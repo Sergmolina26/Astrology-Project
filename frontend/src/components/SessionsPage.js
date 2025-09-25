@@ -157,7 +157,12 @@ const SessionsPage = () => {
               </div>
               <div className="flex items-center text-slate-300">
                 <Clock className="w-4 h-4 mr-2 text-amber-400" />
-                {new Date(session.start_at).toLocaleTimeString()}
+                {new Date(session.start_at).toLocaleTimeString('en-US', { 
+                  hour: 'numeric', 
+                  minute: '2-digit', 
+                  hour12: true,
+                  timeZone: 'America/Chicago' 
+                })}
               </div>
               <div className="flex items-center text-slate-300">
                 <span className="w-4 h-4 mr-2 text-amber-400">💰</span>
