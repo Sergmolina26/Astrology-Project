@@ -228,7 +228,16 @@ const SessionsPage = () => {
                         <div className="flex justify-between">
                           <span className="text-slate-400">{t('sessions.scheduledFor')}:</span>
                           <span className="text-white">
-                            {new Date(session.start_at).toLocaleDateString()} {new Date(session.start_at).toLocaleTimeString()}
+                            {new Date(session.start_at).toLocaleDateString('en-US', { 
+                              month: 'long', 
+                              day: 'numeric', 
+                              year: 'numeric' 
+                            })} {new Date(session.start_at).toLocaleTimeString('en-US', { 
+                              hour: 'numeric', 
+                              minute: '2-digit', 
+                              hour12: true,
+                              timeZone: 'America/Chicago' 
+                            })}
                           </span>
                         </div>
                         <div className="flex justify-between">
