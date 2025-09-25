@@ -1,0 +1,83 @@
+{
+  "timestamp": "2025-09-25T05:43:38.787023",
+  "test_focus": "Business Hours Validation Fix",
+  "fix_description": "Changed condition from end_datetime.hour > 18 to end_datetime.hour >= 18",
+  "total_tests": 9,
+  "passed_tests": 4,
+  "success_rate": 44.44444444444444,
+  "test_details": [
+    {
+      "test_name": "Authentication Setup",
+      "success": true,
+      "details": "Registered user: biz_hours_test_054338@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T05:43:38.384759"
+    },
+    {
+      "test_name": "Session Ending After 6 PM (5:30-6:30)",
+      "success": false,
+      "details": "Failed to reject session ending after 6 PM",
+      "response_data": {
+        "detail": "All services must conclude by 6:00 PM. Please choose an earlier time."
+      },
+      "timestamp": "2025-09-25T05:43:38.462083"
+    },
+    {
+      "test_name": "Session Ending Exactly at 6 PM (5:00-6:00)",
+      "success": false,
+      "details": "Failed to reject session ending exactly at 6 PM",
+      "response_data": {
+        "detail": "All services must conclude by 6:00 PM. Please choose an earlier time."
+      },
+      "timestamp": "2025-09-25T05:43:38.505610"
+    },
+    {
+      "test_name": "Valid Session Before 6 PM (4:00-5:00)",
+      "success": true,
+      "details": "Successfully created session ending at 5:00 PM: 4a62310b-5563-4d7a-bdcf-b9f3d1b989da",
+      "response_data": null,
+      "timestamp": "2025-09-25T05:43:38.546978"
+    },
+    {
+      "test_name": "Session Starting Before 10 AM",
+      "success": false,
+      "details": "Failed to reject session starting before 10 AM",
+      "response_data": {
+        "detail": "Services start at 10:00 AM. Please choose a later time."
+      },
+      "timestamp": "2025-09-25T05:43:38.591396"
+    },
+    {
+      "test_name": "Weekend Session Rejection",
+      "success": false,
+      "details": "Failed to reject weekend session",
+      "response_data": {
+        "detail": "Services are only available Monday through Friday."
+      },
+      "timestamp": "2025-09-25T05:43:38.628476"
+    },
+    {
+      "test_name": "Valid Business Hours Session",
+      "success": true,
+      "details": "Successfully created session within business hours: 6556392e-2437-4388-8b62-661745b6f1fb",
+      "response_data": null,
+      "timestamp": "2025-09-25T05:43:38.708491"
+    },
+    {
+      "test_name": "Edge Case Session Ending at 5:59 PM",
+      "success": true,
+      "details": "Successfully created session ending at 5:59 PM: 9daf41ba-be38-4f96-812e-d4bf4c3f221e",
+      "response_data": null,
+      "timestamp": "2025-09-25T05:43:38.745262"
+    },
+    {
+      "test_name": "Edge Case Session Ending at 6:01 PM",
+      "success": false,
+      "details": "Failed to reject session ending at 6:01 PM",
+      "response_data": {
+        "detail": "All services must conclude by 6:00 PM. Please choose an earlier time."
+      },
+      "timestamp": "2025-09-25T05:43:38.786969"
+    }
+  ]
+}
