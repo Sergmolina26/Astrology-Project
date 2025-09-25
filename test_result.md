@@ -556,6 +556,7 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Astrological map inline display and workflow - AUTHENTICATION BLOCKED"
     - "Time display backend fix - COMPLETED"
     - "Birth chart map generation with SVG - COMPLETED"
     - "Dashboard stats clickability - COMPLETED"
@@ -563,6 +564,7 @@ test_plan:
   stuck_tasks:
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
+    - "Astrological map inline display and workflow - AUTHENTICATION ISSUE"
   test_all: false
   test_priority: "high_first"
 
