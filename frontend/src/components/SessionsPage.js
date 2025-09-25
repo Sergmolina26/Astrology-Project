@@ -236,7 +236,7 @@ const SessionsPage = () => {
                               hour: 'numeric', 
                               minute: '2-digit', 
                               hour12: true,
-                              timeZone: 'America/Chicago' 
+                              timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
                             })}
                           </span>
                         </div>
