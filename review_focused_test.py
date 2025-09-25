@@ -203,7 +203,7 @@ class ReviewFocusedTester:
         
         success_630pm, response_630pm = self.make_request('POST', 'sessions', session_data_630pm, 400)  # Expecting 400 error
         
-        if not success_630pm and "6:00 PM" in str(response_630pm):
+        if success_630pm and "6:00 PM" in str(response_630pm):
             self.log_test("Business Hours - 6:30 PM (Should Reject)", True, 
                          "Correctly rejected session ending at 6:30 PM")
         else:
