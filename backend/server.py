@@ -845,7 +845,7 @@ async def create_session(
             <h3>📋 Session Details</h3>
             <p><strong>Service:</strong> {session_data.service_type}</p>
             <p><strong>Requested Date:</strong> {session_data.start_at.strftime('%B %d, %Y at %I:%M %p')}</p>
-            <p><strong>Duration:</strong> {(session_data.end_at - session_data.start_at).seconds // 60} minutes</p>
+            <p><strong>Duration:</strong> {int((session_data.end_at - session_data.start_at).total_seconds() // 60)} minutes</p>
             <p><strong>Investment:</strong> ${amount}</p>
         </div>
         
