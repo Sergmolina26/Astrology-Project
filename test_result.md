@@ -408,16 +408,19 @@ frontend:
           comment: "✅ FULLY WORKING: Comprehensive testing confirms all fixes working perfectly. 1) Service Removal: 'chart-tarot-combo' service successfully removed from /api/services, 2) Duration Calculation: 45-minute session starting at 10:00 AM correctly ends at 10:45 AM, 3) All Services: Tested all service durations (general-purpose-reading: 45min, astrological-tarot-session: 60min, birth-chart-reading: 90min, follow-up: 30min) - all calculate correctly, 4) Business Hours: Validation still working, rejecting sessions ending after 6:00 PM. Duration calculation bug completely resolved (9/9 tests passed - 100% success rate)."
 
   - task: "Admin sessions list endpoint fix"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "testing"
           comment: "❌ CRITICAL BUG FOUND: Admin sessions list endpoint (/api/admin/sessions) failing with 500 Internal Server Error due to MongoDB ObjectId serialization issue. This is the root cause of sessions not appearing in admin portal. Sessions are being created and stored correctly, but admin cannot view them due to this endpoint failure. Fix needed: exclude '_id' field or convert ObjectId to string in line ~1533."
+        - working: true
+          agent: "testing"
+          comment: "✅ FIXED AND VERIFIED: Admin sessions list endpoint now working correctly. Successfully retrieved 41 sessions without ObjectId serialization errors. MongoDB _id field properly excluded from response. Sessions now visible in admin portal as expected."
 
   - task: "Reader dashboard access for admin users"
     implemented: false
