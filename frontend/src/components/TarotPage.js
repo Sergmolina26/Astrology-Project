@@ -107,7 +107,7 @@ const TarotPage = () => {
   const calculateEndTime = (startTime, durationMinutes) => {
     if (!startTime) return '';
     const start = new Date(startTime);
-    const end = new Date(start.getTime() + durationMinutes * 60000);
+    const end = new Date(start.getTime() + (durationMinutes * 60 * 1000)); // Fix: durationMinutes * 60 * 1000 milliseconds
     return end.toISOString().slice(0, 16); // Format for datetime-local input
   };
 
