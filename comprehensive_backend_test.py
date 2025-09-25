@@ -188,8 +188,14 @@ class ComprehensiveBackendTester:
 
     def test_session_duration_calculation(self):
         """Test session duration calculations for different services"""
-        # Test 45-minute service
-        start_time = datetime.now().replace(hour=10, minute=0, second=0, microsecond=0) + timedelta(days=2)
+        # Test 45-minute service - use next Tuesday to ensure it's a weekday
+        today = datetime.now()
+        days_until_tuesday = (1 - today.weekday()) % 7
+        if days_until_tuesday == 0:  # If today is Tuesday, use next Tuesday
+            days_until_tuesday = 7
+        next_tuesday = today + timedelta(days=days_until_tuesday)
+        
+        start_time = next_tuesday.replace(hour=11, minute=0, second=0, microsecond=0)
         end_time = start_time + timedelta(minutes=45)
         
         session_data = {
