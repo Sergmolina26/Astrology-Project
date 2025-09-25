@@ -252,14 +252,6 @@ def get_all_services():
             "duration_range": "90 min"
         },
         {
-            "id": "chart-tarot-combo",
-            "name": "Birth Chart + Tarot Combo",
-            "description": "Comprehensive session combining astrology and tarot insights.",
-            "price": 165.0,
-            "duration": 120,
-            "duration_range": "120 min"
-        },
-        {
             "id": "follow-up",
             "name": "Follow-up Session",
             "description": "Follow-up reading for previous clients.",
