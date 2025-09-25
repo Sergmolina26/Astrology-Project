@@ -268,8 +268,14 @@ class AdminDashboardTester:
         """Test complete booking flow and verify it shows up in both admin and reader views"""
         print("\n🔍 Testing Complete Booking Flow...")
         
-        # Create another session to test the complete flow
-        start_time = datetime.now() + timedelta(days=2, hours=3)
+        # Create another session to test the complete flow - ensure business hours
+        now = datetime.now()
+        # Find next weekday
+        days_ahead = 2
+        while (now + timedelta(days=days_ahead)).weekday() > 4:  # 0-4 is Mon-Fri
+            days_ahead += 1
+        
+        start_time = (now + timedelta(days=days_ahead)).replace(hour=15, minute=0, second=0, microsecond=0)  # 3 PM
         end_time = start_time + timedelta(minutes=60)  # 60 minute session
         
         session_data = {
