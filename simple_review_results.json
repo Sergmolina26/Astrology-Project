@@ -1,0 +1,96 @@
+{
+  "timestamp": "2025-09-25T07:23:41.477777",
+  "total_tests": 12,
+  "passed_tests": 10,
+  "success_rate": 83.33333333333334,
+  "test_details": [
+    {
+      "test_name": "Authentication Setup",
+      "success": true,
+      "details": "Registered user: simple_review_072340@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.129755"
+    },
+    {
+      "test_name": "Business Hours - After 6 PM Rejection",
+      "success": false,
+      "details": "Failed to reject session ending at 6:15 PM",
+      "response_data": {
+        "detail": "Services are only available Monday through Friday."
+      },
+      "timestamp": "2025-09-25T07:23:41.171346"
+    },
+    {
+      "test_name": "Business Hours - Weekend Rejection",
+      "success": true,
+      "details": "Correctly rejected Saturday booking",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.210952"
+    },
+    {
+      "test_name": "Business Hours - Before 10 AM Rejection",
+      "success": false,
+      "details": "Failed to reject 9:00 AM booking",
+      "response_data": {
+        "detail": "Services are only available Monday through Friday."
+      },
+      "timestamp": "2025-09-25T07:23:41.250463"
+    },
+    {
+      "test_name": "Time Storage - 10:00 AM Preservation",
+      "success": true,
+      "details": "10:00 AM correctly stored as hour 10",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.290883"
+    },
+    {
+      "test_name": "Time Retrieval - 10:00 AM Persistence",
+      "success": true,
+      "details": "Retrieved session maintains 10:00 AM (hour 10)",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.325191"
+    },
+    {
+      "test_name": "Services API - general-purpose-reading",
+      "success": true,
+      "details": "Correct pricing: $65.0/45min",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.359525"
+    },
+    {
+      "test_name": "Services API - astrological-tarot-session",
+      "success": true,
+      "details": "Correct pricing: $85.0/60min",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.359557"
+    },
+    {
+      "test_name": "Services API - Removed Service",
+      "success": true,
+      "details": "chart-tarot-combo correctly removed",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.359566"
+    },
+    {
+      "test_name": "Double Booking - First Session Creation",
+      "success": true,
+      "details": "Created first session: 8c2f0ed3-b472-4d10-b9b6-3e0aad8c1dcb",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.397574"
+    },
+    {
+      "test_name": "Double Booking - First Session Payment",
+      "success": true,
+      "details": "Completed payment for first session",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.433938"
+    },
+    {
+      "test_name": "Double Booking - Overlap Prevention",
+      "success": true,
+      "details": "Successfully prevented overlapping session",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:23:41.477732"
+    }
+  ]
+}
