@@ -210,7 +210,6 @@ def get_service_price(service_type: str) -> float:
         "general-purpose-reading": 65.0,
         "astrological-tarot-session": 85.0,
         "birth-chart-reading": 120.0,
-        "chart-tarot-combo": 165.0,
         "follow-up": 45.0
     }
     return prices.get(service_type, 65.0)
