@@ -463,6 +463,13 @@ async def get_reader_dashboard(current_user: User = Depends(get_current_user)):
     completed_sessions = len([s for s in sessions if s["status"] == "completed"])
     total_revenue = sum([s.get("amount", 0) for s in sessions if s["payment_status"] == "paid"])
     
+    # Process sessions to remove MongoDB _id field
+    processed_sessions = []
+    for session_doc in sessions:
+        if "_id" in session_doc:
+            del session_doc["_id"]
+        processed_sessions.append(session_doc)
+    
     return {
         "stats": {
             "total_sessions": total_sessions,
@@ -472,7 +479,7 @@ async def get_reader_dashboard(current_user: User = Depends(get_current_user)):
             "total_revenue": total_revenue
         },
         "recent_clients": recent_clients,
-        "sessions": sessions
+        "sessions": processed_sessions
     }
 
 @api_router.get("/auth/me", response_model=User)
