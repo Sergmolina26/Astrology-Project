@@ -717,15 +717,37 @@ async def generate_chart_map(chart_id: str, current_user: User = Depends(get_cur
         
         # Create AstrologicalSubject from stored birth data
         birth_data = chart["birth_data"]
+        
+        # Parse birth date and time from stored format
+        date_parts = birth_data["birth_date"].split("-")
+        year, month, day = int(date_parts[0]), int(date_parts[1]), int(date_parts[2])
+        
+        hour, minute = 12, 0  # Default to noon if no time
+        if birth_data.get("birth_time"):
+            time_parts = birth_data["birth_time"].split(":")
+            hour, minute = int(time_parts[0]), int(time_parts[1])
+        
+        # Use coordinates if available
+        lat = 40.7128  # NYC default
+        lng = -74.0060
+        
+        if birth_data.get("latitude") and birth_data.get("longitude"):
+            try:
+                lat = float(birth_data["latitude"])
+                lng = float(birth_data["longitude"])
+            except (ValueError, TypeError):
+                pass
+        
         subject = AstrologicalSubject(
-            name=birth_data["name"], 
-            year=birth_data["birth_date_parsed"]["year"],
-            month=birth_data["birth_date_parsed"]["month"],
-            day=birth_data["birth_date_parsed"]["day"],
-            hour=birth_data.get("birth_time_parsed", {}).get("hour", 12),
-            minute=birth_data.get("birth_time_parsed", {}).get("minute", 0),
-            city=birth_data["birth_place"],
-            nation="US"  # Default for now
+            name="Chart",
+            year=year,
+            month=month,
+            day=day,
+            hour=hour,
+            minute=minute,
+            lat=lat,
+            lng=lng,
+            tz_str="UTC"
         )
         
         # Generate SVG chart
