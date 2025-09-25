@@ -102,7 +102,44 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: Test newly implemented backend changes for email confirmation (SendGrid), payment link generation, reader registration, and session management. Then implement calendar blocking, admin/reader profile creation, and email forwarding features.
+user_problem_statement: Fix critical booking system issues: 1) "No reader available" error 2) Incorrect session duration calculation (60 minutes showing as 6 hours) 3) Business hours constraints (10 AM-6 PM, Mon-Fri) 4) Google Calendar integration for preventing double bookings 5) Google Meets integration for session links
+
+backend:
+  - task: "Fix no reader available error"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "User reports 'no reader available' error during booking. Need to investigate session creation logic in server.py line 772."
+
+  - task: "Fix session duration calculation bug"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "User reports 60-minute sessions showing as 6 hours in booking confirmation. Issue found in line 848 using .seconds instead of .total_seconds()."
+
+  - task: "Implement business hours validation"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Business hours validation already implemented in lines 780-798 for 10 AM-6 PM, Monday-Friday constraints."
 
 backend:
   - task: "Email confirmation system"
