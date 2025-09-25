@@ -24,7 +24,7 @@ import hashlib
 from models.payment import PaymentTransaction, PaymentCreateRequest, PaymentStatusResponse
 from utils.calendar import CalendarBlockingService
 from utils.admin import AdminProfileService
-from utils.email_providers import send_email as email_send
+# from utils.email_providers import send_email as email_send  # Will be enabled after Gmail setup
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -51,7 +51,10 @@ ALGORITHM = "HS256"
 def send_email(to_email: str, subject: str, html_content: str) -> bool:
     """Send email using configured provider"""
     try:
-        return email_send(to_email, subject, html_content)
+        # Temporarily disabled until Gmail setup is complete
+        print(f"📧 EMAIL MOCK: Would send to {to_email} - Subject: {subject}")
+        return True  # Mock success for now
+        # return email_send(to_email, subject, html_content)  # Will be enabled after Gmail setup
     except Exception as e:
         print(f"📧 EMAIL ERROR: {str(e)}")
         return False
