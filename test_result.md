@@ -170,6 +170,39 @@ backend:
         - working: true
           agent: "testing"
           comment: "✅ CONFIRMED: New services API working correctly. Service pricing verified: General Purpose Reading ($65/45min) and Astrological Tarot Session ($85/60min) both functioning properly."
+
+  - task: "Fix duration calculation bug"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/TarotPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "User reports duration calculation still wrong - 45-minute service showing 5.75 hours (10:00 AM to 3:45 PM) instead of 45 minutes (10:00 AM to 10:45 AM)."
+        - working: true
+          agent: "main"
+          comment: "✅ FIXED: Rewrote calculateEndTime function to use setMinutes() instead of millisecond calculations to avoid timezone issues with datetime-local inputs."
+        - working: true
+          agent: "testing"
+          comment: "✅ CONFIRMED: Duration calculation completely fixed. 45-minute session starting at 10:00 AM now correctly ends at 10:45 AM (not 3:45 PM). All service durations tested and working."
+
+  - task: "Remove Birth Chart + Tarot Combo service"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py, /app/frontend/src/components/TarotPage.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "✅ IMPLEMENTED: Removed 'chart-tarot-combo' service from both frontend services array and backend pricing/duration functions."
+        - working: true
+          agent: "testing"
+          comment: "✅ CONFIRMED: 'chart-tarot-combo' service successfully removed from /api/services endpoint. No longer available for booking."
         - working: true
           agent: "testing"
           comment: "✅ CONFIRMED: Business hours validation fix working perfectly. All tests passed (9/9). Sessions ending at/after 6:00 PM properly rejected, valid sessions before 6 PM work correctly."
