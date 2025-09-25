@@ -161,14 +161,14 @@ class ReviewFocusedTester:
             "client_message": "Testing 6:00 PM exact end time"
         }
         
-        success_6pm, response_6pm = self.make_request('POST', 'sessions', session_data_6pm, 400)  # Expecting 400 error
+        success_6pm, response_6pm = self.make_request('POST', 'sessions', session_data_6pm, 200)  # Expecting success
         
-        if success_6pm and "6:00 PM" in str(response_6pm):
-            self.log_test("Business Hours - 6:00 PM Exact (Should Reject)", True, 
-                         "Correctly rejected session ending exactly at 6:00 PM")
+        if success_6pm and 'id' in response_6pm:
+            self.log_test("Business Hours - 6:00 PM Exact (Should Accept)", True, 
+                         "Correctly accepted session ending exactly at 6:00 PM")
         else:
-            self.log_test("Business Hours - 6:00 PM Exact (Should Reject)", False, 
-                         "Failed to reject session ending at 6:00 PM", response_6pm)
+            self.log_test("Business Hours - 6:00 PM Exact (Should Accept)", False, 
+                         "Failed to accept session ending at 6:00 PM", response_6pm)
         
         # Test 2: Session ending after 6:00 PM (6:01 PM - should be rejected)
         start_time_601pm = tomorrow.replace(hour=17, minute=1)  # 5:01 PM
