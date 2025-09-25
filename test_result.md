@@ -154,7 +154,7 @@ backend:
           comment: "✅ FIXED: Changed condition from > 18 to >= 18 in line 794 to properly reject sessions ending at or after 6:00 PM."
         - working: true
           agent: "testing"
-          comment: "✅ COMPREHENSIVE TESTING COMPLETE: All business hours validation tests passed (9/9). Verified: 1) Sessions ending after 6:00 PM properly rejected (5:30-6:30 PM test), 2) Sessions ending exactly at 6:00 PM properly rejected (5:00-6:00 PM test), 3) Valid sessions before 6:00 PM work correctly (4:00-5:00 PM test), 4) Other constraints work (before 10 AM, weekends), 5) Edge cases work (5:59 PM succeeds, 6:01 PM fails). The fix (end_datetime.hour >= 18) is working perfectly."
+          comment: "✅ CONFIRMED: Business hours validation fix working perfectly. All tests passed (9/9). Sessions ending at/after 6:00 PM properly rejected, valid sessions before 6 PM work correctly."
 
 backend:
   - task: "Email confirmation system"
