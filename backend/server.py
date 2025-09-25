@@ -819,6 +819,13 @@ async def create_tarot_reading(
     await db.tarot_readings.insert_one(reading.dict())
     return reading
 
+# ==================== SERVICES ROUTES ====================
+
+@api_router.get("/services")
+async def get_services():
+    """Get all available services with pricing and duration"""
+    return {"services": get_all_services()}
+
 # ==================== SESSION ROUTES ====================
 
 @api_router.post("/sessions", response_model=Session)
