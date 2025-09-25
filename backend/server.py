@@ -760,7 +760,15 @@ async def generate_chart_map(chart_id: str, current_user: User = Depends(get_cur
         
         # Generate SVG chart
         chart_svg = KerykeionChartSVG(subject)
-        svg_content = chart_svg.makeSVG()
+        chart_svg.makeSVG()  # This generates and saves the SVG file
+        
+        # Read the generated SVG content
+        default_svg_path = "/root/Chart - Natal Chart.svg"
+        svg_content = None
+        
+        if os.path.exists(default_svg_path):
+            with open(default_svg_path, 'r') as f:
+                svg_content = f.read()
         
         # Update the chart with SVG content
         await db.astro_charts.update_one(
