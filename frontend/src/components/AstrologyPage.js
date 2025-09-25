@@ -448,37 +448,25 @@ const AstrologyPage = () => {
                                 {new Date(chart.created_at).toLocaleDateString()}
                               </Badge>
                               <div className="flex space-x-2">
-                                {chart.chart_svg ? (
-                                  <Button
-                                    onClick={() => window.open(`${process.env.REACT_APP_BACKEND_URL}/api/charts/${chart.id}/svg`, '_blank')}
-                                    variant="outline"
-                                    size="sm"
-                                    className="text-amber-400 border-amber-400/50 hover:bg-amber-400/10"
-                                  >
-                                    <Sun className="w-4 h-4 mr-2" />
-                                    View Map
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    onClick={() => generateMapMutation.mutate(chart.id)}
-                                    disabled={generateMapMutation.isPending}
-                                    variant="outline"
-                                    size="sm"
-                                    className="text-emerald-400 border-emerald-400/50 hover:bg-emerald-400/10"
-                                  >
-                                    {generateMapMutation.isPending ? (
-                                      <>
-                                        <div className="loading-spinner w-4 h-4 mr-2"></div>
-                                        Generating...
-                                      </>
-                                    ) : (
-                                      <>
-                                        <Stars className="w-4 h-4 mr-2" />
-                                        Generate Map
-                                      </>
-                                    )}
-                                  </Button>
-                                )}
+                                <Button
+                                  onClick={() => generateMapMutation.mutate(chart.id)}
+                                  disabled={generateMapMutation.isPending}
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-emerald-400 border-emerald-400/50 hover:bg-emerald-400/10"
+                                >
+                                  {generateMapMutation.isPending ? (
+                                    <>
+                                      <div className="loading-spinner w-4 h-4 mr-2"></div>
+                                      Generating...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Stars className="w-4 h-4 mr-2" />
+                                      {chart.chart_svg ? 'Regenerate Map' : 'Generate Map'}
+                                    </>
+                                  )}
+                                </Button>
                               </div>
                             </div>
                           </div>
