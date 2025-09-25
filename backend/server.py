@@ -791,7 +791,7 @@ async def create_session(
             detail="Services start at 10:00 AM. Please choose a later time."
         )
     
-    if end_datetime.hour > 18:  # 6 PM in 24-hour format
+    if end_datetime.hour >= 18:  # 6 PM in 24-hour format or later
         raise HTTPException(
             status_code=400, 
             detail="All services must conclude by 6:00 PM. Please choose an earlier time."
