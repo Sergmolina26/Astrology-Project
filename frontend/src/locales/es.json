@@ -32,6 +32,25 @@
     "errorOccurred": "Ocurrió un error. Por favor intenta de nuevo.",
     "creatingProfile": "Creando tu perfil cósmico..."
   },
+  "dashboard": {
+    "welcome": "Bienvenido a Celestia",
+    "welcomeBack": "Bienvenido de vuelta, {{name}}",
+    "subtitle": "Tu viaje cósmico comienza aquí",
+    "journeyContinues": "Tu viaje cósmico continúa",
+    "guidanceAwaits": "Tu guía te espera",
+    "quickActions": "Acciones Rápidas",
+    "exploreChart": "Explora Tu Carta Natal",
+    "generateChart": "Generar Carta",
+    "chartDescription": "Descubre las posiciones planetarias en tu nacimiento",
+    "bookReading": "Reservar Servicios",
+    "bookServices": "Reservar Servicios",
+    "readingDescription": "Programa una sesión personalizada con nuestro experto",
+    "viewSessions": "Ver Sesiones",
+    "sessionsDescription": "Gestiona tus sesiones próximas y pasadas",
+    "recentActivity": "Actividad Reciente",
+    "noActivity": "No hay actividad reciente que mostrar",
+    "getStarted": "Comienza explorando tu carta natal o reservando una sesión"
+  },
   "admin": {
     "dashboard": "Panel de Administración",
     "manageBusiness": "Gestiona tu negocio Celestia con control administrativo completo",
