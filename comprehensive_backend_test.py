@@ -142,12 +142,19 @@ class ComprehensiveBackendTester:
     def test_business_hours_validation(self):
         """Test business hours validation"""
         # Test session ending after 6 PM (should fail)
-        tomorrow = datetime.now().replace(hour=17, minute=30, second=0, microsecond=0) + timedelta(days=1)
-        end_time = tomorrow + timedelta(hours=1)  # Ends at 6:30 PM
+        # Use next Monday to avoid weekend issues
+        today = datetime.now()
+        days_until_monday = (7 - today.weekday()) % 7
+        if days_until_monday == 0:  # If today is Monday, use next Monday
+            days_until_monday = 7
+        next_monday = today + timedelta(days=days_until_monday)
+        
+        test_time = next_monday.replace(hour=17, minute=30, second=0, microsecond=0)
+        end_time = test_time + timedelta(hours=1)  # Ends at 6:30 PM
         
         session_data = {
             "service_type": "general-purpose-reading",
-            "start_at": tomorrow.isoformat(),
+            "start_at": test_time.isoformat(),
             "end_at": end_time.isoformat(),
             "client_message": "Testing business hours validation"
         }
@@ -160,12 +167,13 @@ class ComprehensiveBackendTester:
             self.log_test("Business Hours Validation (After 6 PM)", False, "Failed to reject session ending after 6 PM", response)
         
         # Test session ending exactly at 6 PM (should succeed)
-        tomorrow_6pm = datetime.now().replace(hour=17, minute=0, second=0, microsecond=0) + timedelta(days=1)
-        end_time_6pm = tomorrow_6pm + timedelta(hours=1)  # Ends at 6:00 PM
+        # Use a different time to avoid calendar conflicts
+        test_time_6pm = next_monday.replace(hour=15, minute=0, second=0, microsecond=0)
+        end_time_6pm = test_time_6pm + timedelta(hours=3)  # 3:00 PM to 6:00 PM
         
         session_data_6pm = {
-            "service_type": "general-purpose-reading",
-            "start_at": tomorrow_6pm.isoformat(),
+            "service_type": "birth-chart-reading",  # 90-minute service
+            "start_at": test_time_6pm.isoformat(),
             "end_at": end_time_6pm.isoformat(),
             "client_message": "Testing 6 PM boundary"
         }
