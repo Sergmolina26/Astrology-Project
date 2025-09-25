@@ -169,6 +169,9 @@ backend:
           comment: "✅ IMPLEMENTED: Replaced 'Personal Tarot Reading' with two new services: General/Purpose Reading ($65, 45min) and Astrological Tarot Session ($85, 60min). Updated backend pricing, frontend services array, and translation files."
         - working: true
           agent: "testing"
+          comment: "✅ CONFIRMED: New services API working correctly. Service pricing verified: General Purpose Reading ($65/45min) and Astrological Tarot Session ($85/60min) both functioning properly."
+        - working: true
+          agent: "testing"
           comment: "✅ CONFIRMED: Business hours validation fix working perfectly. All tests passed (9/9). Sessions ending at/after 6:00 PM properly rejected, valid sessions before 6 PM work correctly."
         - working: true
           agent: "testing"
