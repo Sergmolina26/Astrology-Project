@@ -511,11 +511,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Session notes system testing - COMPLETED"
-    - "Time display verification - COMPLETED"
+    - "Time display timezone conversion fix - CRITICAL ISSUE IDENTIFIED"
+    - "Dashboard stats clickability - COMPLETED"
+    - "Session details dialog and notes system - COMPLETED"
   stuck_tasks:
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
+    - "Time display timezone conversion fix"
   test_all: false
   test_priority: "high_first"
 
