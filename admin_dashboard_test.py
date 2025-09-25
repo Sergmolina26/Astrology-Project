@@ -172,8 +172,14 @@ class AdminDashboardTester:
         """Create a test booking to verify it appears in admin portal"""
         print("\n🔍 Creating Test Booking...")
         
-        # Create session as client
-        start_time = datetime.now() + timedelta(days=1, hours=2)
+        # Create session as client - ensure it's during business hours (weekday, 10 AM - 6 PM)
+        now = datetime.now()
+        # Find next weekday
+        days_ahead = 1
+        while (now + timedelta(days=days_ahead)).weekday() > 4:  # 0-4 is Mon-Fri
+            days_ahead += 1
+        
+        start_time = (now + timedelta(days=days_ahead)).replace(hour=14, minute=0, second=0, microsecond=0)  # 2 PM
         end_time = start_time + timedelta(minutes=45)  # 45 minute session
         
         session_data = {
