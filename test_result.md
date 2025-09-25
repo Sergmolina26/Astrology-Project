@@ -118,7 +118,7 @@ backend:
           comment: "User reports 'no reader available' error during booking. Need to investigate session creation logic in server.py line 772."
         - working: true
           agent: "testing"
-          comment: "✅ TESTED: No reader available error is RESOLVED. Admin user exists (lago.mistico11@gmail.com) and reader functionality is working. Session creation successful during valid business hours. The system correctly finds available readers for booking."
+          comment: "✅ RESOLVED: Admin/reader users exist in database. Sessions create successfully with existing admin user. No reader available error is not occurring."
 
   - task: "Fix session duration calculation bug"
     implemented: true
