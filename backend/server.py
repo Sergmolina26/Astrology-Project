@@ -630,13 +630,37 @@ async def generate_chart(
                 "house_3": {"cusp": 75.1, "sign": "Gemini"}
             }
         
+        # Generate SVG chart image
+        chart_svg_content = None
+        chart_image_path = None
+        
+        try:
+            # Create Kerykeion SVG chart
+            chart_svg = KerykeionChartSVG(subject)
+            chart_svg_content = chart_svg.makeSVG()
+            
+            # Save SVG to a file (you might want to store this differently)
+            chart_filename = f"chart_{birth_data.client_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.svg"
+            chart_image_path = f"/tmp/{chart_filename}"
+            
+            # Save SVG content to file if makeSVG doesn't automatically save
+            if chart_svg_content:
+                with open(chart_image_path, 'w') as f:
+                    f.write(str(chart_svg_content))
+            
+        except Exception as svg_error:
+            print(f"SVG generation failed: {svg_error}")
+            # Continue without SVG - chart data is still valuable
+        
         # Create chart record
         chart = AstroChart(
             client_id=birth_data.client_id,
             birth_data=birth_data,
             planets=planets,
             houses=houses,
-            aspects=[]  # We'll add aspect calculations later
+            aspects=[],  # We'll add aspect calculations later
+            svg_content=chart_svg_content if chart_svg_content else None,
+            image_path=chart_image_path if chart_image_path else None
         )
         
         await db.astro_charts.insert_one(chart.dict())
