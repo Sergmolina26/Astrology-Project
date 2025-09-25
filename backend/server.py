@@ -13,7 +13,7 @@ from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 import bcrypt
-from kerykeion import AstrologicalSubject
+from kerykeion import AstrologicalSubject, KerykeionChartSVG
 import json
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
