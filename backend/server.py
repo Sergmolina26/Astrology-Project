@@ -638,19 +638,27 @@ async def generate_chart(
         try:
             # Create Kerykeion SVG chart
             chart_svg = KerykeionChartSVG(subject)
-            chart_svg_content = chart_svg.makeSVG()
+            chart_svg.makeSVG()  # This generates and saves the SVG file
             
-            # Save SVG to a file (you might want to store this differently)
+            # KerykeionChartSVG saves to a default location, read the content
+            default_svg_path = "/root/Chart - Natal Chart.svg"
             chart_filename = f"chart_{birth_data.client_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.svg"
             chart_image_path = f"/tmp/{chart_filename}"
             
-            # Save SVG content to file if makeSVG doesn't automatically save
-            if chart_svg_content:
+            # Read the generated SVG content
+            if os.path.exists(default_svg_path):
+                with open(default_svg_path, 'r') as f:
+                    chart_svg_content = f.read()
+                
+                # Copy to our desired location
                 with open(chart_image_path, 'w') as f:
-                    f.write(str(chart_svg_content))
+                    f.write(chart_svg_content)
+            else:
+                chart_svg_content = None
             
         except Exception as svg_error:
             print(f"SVG generation failed: {svg_error}")
+            chart_svg_content = None
             # Continue without SVG - chart data is still valuable
         
         # Create chart record
