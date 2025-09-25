@@ -82,22 +82,24 @@ const Dashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="glass-card card-hover">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-200">
-              Total Sessions
-            </CardTitle>
-            <Calendar className="h-4 w-4 text-amber-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white" data-testid="total-sessions-count">
-              {sessionsLoading ? '...' : sessions.length}
-            </div>
-            <p className="text-xs text-slate-400">
-              {user?.role === 'reader' ? 'Readings conducted' : 'Sessions attended'}
-            </p>
-          </CardContent>
-        </Card>
+        <Link to="/sessions">
+          <Card className="glass-card card-hover cursor-pointer hover:border-amber-400/50 transition-colors">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-200">
+                Total Sessions
+              </CardTitle>
+              <Calendar className="h-4 w-4 text-amber-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-white" data-testid="total-sessions-count">
+                {sessionsLoading ? '...' : sessions.length}
+              </div>
+              <p className="text-xs text-slate-400">
+                {user?.role === 'reader' ? 'Readings conducted' : 'Sessions attended'}
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
         <Card className="glass-card card-hover">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
