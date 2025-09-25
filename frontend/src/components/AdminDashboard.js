@@ -275,16 +275,23 @@ const AdminDashboard = () => {
         <TabsContent value="sessions" className="mt-6">
           <Card className="glass-card mystical-border">
             <CardHeader>
-              <CardTitle className="text-white">Session Management</CardTitle>
+              <CardTitle className="text-white">{t('admin.sessionManagement')}</CardTitle>
               <CardDescription className="text-slate-300">
-                Manage all client sessions and bookings
+                {t('admin.manageAllSessions')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {sessionsLoading ? (
                 <div className="text-center py-8">
                   <div className="loading-spinner mx-auto mb-4"></div>
-                  <p className="text-slate-400">Loading sessions...</p>
+                  <p className="text-slate-400">{t('admin.loadingSessions')}</p>
+                </div>
+              ) : sessions.length === 0 ? (
+                <div className="text-center py-8">
+                  <Calendar className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-slate-300 mb-2">
+                    {t('admin.noSessionsFound')}
+                  </h3>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -293,15 +300,15 @@ const AdminDashboard = () => {
                       <div className="flex items-center justify-between">
                         <div className="space-y-2">
                           <div className="flex items-center space-x-4">
-                            <h3 className="font-medium text-white">{session.client_name}</h3>
+                            <h3 className="font-medium text-white">{session.client_name || 'Unknown Client'}</h3>
                             <Badge className={getStatusColor(session.status)}>
-                              {session.status}
+                              {t(`admin.${session.status}`) || session.status}
                             </Badge>
                           </div>
                           <div className="flex items-center space-x-4 text-sm text-slate-400">
                             <span className="flex items-center">
                               <Mail className="w-3 h-3 mr-1" />
-                              {session.client_email}
+                              {session.client_email || 'No email'}
                             </span>
                             <span className="flex items-center">
                               <Calendar className="w-3 h-3 mr-1" />
@@ -330,11 +337,11 @@ const AdminDashboard = () => {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending_payment">Pending Payment</SelectItem>
-                              <SelectItem value="confirmed">Confirmed</SelectItem>
-                              <SelectItem value="completed">Completed</SelectItem>
-                              <SelectItem value="cancelled">Cancelled</SelectItem>
-                              <SelectItem value="declined">Declined</SelectItem>
+                              <SelectItem value="pending_payment">{t('admin.pendingPayment')}</SelectItem>
+                              <SelectItem value="confirmed">{t('admin.confirmed')}</SelectItem>
+                              <SelectItem value="completed">{t('admin.completed')}</SelectItem>
+                              <SelectItem value="cancelled">{t('admin.cancelled')}</SelectItem>
+                              <SelectItem value="declined">{t('admin.declined')}</SelectItem>
                             </SelectContent>
                           </Select>
                           <Button
