@@ -437,6 +437,21 @@ frontend:
           agent: "testing"
           comment: "✅ FIXED AND VERIFIED: Reader dashboard access now working for admin users. Admin users can successfully access /api/reader/dashboard endpoint and view all sessions (41 sessions retrieved). Fixed logic to show all sessions for admin users instead of filtering by reader_id. Also fixed ObjectId serialization in sessions response."
 
+  - task: "Time display and double booking investigation"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "🔍 INVESTIGATION REQUESTED: User reports sessions scheduled for 10 AM displaying as 3:00 PM, and double bookings occurring. Need to investigate: 1) Time storage vs display, 2) Double booking prevention, 3) Session time retrieval, 4) Timezone conversion issues."
+        - working: true
+          agent: "testing"
+          comment: "✅ INVESTIGATION COMPLETE: Comprehensive testing reveals backend time handling is working correctly. 1) Time Storage: Sessions stored and retrieved with correct times (10:00 AM remains 10:00 AM), 2) Double Booking Prevention: Calendar blocking system fully functional - prevents overlapping sessions for same/different users, 3) Duration Calculations: All service durations (30min, 45min, 60min, 90min) calculate correctly, 4) Business Hours: Edge cases working (6:00 PM cutoff enforced properly), 5) Timezone Handling: No backend timezone conversion issues found. CONCLUSION: If users see 10 AM → 3 PM display issues, the problem is in frontend JavaScript/browser timezone handling, not backend API."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
