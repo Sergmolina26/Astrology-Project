@@ -226,6 +226,52 @@ def get_service_duration(service_type: str) -> int:
     }
     return durations.get(service_type, 45)
 
+def get_all_services():
+    """Get all available services with pricing and duration info"""
+    services = [
+        {
+            "id": "general-purpose-reading",
+            "name": "General or Purpose Reading",
+            "description": "A focused tarot session designed to uncover clarity around your current path, life purpose, or pressing questions.",
+            "price": 65.0,
+            "duration": 45,
+            "duration_range": "30-45 min"
+        },
+        {
+            "id": "astrological-tarot-session", 
+            "name": "Astrological Tarot Session",
+            "description": "Deep insights into your personal journey, relationships, and life path through traditional tarot cards.",
+            "price": 85.0,
+            "duration": 60,
+            "duration_range": "60 min"
+        },
+        {
+            "id": "birth-chart-reading",
+            "name": "Birth Chart Analysis", 
+            "description": "Complete natal chart reading with detailed planetary analysis.",
+            "price": 120.0,
+            "duration": 90,
+            "duration_range": "90 min"
+        },
+        {
+            "id": "chart-tarot-combo",
+            "name": "Birth Chart + Tarot Combo",
+            "description": "Comprehensive session combining astrology and tarot insights.",
+            "price": 165.0,
+            "duration": 120,
+            "duration_range": "120 min"
+        },
+        {
+            "id": "follow-up",
+            "name": "Follow-up Session",
+            "description": "Follow-up reading for previous clients.",
+            "price": 45.0,
+            "duration": 30,
+            "duration_range": "30 min"
+        }
+    ]
+    return services
+
 async def notify_reader(session_id: str, event_type: str):
     """Send notification to reader about client activities"""
     try:
