@@ -514,6 +514,23 @@ const AstrologyPage = () => {
                               ))}
                             </div>
                           </div>
+
+                          {/* Astrological Map */}
+                          {chart.chart_svg && (
+                            <div className="space-y-3">
+                              <h4 className="font-medium text-amber-400 flex items-center">
+                                <Stars className="w-4 h-4 mr-2" />
+                                Astrological Map
+                              </h4>
+                              <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-600/30">
+                                <div 
+                                  className="w-full overflow-auto"
+                                  style={{ maxHeight: '600px' }}
+                                  dangerouslySetInnerHTML={{ __html: chart.chart_svg }}
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
