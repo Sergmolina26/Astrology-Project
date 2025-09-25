@@ -215,6 +215,17 @@ def get_service_price(service_type: str) -> float:
     }
     return prices.get(service_type, 65.0)
 
+def get_service_duration(service_type: str) -> int:
+    """Get duration in minutes for different services"""
+    durations = {
+        "general-purpose-reading": 45,  # 30-45 min
+        "astrological-tarot-session": 60,  # 60 min
+        "birth-chart-reading": 90,  # 90 min
+        "chart-tarot-combo": 120,  # 120 min
+        "follow-up": 30  # 30 min
+    }
+    return durations.get(service_type, 45)
+
 async def notify_reader(session_id: str, event_type: str):
     """Send notification to reader about client activities"""
     try:
