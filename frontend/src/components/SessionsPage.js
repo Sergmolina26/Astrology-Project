@@ -185,15 +185,19 @@ const SessionsPage = () => {
           </div>
 
           <div className="flex flex-col space-y-2 ml-4">
-            <Dialog>
+            <Dialog onOpenChange={(open) => {
+              if (open) {
+                setSelectedSession(session);
+                setPersonalNote('');
+                setMisticaNote('');
+                setEditingPersonalNote(false);
+                setMisticaNoteVisible(true);
+              }
+            }}>
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => {
-                    setSelectedSession(session);
-                    setPersonalNote(sessionNotes?.personal_notes?.[0]?.note_content || '');
-                  }}
                   className="text-amber-400 hover:text-amber-300"
                 >
                   <Eye className="w-4 h-4 mr-2" />
