@@ -153,6 +153,21 @@ backend:
           agent: "main"
           comment: "✅ FIXED: Changed condition from > 18 to >= 18 in line 794 to properly reject sessions ending at or after 6:00 PM."
         - working: true
+          agent: "main" 
+          comment: "✅ UPDATED: Refined business hours validation to allow sessions ending exactly at 6:00 PM but reject sessions ending after 6:00 PM (like 6:01 PM)."
+
+  - task: "Update service structure and pricing"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py, /app/frontend/src/components/TarotPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "✅ IMPLEMENTED: Replaced 'Personal Tarot Reading' with two new services: General/Purpose Reading ($65, 45min) and Astrological Tarot Session ($85, 60min). Updated backend pricing, frontend services array, and translation files."
+        - working: true
           agent: "testing"
           comment: "✅ CONFIRMED: Business hours validation fix working perfectly. All tests passed (9/9). Sessions ending at/after 6:00 PM properly rejected, valid sessions before 6 PM work correctly."
 
