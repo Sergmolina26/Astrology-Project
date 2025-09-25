@@ -61,14 +61,6 @@ const TarotPage = () => {
       icon: Sun
     },
     {
-      id: 'chart-tarot-combo',
-      name: t('services.comboReading'),
-      description: t('services.comboDescription'),
-      price: 165,
-      duration: 120,
-      icon: Sparkles
-    },
-    {
       id: 'follow-up',
       name: t('services.followUp'),
       description: t('services.followUpDescription'),
