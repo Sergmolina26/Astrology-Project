@@ -435,8 +435,11 @@ async def get_reader_dashboard(current_user: User = Depends(get_current_user)):
     if current_user.role not in ["reader", "admin"]:
         raise HTTPException(status_code=403, detail="Reader or Admin access required")
     
-    # Get all sessions for reader
-    sessions = await db.sessions.find({"reader_id": current_user.id}).to_list(100)
+    # Get all sessions for reader - if admin, get all sessions
+    if current_user.role == "admin":
+        sessions = await db.sessions.find({}).to_list(100)
+    else:
+        sessions = await db.sessions.find({"reader_id": current_user.id}).to_list(100)
     
     # Get recent clients
     recent_clients = []
