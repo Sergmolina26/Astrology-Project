@@ -1,36 +1,36 @@
 {
-  "timestamp": "2025-09-25T07:39:24.294436",
+  "timestamp": "2025-09-25T07:40:12.929589",
   "total_tests": 9,
-  "passed_tests": 6,
-  "success_rate": 66.66666666666666,
+  "passed_tests": 7,
+  "success_rate": 77.77777777777779,
   "test_details": [
     {
       "test_name": "Client Setup",
       "success": true,
-      "details": "Client registered: comprehensive_client_073923@celestia.com",
+      "details": "Client registered: comprehensive_client_074012@celestia.com",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:23.731401"
+      "timestamp": "2025-09-25T07:40:12.415027"
     },
     {
       "test_name": "Admin Setup",
       "success": true,
       "details": "Admin logged in",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:23.998546"
+      "timestamp": "2025-09-25T07:40:12.683390"
     },
     {
       "test_name": "Services Endpoint",
       "success": true,
       "details": "All services available with correct pricing: general-purpose-reading: $65.0, astrological-tarot-session: $85.0, birth-chart-reading: $120.0, follow-up: $45.0",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:24.038350"
+      "timestamp": "2025-09-25T07:40:12.718287"
     },
     {
       "test_name": "Business Hours Validation (After 6 PM)",
       "success": true,
       "details": "Correctly rejected session ending after 6 PM",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:24.115746"
+      "timestamp": "2025-09-25T07:40:12.753882"
     },
     {
       "test_name": "Business Hours Validation (At 6 PM)",
@@ -39,37 +39,35 @@
       "response_data": {
         "detail": "This time slot is not available. Please choose a different time."
       },
-      "timestamp": "2025-09-25T07:39:24.156477"
+      "timestamp": "2025-09-25T07:40:12.793984"
     },
     {
       "test_name": "Duration Calculation (45 min)",
-      "success": false,
-      "details": "Failed to create 45-minute session",
-      "response_data": {
-        "detail": "Services are only available Monday through Friday."
-      },
-      "timestamp": "2025-09-25T07:39:24.197429"
+      "success": true,
+      "details": "Correct 45-minute duration calculated",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:40:12.832778"
     },
     {
       "test_name": "Time Storage Consistency",
       "success": false,
       "details": "No session available for testing",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:24.197466"
+      "timestamp": "2025-09-25T07:40:12.832814"
     },
     {
       "test_name": "Admin Sessions List",
       "success": true,
-      "details": "Retrieved 63 sessions with all required fields",
+      "details": "Retrieved 64 sessions with all required fields",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:24.252638"
+      "timestamp": "2025-09-25T07:40:12.886528"
     },
     {
       "test_name": "Reader Dashboard Access",
       "success": true,
-      "details": "Admin can access reader dashboard with 63 sessions",
+      "details": "Admin can access reader dashboard with 64 sessions",
       "response_data": null,
-      "timestamp": "2025-09-25T07:39:24.294377"
+      "timestamp": "2025-09-25T07:40:12.929532"
     }
   ]
 }
