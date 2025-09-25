@@ -423,16 +423,19 @@ frontend:
           comment: "✅ FIXED AND VERIFIED: Admin sessions list endpoint now working correctly. Successfully retrieved 41 sessions without ObjectId serialization errors. MongoDB _id field properly excluded from response. Sessions now visible in admin portal as expected."
 
   - task: "Reader dashboard access for admin users"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "testing"
           comment: "❌ ACCESS ISSUE: Admin user (role: 'admin') cannot access reader dashboard endpoint (/api/reader/dashboard) which requires role: 'reader'. This prevents admin from viewing sessions in reader dashboard. Fix needed: allow admin role access OR change admin user role to 'reader' in line ~435."
+        - working: true
+          agent: "testing"
+          comment: "✅ FIXED AND VERIFIED: Reader dashboard access now working for admin users. Admin users can successfully access /api/reader/dashboard endpoint and view all sessions (41 sessions retrieved). Fixed logic to show all sessions for admin users instead of filtering by reader_id. Also fixed ObjectId serialization in sessions response."
 
 metadata:
   created_by: "main_agent"
