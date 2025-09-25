@@ -363,15 +363,26 @@ const TarotPage = () => {
                     <Label htmlFor="preferred-date" className="text-slate-200">
                       {t('services.preferredDate')}
                     </Label>
-                    <Input
-                      id="preferred-date"
-                      type="datetime-local"
-                      value={sessionForm.start_at}
-                      onChange={(e) => handleStartTimeChange(e.target.value)}
-                      className="form-input"
-                      min={new Date().toISOString().slice(0, 16)}
-                      required
-                    />
+                    <>
+                      <Input
+                        id="preferred-date"
+                        type="datetime-local"
+                        value={sessionForm.start_at}
+                        onChange={(e) => handleStartTimeChange(e.target.value)}
+                        className="form-input"
+                        min={new Date().toISOString().slice(0, 16)}
+                        list="available-slots"
+                        required
+                      />
+                      <datalist id="available-slots">
+                        {generateAvailableTimeSlots().map((slot) => (
+                          <option key={slot} value={slot} />
+                        ))}
+                      </datalist>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Available: Monday-Friday, 10 AM - 6 PM
+                      </p>
+                    </>
                   </div>
 
                   {/* End Time (Auto-calculated) */}
