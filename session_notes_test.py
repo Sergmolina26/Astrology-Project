@@ -220,11 +220,11 @@ class SessionNotesAPITester:
         
         print("\n📝 Testing Personal Notes Creation...")
         
-        # Create personal note as client
+        # Create personal note as client - note_content is a query parameter
         note_content = "This is my personal note about the upcoming session. I'm looking forward to insights about my career path."
         
-        success, response = self.make_request('POST', f'sessions/{self.session_id}/personal-notes', 
-                                            {"note_content": note_content}, 200)
+        success, response = self.make_request('POST', f'sessions/{self.session_id}/personal-notes?note_content={note_content}', 
+                                            None, 200)
         
         if success and 'message' in response:
             self.log_test("Personal Notes Creation", True, 
