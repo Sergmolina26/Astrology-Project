@@ -1,43 +1,45 @@
 {
-  "timestamp": "2025-09-25T05:37:21.034774",
+  "timestamp": "2025-09-25T07:00:18.065414",
   "total_tests": 20,
-  "passed_tests": 13,
-  "success_rate": 65.0,
+  "passed_tests": 12,
+  "success_rate": 60.0,
   "test_details": [
     {
       "test_name": "User Registration",
       "success": true,
-      "details": "Registered user: test_user_053718@celestia.com",
+      "details": "Registered user: test_user_070014@celestia.com",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.118611"
+      "timestamp": "2025-09-25T07:00:14.366372"
     },
     {
       "test_name": "User Login/Token Verification",
       "success": true,
       "details": "User authenticated: Test User",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.194810"
+      "timestamp": "2025-09-25T07:00:14.426545"
     },
     {
       "test_name": "Get Me Endpoint",
       "success": true,
-      "details": "Retrieved user info: Test User (test_user_053718@celestia.com)",
+      "details": "Retrieved user info: Test User (test_user_070014@celestia.com)",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.235314"
+      "timestamp": "2025-09-25T07:00:14.463007"
     },
     {
       "test_name": "Reader Registration (Duplicate Prevention)",
       "success": true,
       "details": "Correctly prevented duplicate reader registration - reader already exists",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.273773"
+      "timestamp": "2025-09-25T07:00:14.502213"
     },
     {
       "test_name": "Reader Dashboard (Access Control)",
-      "success": true,
-      "details": "Correctly denied non-reader access to dashboard",
-      "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.313785"
+      "success": false,
+      "details": "Failed to deny non-reader access",
+      "response_data": {
+        "detail": "Reader or Admin access required"
+      },
+      "timestamp": "2025-09-25T07:00:14.537257"
     },
     {
       "test_name": "SendGrid Email Integration - Session Creation",
@@ -46,7 +48,7 @@
       "response_data": {
         "detail": "Services are only available Monday through Friday."
       },
-      "timestamp": "2025-09-25T05:37:19.354180"
+      "timestamp": "2025-09-25T07:00:14.573991"
     },
     {
       "test_name": "Stripe Integration - Session Creation",
@@ -55,21 +57,21 @@
       "response_data": {
         "detail": "Services are only available Monday through Friday."
       },
-      "timestamp": "2025-09-25T05:37:19.386812"
+      "timestamp": "2025-09-25T07:00:14.619642"
     },
     {
       "test_name": "Calendar Blocking - Reader Setup",
       "success": false,
       "details": "No reader available for testing",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.422020"
+      "timestamp": "2025-09-25T07:00:17.667020"
     },
     {
       "test_name": "Reader Profile Management",
       "success": false,
       "details": "No reader token available",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.422052"
+      "timestamp": "2025-09-25T07:00:17.667054"
     },
     {
       "test_name": "Enhanced Session Creation",
@@ -78,7 +80,7 @@
       "response_data": {
         "detail": "Services start at 10:00 AM. Please choose a later time."
       },
-      "timestamp": "2025-09-25T05:37:19.458891"
+      "timestamp": "2025-09-25T07:00:17.701894"
     },
     {
       "test_name": "Session Creation",
@@ -87,70 +89,70 @@
       "response_data": {
         "detail": "Services start at 10:00 AM. Please choose a later time."
       },
-      "timestamp": "2025-09-25T05:37:19.492742"
+      "timestamp": "2025-09-25T07:00:17.737312"
     },
     {
       "test_name": "Payment Completion",
       "success": false,
       "details": "No session available for payment",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.492777"
+      "timestamp": "2025-09-25T07:00:17.737344"
     },
     {
       "test_name": "Get Sessions",
       "success": true,
       "details": "Retrieved 0 sessions",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.572817"
+      "timestamp": "2025-09-25T07:00:17.772387"
     },
     {
       "test_name": "Birth Data Creation",
       "success": true,
-      "details": "Created birth data: be6840ad-c0e5-48f9-b07f-48abfde4e9ca",
+      "details": "Created birth data: 3ffe052f-4ae2-4ffa-bafc-18c641a2b99f",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.614233"
+      "timestamp": "2025-09-25T07:00:17.808552"
     },
     {
       "test_name": "Get Birth Data",
       "success": true,
       "details": "Retrieved 1 birth data records",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.652531"
+      "timestamp": "2025-09-25T07:00:17.845219"
     },
     {
       "test_name": "Astrology Chart Generation",
       "success": true,
       "details": "Generated chart with 5 planets and 12 houses",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.715119"
+      "timestamp": "2025-09-25T07:00:17.886007"
     },
     {
       "test_name": "Get Astrology Charts",
       "success": true,
       "details": "Retrieved 1 astrology charts",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:19.752661"
+      "timestamp": "2025-09-25T07:00:17.920599"
     },
     {
       "test_name": "Get Tarot Spreads",
       "success": true,
       "details": "Retrieved 3 spreads: Single Card, Three Card Spread, Celtic Cross",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:20.952431"
+      "timestamp": "2025-09-25T07:00:17.994730"
     },
     {
       "test_name": "Get Tarot Cards",
       "success": true,
       "details": "Retrieved 5 cards including: The Fool, The Magician, The High Priestess",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:20.993399"
+      "timestamp": "2025-09-25T07:00:18.030251"
     },
     {
       "test_name": "Create Tarot Reading",
       "success": true,
       "details": "Created Single Card reading with 1 cards",
       "response_data": null,
-      "timestamp": "2025-09-25T05:37:21.034719"
+      "timestamp": "2025-09-25T07:00:18.065363"
     }
   ]
 }
