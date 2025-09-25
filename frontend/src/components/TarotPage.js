@@ -134,6 +134,43 @@ const TarotPage = () => {
     }));
   };
 
+  // Generate available time slots for business hours (10 AM - 6 PM, Mon-Fri)
+  const generateAvailableTimeSlots = () => {
+    const slots = [];
+    const today = new Date();
+    
+    // Generate slots for next 30 days
+    for (let day = 1; day <= 30; day++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + day);
+      
+      // Skip weekends (Saturday = 6, Sunday = 0)
+      if (date.getDay() === 0 || date.getDay() === 6) continue;
+      
+      // Generate hourly slots from 10 AM to 5 PM (so sessions end by 6 PM)
+      for (let hour = 10; hour <= 17; hour++) {
+        const slotDate = new Date(date);
+        slotDate.setHours(hour, 0, 0, 0);
+        
+        // Ensure sessions can end by 6 PM based on selected service duration
+        if (selectedService) {
+          const endTime = new Date(slotDate.getTime() + (selectedService.duration * 60 * 1000));
+          if (endTime.getHours() <= 18) { // Must end by 6 PM
+            slots.push(slotDate.toISOString().slice(0, 16));
+          }
+        } else {
+          // Default to 1-hour slots if no service selected
+          const endTime = new Date(slotDate.getTime() + (60 * 60 * 1000));
+          if (endTime.getHours() <= 18) {
+            slots.push(slotDate.toISOString().slice(0, 16));
+          }
+        }
+      }
+    }
+    
+    return slots;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
