@@ -445,12 +445,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin sessions list endpoint fix"
-    - "Reader dashboard access for admin users"
+    - "SendGrid email integration"
+    - "Email forwarding to admin/reader"
   stuck_tasks:
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
-    - "Admin sessions list endpoint fix"
   test_all: false
   test_priority: "high_first"
 
