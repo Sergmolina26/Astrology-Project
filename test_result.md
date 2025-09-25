@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: Fix critical booking system issues: 1) "No reader available" error 2) Incorrect session duration calculation (60 minutes showing as 6 hours) 3) Business hours constraints (10 AM-6 PM, Mon-Fri) 4) Google Calendar integration for preventing double bookings 5) Google Meets integration for session links
+user_problem_statement: Fix critical booking system issues: 1) "No reader available" error 2) Incorrect session duration calculation (60 minutes showing as 6 hours) 3) Business hours constraints (sessions can end AT 6 PM, not after) 4) Update service structure with new pricing (General Reading $65/45min, Astrological Tarot $85/60min) 5) Google Calendar integration 6) Google Meets integration
 
 backend:
   - task: "Fix no reader available error"
