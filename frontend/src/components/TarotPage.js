@@ -107,10 +107,23 @@ const TarotPage = () => {
   };
 
   const calculateEndTime = (startTime, durationMinutes) => {
-    if (!startTime) return '';
+    if (!startTime || !durationMinutes) return '';
+    
+    // Parse the datetime-local input correctly
     const start = new Date(startTime);
-    const end = new Date(start.getTime() + (durationMinutes * 60 * 1000)); // Fix: durationMinutes * 60 * 1000 milliseconds
-    return end.toISOString().slice(0, 16); // Format for datetime-local input
+    
+    // Add duration in minutes
+    const end = new Date(start);
+    end.setMinutes(start.getMinutes() + durationMinutes);
+    
+    // Format back to datetime-local format (YYYY-MM-DDTHH:mm)
+    const year = end.getFullYear();
+    const month = String(end.getMonth() + 1).padStart(2, '0');
+    const day = String(end.getDate()).padStart(2, '0');
+    const hours = String(end.getHours()).padStart(2, '0');
+    const minutes = String(end.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
   const handleStartTimeChange = (startTime) => {
