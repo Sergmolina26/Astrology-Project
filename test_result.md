@@ -132,8 +132,11 @@ backend:
           agent: "main"
           comment: "User reports 60-minute sessions showing as 6 hours in booking confirmation. Issue found in line 848 using .seconds instead of .total_seconds()."
         - working: true
+          agent: "main"
+          comment: "✅ FIXED: Changed .seconds to .total_seconds() in line 848 for correct duration calculation."
+        - working: true
           agent: "testing"
-          comment: "✅ TESTED: Session duration calculation is FIXED. Created 1-hour session and verified duration correctly calculated as 60 minutes (1 hour), not 6 hours. The .total_seconds() fix is working properly."
+          comment: "✅ CONFIRMED: Session duration calculation working correctly. 60 minutes displays properly, not 6 hours."
 
   - task: "Fix business hours validation bug"
     implemented: true
