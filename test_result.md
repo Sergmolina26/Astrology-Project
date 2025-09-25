@@ -382,8 +382,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Google Calendar integration"
-    - "Google Meets integration"
+    - "Duration calculation fix and service removal"
   stuck_tasks:
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
