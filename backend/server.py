@@ -432,8 +432,8 @@ async def register_as_reader(user_data: UserCreate):
 
 @api_router.get("/reader/dashboard")
 async def get_reader_dashboard(current_user: User = Depends(get_current_user)):
-    if current_user.role != "reader":
-        raise HTTPException(status_code=403, detail="Reader access required")
+    if current_user.role not in ["reader", "admin"]:
+        raise HTTPException(status_code=403, detail="Reader or Admin access required")
     
     # Get all sessions for reader
     sessions = await db.sessions.find({"reader_id": current_user.id}).to_list(100)
@@ -1307,8 +1307,8 @@ async def create_reader_profile(
     current_user: User = Depends(get_current_user)
 ):
     """Create or update reader profile"""
-    if current_user.role != "reader":
-        raise HTTPException(status_code=403, detail="Reader access required")
+    if current_user.role not in ["reader", "admin"]:
+        raise HTTPException(status_code=403, detail="Reader or Admin access required")
     
     try:
         # Use user's email as default notification email if not provided
@@ -1326,8 +1326,8 @@ async def create_reader_profile(
 @api_router.get("/reader/profile")
 async def get_reader_profile(current_user: User = Depends(get_current_user)):
     """Get reader profile"""
-    if current_user.role != "reader":
-        raise HTTPException(status_code=403, detail="Reader access required")
+    if current_user.role not in ["reader", "admin"]:
+        raise HTTPException(status_code=403, detail="Reader or Admin access required")
     
     try:
         profile = await admin_service.get_reader_profile(current_user.id)
@@ -1354,8 +1354,8 @@ async def update_notification_settings(
     current_user: User = Depends(get_current_user)
 ):
     """Update reader notification settings"""
-    if current_user.role != "reader":
-        raise HTTPException(status_code=403, detail="Reader access required")
+    if current_user.role not in ["reader", "admin"]:
+        raise HTTPException(status_code=403, detail="Reader or Admin access required")
     
     try:
         success = await admin_service.update_notification_settings(
