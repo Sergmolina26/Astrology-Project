@@ -302,6 +302,42 @@ backend:
           comment: "✅ TESTED: /api/auth/me endpoint working correctly. Returns authenticated user information including id, email, name, and role."
 
 frontend:
+  - task: "Time display timezone conversion fix"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/SessionsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "⚠️ CRITICAL FRONTEND ISSUE IDENTIFIED: Sessions scheduled for 10:00 AM display as 3:00 PM due to automatic timezone conversion in SessionsPage.js lines 167-172 and 246-251. The code uses 'timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone' which converts UTC times to user's local timezone. Users in EST/CDT (UTC-5) see 10:00 AM UTC as 3:00 PM local time. Backend stores times correctly - issue is purely frontend timezone conversion logic. SOLUTION: Remove automatic timezone conversion or implement proper timezone handling to display times in original booking timezone."
+
+  - task: "Dashboard stats clickability"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Dashboard.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ FULLY WORKING: Dashboard stats (Total Sessions, This Month, Upcoming) are properly wrapped in Link components and successfully navigate to sessions page when clicked. All three stat cards tested and confirmed clickable."
+
+  - task: "Session details dialog and notes system"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/SessionsPage.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ FULLY WORKING: View Details dialog opens correctly and displays session information. Personal Notes and Mística Notes sections are properly implemented. Dialog structure includes all required fields (session details, time, amount, status). Notes editing functionality available for both personal and admin notes. Dialog closes properly with Escape key."
+
   - task: "SendGrid email integration"
     implemented: true
     working: false
