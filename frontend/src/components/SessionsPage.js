@@ -54,6 +54,13 @@ const SessionsPage = () => {
     enabled: !!selectedSession
   });
 
+  // Load personal note when sessionNotes changes
+  React.useEffect(() => {
+    if (sessionNotes?.personal_notes?.[0]?.note_content && !editingPersonalNote) {
+      setPersonalNote(sessionNotes.personal_notes[0].note_content);
+    }
+  }, [sessionNotes, editingPersonalNote]);
+
   // Personal note mutation
   const personalNoteMutation = useMutation({
     mutationFn: ({ sessionId, content }) => 
