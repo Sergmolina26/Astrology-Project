@@ -503,6 +503,33 @@ frontend:
           agent: "testing"
           comment: "✅ FULLY WORKING: Session notes system tested comprehensively. 1) /sessions/{session_id}/notes endpoint working correctly, 2) Personal notes creation/retrieval working for clients, 3) Mistica notes creation working for admin users with proper visibility controls, 4) Admin can see all notes (public + private), clients see only public Mistica notes and their own personal notes, 5) Fixed MongoDB ObjectId serialization issue in notes retrieval. All 17/17 tests passed (100% success rate). Notes system ready for frontend integration."
 
+  - task: "Time display backend fix"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ BACKEND TIME HANDLING VERIFIED: Comprehensive testing confirms backend correctly stores and retrieves session times without timezone conversion. Sessions created at 10:00 AM are stored and retrieved as hour 10 (not 15/3 PM). Backend time handling working perfectly - any frontend display issues are due to client-side timezone conversion, not backend API problems."
+
+  - task: "Birth chart map generation with SVG"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ INITIAL ISSUE: Birth chart generation was not including SVG content due to KerykeionChartSVG.makeSVG() method saving files but not returning content."
+        - working: true
+          agent: "testing"
+          comment: "✅ FIXED AND VERIFIED: Fixed KerykeionChartSVG integration by reading generated SVG files. Birth chart generation now includes proper SVG content (160KB files with astrological maps). All chart endpoints working: chart generation includes SVG, /api/charts/{id}/generate-map regenerates maps, /api/charts/{id}/svg retrieves SVG content. KerykeionChartSVG integration fully functional with planetary positions and astrological maps."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
