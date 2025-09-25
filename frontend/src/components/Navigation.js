@@ -46,22 +46,29 @@ const Navigation = () => {
               <Home className="w-4 h-4 inline mr-2" />
               {t('nav.dashboard')}
             </Link>
-            <Link
-              to="/astrology"
-              className={`nav-link ${isActive('/astrology') ? 'active' : ''}`}
-              data-testid="nav-astrology"
-            >
-              <Sparkles className="w-4 h-4 inline mr-2" />
-              {t('nav.astrology')}
-            </Link>
-            <Link
-              to="/tarot"
-              className={`nav-link ${isActive('/tarot') ? 'active' : ''}`}
-              data-testid="nav-tarot"
-            >
-              <Calendar className="w-4 h-4 inline mr-2" />
-              {t('nav.bookReading')}
-            </Link>
+            
+            {/* Only show Astrology and Book Reading for non-admin users */}
+            {user?.role !== 'admin' && (
+              <>
+                <Link
+                  to="/astrology"
+                  className={`nav-link ${isActive('/astrology') ? 'active' : ''}`}
+                  data-testid="nav-astrology"
+                >
+                  <Sparkles className="w-4 h-4 inline mr-2" />
+                  {t('nav.astrology')}
+                </Link>
+                <Link
+                  to="/tarot"
+                  className={`nav-link ${isActive('/tarot') ? 'active' : ''}`}
+                  data-testid="nav-tarot"
+                >
+                  <Calendar className="w-4 h-4 inline mr-2" />
+                  {t('nav.bookReading')}
+                </Link>
+              </>
+            )}
+            
             <Link
               to="/sessions"
               className={`nav-link ${isActive('/sessions') ? 'active' : ''}`}
