@@ -162,7 +162,7 @@ backend:
     file: "/app/backend/server.py, /app/frontend/src/components/TarotPage.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
@@ -170,6 +170,9 @@ backend:
         - working: true
           agent: "testing"
           comment: "✅ CONFIRMED: Business hours validation fix working perfectly. All tests passed (9/9). Sessions ending at/after 6:00 PM properly rejected, valid sessions before 6 PM work correctly."
+        - working: true
+          agent: "testing"
+          comment: "✅ REVIEW TESTING COMPLETE: All 4 review requirements verified: 1) Business hours validation correctly allows sessions ending exactly at 6:00 PM but rejects sessions ending after 6:00 PM (6:01 PM, 6:30 PM), 2) New /api/services endpoint returns updated service list with correct pricing, 3) Service pricing verified for new services (general-purpose-reading: $65/45min, astrological-tarot-session: $85/60min), 4) Duration calculation working correctly for both new services. All tests passed (10/10 - 100% success rate)."
 
 backend:
   - task: "Email confirmation system"
