@@ -366,16 +366,23 @@ const AdminDashboard = () => {
         <TabsContent value="users" className="mt-6">
           <Card className="glass-card mystical-border">
             <CardHeader>
-              <CardTitle className="text-white">User Management</CardTitle>
+              <CardTitle className="text-white">{t('admin.userManagement')}</CardTitle>
               <CardDescription className="text-slate-300">
-                View and manage all registered users
+                {t('admin.viewManageUsers')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {usersLoading ? (
                 <div className="text-center py-8">
                   <div className="loading-spinner mx-auto mb-4"></div>
-                  <p className="text-slate-400">Loading users...</p>
+                  <p className="text-slate-400">{t('admin.loadingUsers')}</p>
+                </div>
+              ) : users.length === 0 ? (
+                <div className="text-center py-8">
+                  <Users className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-slate-300 mb-2">
+                    {t('admin.noUsersFound')}
+                  </h3>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -396,7 +403,7 @@ const AdminDashboard = () => {
                             {user.role}
                           </Badge>
                           <span className="text-xs text-slate-400">
-                            Joined: {new Date(user.created_at).toLocaleDateString()}
+                            {t('admin.joined')}: {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
                           </span>
                         </div>
                       </div>
