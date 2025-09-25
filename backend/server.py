@@ -207,12 +207,13 @@ def generate_payment_link(session_id: str, amount: float) -> str:
 def get_service_price(service_type: str) -> float:
     """Get pricing for different services"""
     prices = {
-        "tarot-reading": 85.0,
+        "general-purpose-reading": 65.0,
+        "astrological-tarot-session": 85.0,
         "birth-chart-reading": 120.0,
         "chart-tarot-combo": 165.0,
         "follow-up": 45.0
     }
-    return prices.get(service_type, 85.0)
+    return prices.get(service_type, 65.0)
 
 async def notify_reader(session_id: str, event_type: str):
     """Send notification to reader about client activities"""
