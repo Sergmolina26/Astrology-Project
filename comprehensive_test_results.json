@@ -1,0 +1,75 @@
+{
+  "timestamp": "2025-09-25T07:39:24.294436",
+  "total_tests": 9,
+  "passed_tests": 6,
+  "success_rate": 66.66666666666666,
+  "test_details": [
+    {
+      "test_name": "Client Setup",
+      "success": true,
+      "details": "Client registered: comprehensive_client_073923@celestia.com",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:23.731401"
+    },
+    {
+      "test_name": "Admin Setup",
+      "success": true,
+      "details": "Admin logged in",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:23.998546"
+    },
+    {
+      "test_name": "Services Endpoint",
+      "success": true,
+      "details": "All services available with correct pricing: general-purpose-reading: $65.0, astrological-tarot-session: $85.0, birth-chart-reading: $120.0, follow-up: $45.0",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:24.038350"
+    },
+    {
+      "test_name": "Business Hours Validation (After 6 PM)",
+      "success": true,
+      "details": "Correctly rejected session ending after 6 PM",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:24.115746"
+    },
+    {
+      "test_name": "Business Hours Validation (At 6 PM)",
+      "success": false,
+      "details": "Failed to accept session ending at 6 PM",
+      "response_data": {
+        "detail": "This time slot is not available. Please choose a different time."
+      },
+      "timestamp": "2025-09-25T07:39:24.156477"
+    },
+    {
+      "test_name": "Duration Calculation (45 min)",
+      "success": false,
+      "details": "Failed to create 45-minute session",
+      "response_data": {
+        "detail": "Services are only available Monday through Friday."
+      },
+      "timestamp": "2025-09-25T07:39:24.197429"
+    },
+    {
+      "test_name": "Time Storage Consistency",
+      "success": false,
+      "details": "No session available for testing",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:24.197466"
+    },
+    {
+      "test_name": "Admin Sessions List",
+      "success": true,
+      "details": "Retrieved 63 sessions with all required fields",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:24.252638"
+    },
+    {
+      "test_name": "Reader Dashboard Access",
+      "success": true,
+      "details": "Admin can access reader dashboard with 63 sessions",
+      "response_data": null,
+      "timestamp": "2025-09-25T07:39:24.294377"
+    }
+  ]
+}
