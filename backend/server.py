@@ -702,6 +702,70 @@ async def get_client_charts(
     charts = await db.astro_charts.find({"client_id": client_id}).to_list(100)
     return [AstroChart(**chart) for chart in charts]
 
+@api_router.post("/charts/{chart_id}/generate-map")
+async def generate_chart_map(chart_id: str, current_user: User = Depends(get_current_user)):
+    """Generate or regenerate the astrological map (SVG) for an existing chart"""
+    try:
+        # Get the existing chart
+        chart = await db.astro_charts.find_one({"id": chart_id})
+        if not chart:
+            raise HTTPException(status_code=404, detail="Chart not found")
+        
+        # Check if user owns this chart or is admin
+        if current_user.role != "admin" and chart["client_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Create AstrologicalSubject from stored birth data
+        birth_data = chart["birth_data"]
+        subject = AstrologicalSubject(
+            name=birth_data["name"], 
+            year=birth_data["birth_date_parsed"]["year"],
+            month=birth_data["birth_date_parsed"]["month"],
+            day=birth_data["birth_date_parsed"]["day"],
+            hour=birth_data.get("birth_time_parsed", {}).get("hour", 12),
+            minute=birth_data.get("birth_time_parsed", {}).get("minute", 0),
+            city=birth_data["birth_place"],
+            nation="US"  # Default for now
+        )
+        
+        # Generate SVG chart
+        chart_svg = KerykeionChartSVG(subject)
+        svg_content = chart_svg.makeSVG()
+        
+        # Update the chart with SVG content
+        await db.astro_charts.update_one(
+            {"id": chart_id},
+            {"$set": {
+                "chart_svg": str(svg_content) if svg_content else None,
+                "image_path": f"/tmp/chart_{chart_id}.svg"
+            }}
+        )
+        
+        return {"message": "Chart map generated successfully", "has_svg": bool(svg_content)}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate chart map: {str(e)}")
+
+@api_router.get("/charts/{chart_id}/svg")
+async def get_chart_svg(chart_id: str, current_user: User = Depends(get_current_user)):
+    """Get the SVG content of a chart"""
+    try:
+        chart = await db.astro_charts.find_one({"id": chart_id})
+        if not chart:
+            raise HTTPException(status_code=404, detail="Chart not found")
+        
+        # Check if user owns this chart or is admin
+        if current_user.role != "admin" and chart["client_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        if not chart.get("chart_svg"):
+            raise HTTPException(status_code=404, detail="Chart SVG not generated yet")
+        
+        return Response(content=chart["chart_svg"], media_type="image/svg+xml")
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get chart SVG: {str(e)}")
+
 # ==================== TAROT ROUTES ====================
 
 @api_router.get("/tarot/spreads", response_model=List[TarotSpread])
