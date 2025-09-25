@@ -98,6 +98,21 @@ const AstrologyPage = () => {
     }
   });
 
+  // Mutation for generating chart map
+  const generateMapMutation = useMutation({
+    mutationFn: async (chartId) => {
+      const response = await axios.post(`/charts/${chartId}/generate-map`);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['charts']);
+      toast.success('Astrological map generated successfully!');
+    },
+    onError: (error) => {
+      toast.error(`Failed to generate map: ${extractErrorMessage(error)}`);
+    }
+  });
+
   // Generate chart mutation
   const generateChartMutation = useMutation({
     mutationFn: async (birthDataId) => {
