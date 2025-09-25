@@ -102,11 +102,17 @@ const AstrologyPage = () => {
   const generateMapMutation = useMutation({
     mutationFn: async (chartId) => {
       const response = await axios.post(`/charts/${chartId}/generate-map`);
-      return response.data;
+      return { chartId, ...response.data };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Invalidate and refetch charts to get updated SVG content
       queryClient.invalidateQueries(['charts']);
-      toast.success('Astrological map generated successfully!');
+      
+      if (data.has_svg) {
+        toast.success('Astrological map generated successfully! View it below the chart data.');
+      } else {
+        toast.error('Failed to generate map - please try again.');
+      }
     },
     onError: (error) => {
       toast.error(`Failed to generate map: ${extractErrorMessage(error)}`);
