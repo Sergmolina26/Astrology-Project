@@ -209,6 +209,13 @@ const TarotPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    // Validate business hours before submission
+    const validation = validateBusinessHours(sessionForm.start_at);
+    if (!validation.valid) {
+      toast.error(validation.message);
+      return;
+    }
+    
     if (!sessionForm.service_type || !sessionForm.start_at) {
       toast.error(t('common.required'));
       return;
