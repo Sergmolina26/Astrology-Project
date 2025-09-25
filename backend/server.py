@@ -1420,8 +1420,24 @@ async def get_all_users(current_user: User = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Admin access required")
     
     try:
-        users = await db.users.find({}, {"password": 0}).to_list(None)  # Exclude passwords
-        return users
+        # Get all users excluding passwords and converting ObjectIds
+        users_cursor = db.users.find({}, {"password": 0, "hashed_password": 0, "_id": 0})
+        users = await users_cursor.to_list(None)
+        
+        # Process users to ensure proper serialization
+        processed_users = []
+        for user in users:
+            processed_user = {
+                "id": user.get("id"),
+                "name": user.get("name"),
+                "email": user.get("email"),
+                "role": user.get("role"),
+                "created_at": user.get("created_at"),
+                "updated_at": user.get("updated_at")
+            }
+            processed_users.append(processed_user)
+        
+        return processed_users
         
     except Exception as e:
         print(f"❌ Get users failed: {str(e)}")
