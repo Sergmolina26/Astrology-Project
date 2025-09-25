@@ -37,12 +37,20 @@ const TarotPage = () => {
   // Available services with prices
   const services = [
     {
-      id: 'tarot-reading',
-      name: t('services.personalTarot'),
-      description: t('services.tarotDescription'),
+      id: 'general-purpose-reading',
+      name: t('services.generalReading'),
+      description: t('services.generalDescription'),
+      price: 65,
+      duration: 45,
+      icon: Star
+    },
+    {
+      id: 'astrological-tarot-session',
+      name: t('services.astrologicalTarot'),
+      description: t('services.astrologicalTarotDescription'),
       price: 85,
       duration: 60,
-      icon: Star
+      icon: Moon
     },
     {
       id: 'birth-chart-reading',
