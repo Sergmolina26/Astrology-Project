@@ -538,13 +538,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Time display timezone conversion fix - CRITICAL ISSUE IDENTIFIED"
+    - "Time display backend fix - COMPLETED"
+    - "Birth chart map generation with SVG - COMPLETED"
     - "Dashboard stats clickability - COMPLETED"
     - "Session details dialog and notes system - COMPLETED"
   stuck_tasks:
     - "SendGrid email integration"
     - "Email forwarding to admin/reader"
-    - "Time display timezone conversion fix"
   test_all: false
   test_priority: "high_first"
 
