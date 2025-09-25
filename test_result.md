@@ -106,16 +106,19 @@ user_problem_statement: Fix critical booking system issues: 1) "No reader availa
 
 backend:
   - task: "Fix no reader available error"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "main"
           comment: "User reports 'no reader available' error during booking. Need to investigate session creation logic in server.py line 772."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: No reader available error is RESOLVED. Admin user exists (lago.mistico11@gmail.com) and reader functionality is working. Session creation successful during valid business hours. The system correctly finds available readers for booking."
 
   - task: "Fix session duration calculation bug"
     implemented: false
