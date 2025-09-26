@@ -1772,6 +1772,281 @@ async def delete_session(
         print(f"❌ Delete session failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ==================== ADMIN CRUD OPERATIONS ====================
+
+@api_router.post("/admin/sessions")
+async def create_session_admin(
+    session_data: SessionCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin create session for any client"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Find the client
+        client = await db.users.find_one({"email": session_data.client_email})
+        if not client:
+            raise HTTPException(status_code=404, detail="Client not found")
+        
+        # Calculate service price and set admin as reader
+        amount = get_service_price(session_data.service_type)
+        
+        session = Session(
+            reader_id=current_user.id,  # Admin acts as reader
+            client_id=client["id"],
+            service_type=session_data.service_type,
+            start_at=session_data.start_at,
+            end_at=session_data.end_at,
+            status=session_data.status or "pending_payment",
+            amount=amount,
+            client_message=session_data.client_message
+        )
+        
+        await db.sessions.insert_one(session.dict())
+        return session
+        
+    except Exception as e:
+        print(f"❌ Admin create session failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.put("/admin/sessions/{session_id}")
+async def update_session_admin(
+    session_id: str,
+    session_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin edit session"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Remove fields that shouldn't be updated
+        update_data = {k: v for k, v in session_data.items() if k not in ['id', 'created_at']}
+        
+        result = await db.sessions.update_one(
+            {"id": session_id},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        # Get updated session
+        updated_session = await db.sessions.find_one({"id": session_id})
+        if "_id" in updated_session:
+            del updated_session["_id"]
+            
+        return updated_session
+        
+    except Exception as e:
+        print(f"❌ Admin update session failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# CLIENT MANAGEMENT
+@api_router.get("/admin/clients")
+async def get_all_clients(current_user: User = Depends(get_current_user)):
+    """Get all clients for admin management"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        clients = await db.users.find({"role": "client"}).to_list(None)
+        # Remove sensitive data and MongoDB _id
+        result_clients = []
+        for client in clients:
+            if "_id" in client:
+                del client["_id"]
+            if "hashed_password" in client:
+                del client["hashed_password"]
+            
+            # Add session count for each client
+            session_count = await db.sessions.count_documents({"client_id": client["id"]})
+            client["session_count"] = session_count
+            
+            result_clients.append(client)
+        
+        return result_clients
+        
+    except Exception as e:
+        print(f"❌ Get clients failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/admin/clients")
+async def create_client_admin(
+    client_data: UserCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin create new client"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check if user exists
+        existing_user = await db.users.find_one({"email": client_data.email})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Hash password
+        hashed_password = get_password_hash(client_data.password)
+        
+        # Create client
+        user_dict = client_data.dict()
+        user_dict.pop("password")
+        user_dict["role"] = "client"  # Force client role
+        user = User(**user_dict)
+        
+        # Store in database
+        await db.users.insert_one({**user.dict(), "hashed_password": hashed_password})
+        
+        return user
+        
+    except Exception as e:
+        print(f"❌ Admin create client failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.put("/admin/clients/{client_id}")
+async def update_client_admin(
+    client_id: str,
+    client_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin edit client"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Remove fields that shouldn't be updated
+        update_data = {k: v for k, v in client_data.items() if k not in ['id', 'created_at', 'hashed_password']}
+        
+        result = await db.users.update_one(
+            {"id": client_id, "role": "client"},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Client not found")
+        
+        # Get updated client
+        updated_client = await db.users.find_one({"id": client_id})
+        if "_id" in updated_client:
+            del updated_client["_id"]
+        if "hashed_password" in updated_client:
+            del updated_client["hashed_password"]
+            
+        return updated_client
+        
+    except Exception as e:
+        print(f"❌ Admin update client failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.delete("/admin/clients/{client_id}")
+async def delete_client_admin(
+    client_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin delete client"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check if client has sessions
+        session_count = await db.sessions.count_documents({"client_id": client_id})
+        if session_count > 0:
+            raise HTTPException(status_code=400, detail="Cannot delete client with existing sessions")
+        
+        result = await db.users.delete_one({"id": client_id, "role": "client"})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Client not found")
+        
+        return {"message": "Client deleted successfully"}
+        
+    except Exception as e:
+        print(f"❌ Admin delete client failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# BIRTH CHARTS MANAGEMENT
+@api_router.get("/admin/charts")
+async def get_all_charts(current_user: User = Depends(get_current_user)):
+    """Get all birth charts for admin management"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        charts = await db.astro_charts.find({}).to_list(None)
+        result_charts = []
+        
+        for chart in charts:
+            if "_id" in chart:
+                del chart["_id"]
+            
+            # Add client info
+            client = await db.users.find_one({"id": chart["client_id"]}, {"name": 1, "email": 1})
+            if client:
+                chart["client_name"] = client["name"]
+                chart["client_email"] = client["email"]
+            
+            result_charts.append(chart)
+        
+        return result_charts
+        
+    except Exception as e:
+        print(f"❌ Get charts failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.put("/admin/charts/{chart_id}")
+async def update_chart_admin(
+    chart_id: str,
+    chart_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin edit birth chart"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Remove fields that shouldn't be updated
+        update_data = {k: v for k, v in chart_data.items() if k not in ['id', 'created_at']}
+        
+        result = await db.astro_charts.update_one(
+            {"id": chart_id},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Chart not found")
+        
+        # Get updated chart
+        updated_chart = await db.astro_charts.find_one({"id": chart_id})
+        if "_id" in updated_chart:
+            del updated_chart["_id"]
+            
+        return updated_chart
+        
+    except Exception as e:
+        print(f"❌ Admin update chart failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.delete("/admin/charts/{chart_id}")
+async def delete_chart_admin(
+    chart_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Admin delete birth chart"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        result = await db.astro_charts.delete_one({"id": chart_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Chart not found")
+        
+        return {"message": "Chart deleted successfully"}
+        
+    except Exception as e:
+        print(f"❌ Admin delete chart failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @api_router.get("/admin/payments")
 async def get_all_payments(current_user: User = Depends(get_current_user)):
     """Get all payment transactions"""
