@@ -126,7 +126,12 @@
     "generating": "Generating...",
     "selectTimeAccuracy": "Select time accuracy",
     "enterBirthPlace": "Enter birth place",
-    "astrologicalMap": "Astrological Map"
+    "astrologicalMap": "Astrological Map",
+    "mapGeneratedSuccess": "Astrological map generated successfully! View it below the chart data.",
+    "mapGenerationFailed": "Failed to generate map - please try again.",
+    "mapGenerationError": "Failed to generate map",
+    "generateMap": "Generate Map",
+    "regenerateMap": "Regenerate Map"
   },
   "services": {
     "bookReading": "Book Your Reading",
