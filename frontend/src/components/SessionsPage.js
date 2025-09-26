@@ -81,7 +81,7 @@ const SessionsPage = () => {
       axios.post(`/sessions/${sessionId}/mistica-notes?note_content=${encodeURIComponent(content)}&is_visible_to_client=${visible}`),
     onSuccess: () => {
       queryClient.invalidateQueries(['session-notes']);
-      toast.success('Mística note saved successfully');
+      toast.success(t('sessions.misticaNoteSaved'));
       setMisticaNote('');
     },
     onError: (error) => {
