@@ -526,7 +526,7 @@ const AstrologyPage = () => {
                             <div className="space-y-3">
                               <h4 className="font-medium text-amber-400 flex items-center">
                                 <Stars className="w-4 h-4 mr-2" />
-                                Astrological Map
+                                {t('astrology.astrologicalMap')}
                               </h4>
                               <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-600/30">
                                 <div 
