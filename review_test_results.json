@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-09-26T18:39:34.839580",
+  "total_tests": 1,
+  "passed_tests": 0,
+  "success_rate": 0.0,
+  "test_details": [
+    {
+      "test_name": "Admin User Login",
+      "success": false,
+      "details": "Failed to login as admin user",
+      "response_data": {
+        "status_code": 502,
+        "text": ""
+      },
+      "timestamp": "2025-09-26T18:39:34.839540"
+    }
+  ]
+}
