@@ -125,7 +125,8 @@
     "saving": "Saving...",
     "generating": "Generating...",
     "selectTimeAccuracy": "Select time accuracy",
-    "enterBirthPlace": "Enter birth place"
+    "enterBirthPlace": "Enter birth place",
+    "astrologicalMap": "Astrological Map"
   },
   "services": {
     "bookReading": "Book Your Reading",
