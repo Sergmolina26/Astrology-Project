@@ -4,8 +4,8 @@ Switch between different email providers easily
 """
 import smtplib
 import os
-from email.mime.text import MimeText as EmailMimeText
-from email.mime.multipart import MimeMultipart as EmailMimeMultipart
+from email.mime.text import MimeText
+from email.mime.multipart import MimeMultipart
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
@@ -104,17 +104,18 @@ class GmailSMTPProvider(EmailProvider):
     def send_email(self, to_email: str, subject: str, html_content: str):
         try:
             if not self.sender_email or not self.sender_password:
-                print(f"❌ Missing Gmail SMTP configuration")
+                print(f"❌ Missing Gmail SMTP configuration - need GMAIL_EMAIL and GMAIL_APP_PASSWORD")
+                print(f"📧 Gmail SMTP Provider: Using {self.sender_email} (app password needed)")
                 return False
             
             # Create message
-            msg = EmailMimeMultipart('alternative')
+            msg = MimeMultipart('alternative')
             msg['Subject'] = subject
             msg['From'] = f"Celestia Astrology <{self.sender_email}>"
             msg['To'] = to_email
             
             # Add HTML content
-            html_part = EmailMimeText(html_content, 'html')
+            html_part = MimeText(html_content, 'html')
             msg.attach(html_part)
             
             # Send email
@@ -129,6 +130,7 @@ class GmailSMTPProvider(EmailProvider):
             
         except Exception as e:
             print(f"❌ Gmail SMTP email failed: {str(e)}")
+            print(f"📧 Gmail SMTP Provider: Using {self.sender_email} (check app password configuration)")
             return False
 
 class MailgunProvider(EmailProvider):
@@ -186,6 +188,7 @@ def get_email_provider():
     }
     
     provider_class = providers.get(provider_name, SendGridProvider)
+    print(f"📧 Using email provider: {provider_name.upper()}")
     return provider_class()
 
 def send_email(to_email: str, subject: str, html_content: str):
