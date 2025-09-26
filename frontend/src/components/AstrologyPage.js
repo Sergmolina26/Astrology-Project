@@ -464,7 +464,7 @@ const AstrologyPage = () => {
                                   {generateMapMutation.isPending ? (
                                     <>
                                       <div className="loading-spinner w-4 h-4 mr-2"></div>
-                                      Generating...
+                                      {t('astrology.generating')}...
                                     </>
                                   ) : (
                                     <>
