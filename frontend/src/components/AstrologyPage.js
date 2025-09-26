@@ -109,9 +109,9 @@ const AstrologyPage = () => {
       queryClient.invalidateQueries(['charts']);
       
       if (data.has_svg) {
-        toast.success('Astrological map generated successfully! View it below the chart data.');
+        toast.success(t('astrology.mapGeneratedSuccess'));
       } else {
-        toast.error('Failed to generate map - please try again.');
+        toast.error(t('astrology.mapGenerationFailed'));
       }
     },
     onError: (error) => {
