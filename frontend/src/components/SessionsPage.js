@@ -360,7 +360,7 @@ const SessionsPage = () => {
                           {user?.role === 'admin' && (
                             <div className="space-y-3 pt-4 border-t border-slate-600/30">
                               <Label className="text-slate-200">
-                                Add Mística's Note
+                                {t('sessions.addMisticaNote')}
                               </Label>
                               <Textarea
                                 placeholder="Add your professional insights for this client..."
