@@ -51,10 +51,8 @@ ALGORITHM = "HS256"
 def send_email(to_email: str, subject: str, html_content: str) -> bool:
     """Send email using configured provider"""
     try:
-        # Temporarily disabled until Gmail setup is complete
-        print(f"📧 EMAIL MOCK: Would send to {to_email} - Subject: {subject}")
-        return True  # Mock success for now
-        # return email_send(to_email, subject, html_content)  # Will be enabled after Gmail setup
+        # Use the email provider system
+        return email_send(to_email, subject, html_content)
     except Exception as e:
         print(f"📧 EMAIL ERROR: {str(e)}")
         return False
