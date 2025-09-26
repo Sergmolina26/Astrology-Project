@@ -386,7 +386,7 @@ const SessionsPage = () => {
                                 size="sm"
                               >
                                 <Save className="w-4 h-4 mr-2" />
-                                {misticaNoteMutation.isPending ? 'Saving...' : 'Save Note'}
+                                {misticaNoteMutation.isPending ? t('common.submitting') : t('sessions.saveNote')}
                               </Button>
                             </div>
                           )}
