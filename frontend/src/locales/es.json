@@ -203,7 +203,13 @@
     "pendingPayment": "Pago Pendiente",
     "confirmed": "Confirmado",
     "completed": "Completado",
-    "cancelled": "Cancelado"
+    "cancelled": "Cancelado",
+    "declined": "Rechazado",
+    "failedSavePersonalNote": "Error al guardar nota personal",
+    "misticaNoteSaved": "Nota de Mística guardada exitosamente",
+    "failedSaveMisticaNote": "Error al guardar nota de Mística",
+    "addMisticaNote": "Agregar Nota de Mística",
+    "saveNote": "Guardar Nota"
   },
   "common": {
     "loading": "Cargando...",
