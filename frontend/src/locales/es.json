@@ -129,7 +129,12 @@
     "generating": "Generando...",
     "selectTimeAccuracy": "Seleccionar precisión de hora",
     "enterBirthPlace": "Ingresa lugar de nacimiento",
-    "astrologicalMap": "Mapa Astrológico"
+    "astrologicalMap": "Mapa Astrológico",
+    "mapGeneratedSuccess": "¡Mapa astrológico generado exitosamente! Véalo debajo de los datos de la carta.",
+    "mapGenerationFailed": "Error al generar el mapa - por favor intenta de nuevo.",
+    "mapGenerationError": "Error al generar el mapa",
+    "generateMap": "Generar Mapa",
+    "regenerateMap": "Regenerar Mapa"
   },
   "services": {
     "bookReading": "Reserva Tu Lectura",
