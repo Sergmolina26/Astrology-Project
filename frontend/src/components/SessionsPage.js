@@ -71,7 +71,7 @@ const SessionsPage = () => {
       toast.success(t('sessions.saveNotes') + ' ' + t('common.success'));
     },
     onError: (error) => {
-      toast.error('Failed to save personal note');
+      toast.error(t('sessions.failedSavePersonalNote'));
     }
   });
 
