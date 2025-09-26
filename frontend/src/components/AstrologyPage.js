@@ -469,7 +469,7 @@ const AstrologyPage = () => {
                                   ) : (
                                     <>
                                       <Stars className="w-4 h-4 mr-2" />
-                                      {chart.chart_svg ? 'Regenerate Map' : 'Generate Map'}
+                                      {chart.chart_svg ? t('astrology.regenerateMap') : t('astrology.generateMap')}
                                     </>
                                   )}
                                 </Button>
