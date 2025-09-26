@@ -79,7 +79,7 @@
     {
       "test_name": "Payment Link Generation",
       "success": true,
-      "details": "Payment link generated: https://astro-booking-3.preview.emergentagent.com/..., Amount: $65.0",
+      "details": "Payment link generated: https://astro-reader-1.preview.emergentagent.com/..., Amount: $65.0",
       "response_data": null,
       "timestamp": "2025-09-25T06:44:52.126502"
     },

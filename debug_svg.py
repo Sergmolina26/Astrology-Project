@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 
 def test_svg_debug():
-    base_url = "https://astro-booking-3.preview.emergentagent.com"
+    base_url = "https://astro-reader-1.preview.emergentagent.com"
     api_url = f"{base_url}/api"
     
     # Register user
