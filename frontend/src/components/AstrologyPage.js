@@ -115,7 +115,7 @@ const AstrologyPage = () => {
       }
     },
     onError: (error) => {
-      toast.error(`Failed to generate map: ${extractErrorMessage(error)}`);
+      toast.error(t('astrology.mapGenerationError') + ': ' + extractErrorMessage(error));
     }
   });
 
