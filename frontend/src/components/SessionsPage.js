@@ -116,7 +116,7 @@ const SessionsPage = () => {
       'confirmed': t('sessions.confirmed'),
       'completed': t('sessions.completed'),
       'cancelled': t('sessions.cancelled'),
-      'declined': 'Declined'
+      'declined': t('sessions.declined')
     };
     return statusMap[status] || status;
   };
