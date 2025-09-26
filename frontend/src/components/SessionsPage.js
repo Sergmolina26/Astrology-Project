@@ -85,7 +85,7 @@ const SessionsPage = () => {
       setMisticaNote('');
     },
     onError: (error) => {
-      toast.error('Failed to save Mística note');
+      toast.error(t('sessions.failedSaveMisticaNote'));
     }
   });
 
