@@ -1,18 +1,117 @@
 {
-  "timestamp": "2025-09-26T18:41:09.675970",
-  "total_tests": 1,
-  "passed_tests": 0,
-  "success_rate": 0.0,
+  "timestamp": "2025-09-26T18:42:10.956420",
+  "total_tests": 15,
+  "passed_tests": 13,
+  "success_rate": 86.66666666666667,
   "test_details": [
     {
       "test_name": "Admin User Login",
+      "success": true,
+      "details": "Admin logged in successfully - Role: admin",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:09.862838"
+    },
+    {
+      "test_name": "Gmail SMTP - Session Creation",
       "success": false,
-      "details": "Failed to login as admin user",
+      "details": "Failed to create session for Gmail email test",
       "response_data": {
-        "status_code": 502,
-        "text": ""
+        "detail": "Services are only available Monday through Friday."
       },
-      "timestamp": "2025-09-26T18:41:09.675917"
+      "timestamp": "2025-09-26T18:42:09.907497"
+    },
+    {
+      "test_name": "Admin Access to Reader Dashboard",
+      "success": true,
+      "details": "Admin can access reader dashboard - 69 sessions visible",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:09.951748"
+    },
+    {
+      "test_name": "Admin Views All Sessions",
+      "success": true,
+      "details": "Admin sees 69 total sessions (69 own, 0 others)",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:09.951791"
+    },
+    {
+      "test_name": "Admin Session Creation as Reader",
+      "success": false,
+      "details": "Admin failed to create session as reader",
+      "response_data": {
+        "detail": "Services start at 10:00 AM. Please choose a later time."
+      },
+      "timestamp": "2025-09-26T18:42:09.992895"
+    },
+    {
+      "test_name": "Session Time Storage/Retrieval",
+      "success": true,
+      "details": "Session time correctly stored and retrieved: 2024-12-20T10:00:00 (hour: 10)",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.671064"
+    },
+    {
+      "test_name": "Session Duration Calculation",
+      "success": true,
+      "details": "Duration correctly calculated: 45.0 minutes",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.671098"
+    },
+    {
+      "test_name": "Birth Data Creation",
+      "success": true,
+      "details": "Created birth data: bb04faa2-545f-4226-959f-140ba2f5d447",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.719689"
+    },
+    {
+      "test_name": "Astrological Chart Generation",
+      "success": true,
+      "details": "Generated chart: 292db253-48c0-4a55-b2a1-388ac8f6fbc7, Has SVG: True",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.784472"
+    },
+    {
+      "test_name": "SVG Map Generation",
+      "success": true,
+      "details": "SVG map generated successfully, Has SVG: True",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.826976"
+    },
+    {
+      "test_name": "SVG Content Retrieval",
+      "success": true,
+      "details": "Retrieved SVG content, Is valid SVG: True, Content length: 154619",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.879977"
+    },
+    {
+      "test_name": "Complete Astrological Map Workflow",
+      "success": true,
+      "details": "Full workflow completed: Birth data \u2192 Chart \u2192 SVG generation \u2192 SVG retrieval",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.880004"
+    },
+    {
+      "test_name": "Services Translation Support",
+      "success": true,
+      "details": "Services endpoint ready for translation: General or Purpose Reading ($65.0/45min), Astrological Tarot Session ($85.0/60min), Birth Chart Analysis ($120.0/90min), Follow-up Session ($45.0/30min)",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.918178"
+    },
+    {
+      "test_name": "Dashboard Translation Support",
+      "success": true,
+      "details": "Dashboard stats ready for translation: {'total_sessions': 70, 'pending_sessions': 62, 'confirmed_sessions': 8, 'completed_sessions': 0, 'total_revenue': 620.0}",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.956355"
+    },
+    {
+      "test_name": "Session Data Translation Support",
+      "success": true,
+      "details": "Session data structure supports translation",
+      "response_data": null,
+      "timestamp": "2025-09-26T18:42:10.956387"
     }
   ]
 }
