@@ -173,6 +173,8 @@ class SessionCreate(BaseModel):
     start_at: datetime
     end_at: datetime
     client_message: Optional[str] = None
+    client_email: Optional[str] = None  # For admin session creation
+    status: Optional[str] = None  # For admin to set initial status
 
 class PaymentLink(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
