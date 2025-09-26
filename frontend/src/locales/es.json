@@ -128,7 +128,8 @@
     "saving": "Guardando...",
     "generating": "Generando...",
     "selectTimeAccuracy": "Seleccionar precisión de hora",
-    "enterBirthPlace": "Ingresa lugar de nacimiento"
+    "enterBirthPlace": "Ingresa lugar de nacimiento",
+    "astrologicalMap": "Mapa Astrológico"
   },
   "services": {
     "bookReading": "Reserva Tu Lectura",
