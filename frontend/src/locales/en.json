@@ -200,7 +200,13 @@
     "pendingPayment": "Pending Payment",
     "confirmed": "Confirmed",
     "completed": "Completed",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "declined": "Declined",
+    "failedSavePersonalNote": "Failed to save personal note",
+    "misticaNoteSaved": "Mística note saved successfully",
+    "failedSaveMisticaNote": "Failed to save Mística note",
+    "addMisticaNote": "Add Mística's Note",
+    "saveNote": "Save Note"
   },
   "common": {
     "loading": "Loading...",
